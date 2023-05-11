@@ -1,4 +1,4 @@
-package be.nadtum.etum.Vanilla.Player.Compétences.Métier.Menu;
+package be.nadtum.etum.Vanilla.MenuGui.CompJobs;
 
 import be.nadtum.etum.Vanilla.MenuGui.MenuJob;
 import be.nadtum.etum.Utility.Modules.MenuGestion;

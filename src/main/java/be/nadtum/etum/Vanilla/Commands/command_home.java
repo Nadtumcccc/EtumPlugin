@@ -72,7 +72,7 @@ public class command_home implements CommandExecutor, TabExecutor {
             if (FichierGestion.getCfgPlayers().isSet(homePath)) {
                 player.sendMessage(PrefixMessage.erreur() + " Le home §4" + args[0] + " §c a déjà été créé");
             } else {
-                ConfigurationSection homesSection = FichierGestion.getCfgPlayers().getConfigurationSection("Profil." + player.getUniqueId().toString() + ".Home.homes");
+                ConfigurationSection homesSection = FichierGestion.getCfgPlayers().getConfigurationSection("Profil." + player.getUniqueId() + ".Home.homes");
                 if (homesSection != null) {
                     int nbHome = homesSection.getKeys(false).size();
                     if (nbHome >= PlayerGestion.getPlayerHomeCount(player.getName())) {

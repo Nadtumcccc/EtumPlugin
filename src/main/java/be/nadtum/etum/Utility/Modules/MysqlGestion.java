@@ -76,7 +76,7 @@ public class MysqlGestion {
             st = cn.createStatement();
 
 
-            resultSet = st.executeQuery("SELECT Pseudo FROM Membres WHERE UUID='" + PlayerGestion.get_uuid_from_name(player) + "'");
+            resultSet = st.executeQuery("SELECT Pseudo FROM Membres WHERE UUID='" + PlayerGestion.getUUIDFromName(player) + "'");
             if(resultSet.next()){
                 foundType = resultSet.getString(1);
             }

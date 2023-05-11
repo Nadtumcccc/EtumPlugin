@@ -1,4 +1,4 @@
-package be.nadtum.etum.Vanilla.Economie.commands;
+package be.nadtum.etum.Vanilla.Commands;
 
 import be.nadtum.etum.Utility.Modules.FichierGestion;
 import be.nadtum.etum.Utility.Modules.PlayerGestion;

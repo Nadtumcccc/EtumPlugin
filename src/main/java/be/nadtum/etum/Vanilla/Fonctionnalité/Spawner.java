@@ -1,7 +1,7 @@
 package be.nadtum.etum.Vanilla.Fonctionnalité;
 
-
-import be.nadtum.etum.Utility.Modules.*;
+import be.nadtum.etum.Utility.Modules.FichierGestion;
+import be.nadtum.etum.Utility.Modules.PlayerGestion;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -12,64 +12,41 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 
 public class Spawner implements Listener {
 
-
-
     @EventHandler
-    public void onBreakSpawner(BlockBreakEvent e){
-
+    public void onBreakSpawner(BlockBreakEvent e) {
         Player player = e.getPlayer();
-
         Block block = e.getBlock();
-
         YamlConfiguration cfg = FichierGestion.getCfgPermission();
 
-        if(!block.getType().equals(Material.SPAWNER))return;
+        if (!block.getType().equals(Material.SPAWNER)) return;
 
-        if (!cfg.contains("Grade." + PlayerGestion.getPlayerGrade(player.getName()) + ".permission.spawner")) {
-            if (!player.isOp()) {
-                return;
-            }
-        }
-
-        Location locSpawner = block.getLocation();
+        if(PlayerGestion.hasPermission(player, "spawner")) return;
 
         CreatureSpawner cs = (CreatureSpawner) block.getState();
+        World world = block.getWorld();
 
-        World world = locSpawner.getWorld();
-
-        //vérifier si ne pas etre légacier fonctionne
         ItemStack stack = new ItemStack(Material.SPAWNER, 1);
-
         BlockStateMeta meta = (BlockStateMeta) stack.getItemMeta();
         meta.setDisplayName("§f[§dGénérateur§f] §a§l" + cs.getCreatureTypeName());
-        meta.setBlockState(cs);
         stack.setItemMeta(meta);
 
-        world.dropItem(locSpawner, stack);
-
-
+        world.dropItem(block.getLocation(), stack);
     }
 
     @EventHandler
-    public void onBPlaceSpawner(BlockBreakEvent e){
-
-
-        Player player = e.getPlayer();
-
+    public void onPlaceSpawner(BlockPlaceEvent e) {
         Block block = e.getBlock();
-        if(!block.getType().equals(Material.SPAWNER))return;
+
+        if (!block.getType().equals(Material.SPAWNER))
+            return;
+
         CreatureSpawner cs = (CreatureSpawner) block.getState();
         block.setBlockData(cs.getBlockData());
-
-
     }
-
-
-
-
 }

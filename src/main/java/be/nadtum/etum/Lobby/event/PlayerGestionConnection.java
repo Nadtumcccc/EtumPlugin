@@ -70,7 +70,7 @@ public class PlayerGestionConnection implements Listener {
 
 
 
-        FichierGestion.getCfgPlayers().set("Profil." + PlayerGestion.get_uuid_from_name(player.getName()).toString() + ".lastconnection", new SimpleDateFormat("dd.MM.yyyy HH.mm").format(new Date()));
+        FichierGestion.getCfgPlayers().set("Profil." + PlayerGestion.getUUIDFromName(player.getName()).toString() + ".lastconnection", new SimpleDateFormat("dd.MM.yyyy HH.mm").format(new Date()));
 
 
 

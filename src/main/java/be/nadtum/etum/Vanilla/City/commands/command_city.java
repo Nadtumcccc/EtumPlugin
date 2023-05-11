@@ -89,7 +89,7 @@ public class command_city implements CommandExecutor, TabExecutor {
                         return false;
                     }
 
-                    FichierGestion.getCfgCity().set("City." + PlayerGestion.getPlayerCityName(player.getName()) + ".membres." + PlayerGestion.get_uuid_from_name(player.getName()), null);
+                    FichierGestion.getCfgCity().set("City." + PlayerGestion.getPlayerCityName(player.getName()) + ".membres." + PlayerGestion.getUUIDFromName(player.getName()), null);
                     PlayerGestion.setPlayerCityName(player.getName(), "NoCity");
 
                     player.sendMessage(PrefixMessage.serveur() + "vous avez bien quitté votre cité");
@@ -137,7 +137,7 @@ public class command_city implements CommandExecutor, TabExecutor {
                     }
 
                     if(!FichierGestion.getCfgCity().contains("City." + PlayerGestion.getPlayerCityName(player.getName()) + ".membres."
-                            + PlayerGestion.get_uuid_from_name(args[1]).toString())){
+                            + PlayerGestion.getUUIDFromName(args[1]).toString())){
                         player.sendMessage(PrefixMessage.erreur() + "le joueur n'est pas dans ta cité");
                         return false;
                     }
@@ -158,7 +158,7 @@ public class command_city implements CommandExecutor, TabExecutor {
                         return false;
                     }
 
-                    FichierGestion.getCfgCity().set("City." + PlayerGestion.getPlayerCityName(player.getName()) + ".membres." + PlayerGestion.get_uuid_from_name(args[1]).toString(), null);
+                    FichierGestion.getCfgCity().set("City." + PlayerGestion.getPlayerCityName(player.getName()) + ".membres." + PlayerGestion.getUUIDFromName(args[1]).toString(), null);
                     PlayerGestion.setPlayerCityName(args[1], "NoCity");
 
                     player.sendMessage(PrefixMessage.serveur() + "vous avez bien kick §b" + args[1]);

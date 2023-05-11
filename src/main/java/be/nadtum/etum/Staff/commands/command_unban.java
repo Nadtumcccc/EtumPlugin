@@ -38,7 +38,7 @@ public class command_unban implements CommandExecutor {
             return false;
         }
 
-        DataPunish data = new DataPunish(PlayerGestion.get_uuid_from_name(args[0]));
+        DataPunish data = new DataPunish(PlayerGestion.getUUIDFromName(args[0]));
 
         if(!data.exist()){
             player.sendMessage(PrefixMessage.erreur() + "fichier joueur inexistant contactez un membre de l'administation au plus vite !");

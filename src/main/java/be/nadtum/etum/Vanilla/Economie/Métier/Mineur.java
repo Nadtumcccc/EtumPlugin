@@ -55,21 +55,6 @@ public class Mineur implements Listener {
         int bonusMoney = 0;
         int bonusXp = 0;
 
-        //gestion des compétences du mineur de l'ancienneté
-        if(PlayerGestion.getPlayerJobsVoie(player.getName()) != null
-                && (PlayerGestion.getPlayerJobsVoie(player.getName()).equalsIgnoreCase("ancienneté"))){
-            //on profite d'avoir fait la vérification pour pouvoir ajouter les bonus lier au mineur ancienneté
-
-            //vérifier si il a débloqué le bonus de gain en money
-            if(PlayerGestion.getPlayerJobsComp1(player.getName()) != null) {
-                bonusMoney = PlayerGestion.getPlayerJobsComp1(player.getName());
-            }
-            //vérifier si il a débloqué le bonus de gain en xp
-            if(PlayerGestion.getPlayerJobsCompDeux(player.getName()) != null) {
-                bonusXp = PlayerGestion.getPlayerJobsCompDeux(player.getName());
-            }
-
-        }
         int gainMoney = cfg.getInt("Jobs.Mineur." + block.getType() + ".gain.money") + bonusMoney;
         Integer gainXp = cfg.getInt("Jobs.Mineur." + block.getType() + ".gain.xp") + bonusXp;
 

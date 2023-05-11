@@ -27,11 +27,6 @@ import java.util.UUID;
 
 public class Claim implements Listener {
 
-    private Double playerpetitx;
-    private Double playerpetitz;
-    private Double playergrandx;
-    private Double playergrandz;
-
     private static Double petitx;
     private static Double petitz;
     private static Double grandx;
@@ -99,7 +94,8 @@ public class Claim implements Listener {
         //on vérifie si les conditions de départ sont bonnes
         Player player = event.getPlayer();
 
-        if(!player.getLocation().getWorld().getName().equals("Akia"))return;
+
+        if(!isInDefaultWorld(player))return;
         Block block = event.getClickedBlock();
         if(!event.getAction().equals(Action.RIGHT_CLICK_BLOCK))return;
         //on vérifie s'il à la permission de gérer le claim de la cité
@@ -107,15 +103,21 @@ public class Claim implements Listener {
         if(event.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.GOLDEN_SHOVEL)
                 || event.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.STICK)) {
             if (!CityGestion.hasPermission(player.getName(), "claim")) {
+
                 return;
             }
         }
 
+
+
         //on vérifie si le joueur a une cité
         String cityname = PlayerGestion.getPlayerCityName(player.getName());
         if(cityname.equals("NoCity")){
+
             return;
         }
+
+
 
         switch (event.getPlayer().getInventory().getItemInMainHand().getType()){
             /*
@@ -429,7 +431,7 @@ public class Claim implements Listener {
             - player : Type Player, description : variable qui contient le joueur dont on veut savoir s'il est dans le monde principal
      */
     public static Boolean isInDefaultWorld(Player player){
-        return player.getLocation().getWorld().getName().equals("Akia");
+        return player.getLocation().getWorld().getName().equals("Etum");
     }
 
     public static void cancelActionClaim(Player player){
@@ -504,6 +506,8 @@ public class Claim implements Listener {
 
                 //si on est dans le cas d'une pose de claim on effectue le code qui execute des éléments en rapport avec une pose
 
+                Double playergrandx;
+                Double playerpetitx;
                 if (x1Player > xBlock) {
                     playergrandx = x1Player;
                     playerpetitx = xBlock;
@@ -512,6 +516,8 @@ public class Claim implements Listener {
                     playerpetitx = x1Player;
                 }
 
+                Double playergrandz;
+                Double playerpetitz;
                 if (z1Player > zBlock) {
                     playergrandz = z1Player;
                     playerpetitz = zBlock;
@@ -640,11 +646,17 @@ public class Claim implements Listener {
 
         //par sécurité nous allons enregistrer son ancien claim de cité s'il en a un
 
+
+
         if (!isActionOnClaim.containsKey(player)) {
+
+
             //première pose
             // on veut vérifier si sa première pose ne se trouve pas dans une cité
             //on remet à zéro le claim
             if(player.isSneaking())return;
+
+
             saveOldClaim(cfg, PlayerGestion.getPlayerCityName(player.getName()), player);
             cfg.set("City." + cityname + ".zone", null);
             //checkcity est la variable qui va contenir le nom de la cité sur laquel on est si on est sur une cité
@@ -654,6 +666,8 @@ public class Claim implements Listener {
             player.sendMessage(PrefixMessage.serveur() + "le premier point de claim a bien été placé");
             isActionOnClaim.put(player, true);
         }else{
+
+
             //deuxième pose
             //on vérifie si la pose finale ne se trouve pas sur un autre claim
 
@@ -819,6 +833,7 @@ public class Claim implements Listener {
 
 
     }
+
 
 
 }

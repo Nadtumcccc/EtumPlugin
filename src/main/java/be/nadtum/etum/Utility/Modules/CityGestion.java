@@ -14,15 +14,15 @@ public class CityGestion {
     }
 
     public static Boolean hasPermission(String player, String permission){
-        return FichierGestion.getCfgCity().contains("City." + PlayerGestion.getPlayerCityName(player) + ".membres." + PlayerGestion.get_uuid_from_name(player).toString() + ".permission." + permission);
+        return FichierGestion.getCfgCity().contains("City." + PlayerGestion.getPlayerCityName(player) + ".membres." + PlayerGestion.getUUIDFromName(player).toString() + ".permission." + permission);
     }
     public static void setPermission(String player, String permission){
-        FichierGestion.getCfgCity().set("City." + PlayerGestion.getPlayerCityName(player) + ".membres." + PlayerGestion.get_uuid_from_name(player).toString() + ".permission." + permission, permission);
+        FichierGestion.getCfgCity().set("City." + PlayerGestion.getPlayerCityName(player) + ".membres." + PlayerGestion.getUUIDFromName(player).toString() + ".permission." + permission, permission);
     }
 
 
     public static void removePermission(String player, String permission){
-        FichierGestion.getCfgCity().set("City." + PlayerGestion.getPlayerCityName(player) + ".membres." + PlayerGestion.get_uuid_from_name(player).toString() + ".permission." + permission, null);
+        FichierGestion.getCfgCity().set("City." + PlayerGestion.getPlayerCityName(player) + ".membres." + PlayerGestion.getUUIDFromName(player).toString() + ".permission." + permission, null);
     }
     public static Boolean hasCitySpawn(String player){
         return FichierGestion.getCfgCity().contains("City." + PlayerGestion.getPlayerCityName(player) + ".spawn.world");

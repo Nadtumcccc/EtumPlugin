@@ -95,7 +95,7 @@ public class command_grade implements CommandExecutor {
                         return false;
                     }
 
-                     PlayerGestion.setPlayerStaffGrade(args[2], args[1]);
+                    PlayerGestion.setPlayerStaffGrade(args[2], args[1]);
                     player.sendMessage(
                             PrefixMessage.admin() + "le joueur §b" + Bukkit.getPlayer(args[2]).getName() + " §ea reçu le grade §b" + args[1]);
                     break;

@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 
 public class MenuGestion {
 
-    public static ItemBuilder contour = new ItemBuilder(Material.MAGENTA_STAINED_GLASS_PANE, "§5Contour",1);
-    public static ItemBuilder back = new ItemBuilder(Material.BARRIER, "§cRetour",1);
+    public static ItemBuilder contour = new ItemBuilder(Material.MAGENTA_STAINED_GLASS_PANE, "§5Contour", 1);
+    public static ItemBuilder back = new ItemBuilder(Material.BARRIER, "§cRetour", 1);
 
 }

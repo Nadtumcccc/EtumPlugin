@@ -17,24 +17,17 @@ public class command_money implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-
         if (!(sender instanceof Player)) {
             System.out.println(PrefixMessage.logs() + "vous ne pouvez pas utiliser cette commande");
             return false;
         }
 
         Player player = (Player) sender;
-
         YamlConfiguration cfg = FichierGestion.getCfgPermission();
 
-        if (!cfg.contains("Grade." + PlayerGestion.getPlayerGrade(player.getName()) + ".permission.money")) {
-            if (!player.isOp()) {
-                player.sendMessage(PrefixMessage.erreur() + "vous n'avez pas la permission d'utiliser cette commande");
-                return false;
-            }
-        }
+        if(!PlayerGestion.hasPermission(player, "default"))return false;
 
-        if(args.length > 0){
+        if (args.length > 0) {
             if (!cfg.contains("Grade." + PlayerGestion.getPlayerStaffGrade(player.getName()) + ".permission.admin")) {
                 if (!player.isOp()) {
                     player.sendMessage(PrefixMessage.erreur() + "vous n'avez pas la permission d'utiliser cette commande (faîtes /money)");
@@ -42,30 +35,42 @@ public class command_money implements CommandExecutor {
                 }
             }
 
-            if(!(Integer.valueOf(args[2]) instanceof Integer)){
+            if (!isInteger(args[2])) {
                 player.sendMessage(PrefixMessage.erreur() + "la valeur n'est pas un nombre");
                 return false;
             }
 
-            if(!(Bukkit.getPlayer(args[1]) instanceof Player)){
+            Player targetPlayer = Bukkit.getPlayer(args[1]);
+            if (targetPlayer == null) {
                 player.sendMessage(PrefixMessage.erreur() + "le joueur n'est pas en ligne");
                 return false;
             }
-            switch (args[0]){
+
+            Long amount = (long) Integer.parseInt(args[2]);
+            switch (args[0]) {
                 case "add":
-                    PlayerGestion.setPlayerMoney(args[1], PlayerGestion.getPlayerMoney(args[1]) + Integer.valueOf(args[2]));
+                    PlayerGestion.setPlayerMoney(args[1], PlayerGestion.getPlayerMoney(args[1]) + amount);
                     break;
                 case "set":
-                    PlayerGestion.setPlayerMoney(args[1], Long.valueOf(args[2]));
+                    PlayerGestion.setPlayerMoney(args[1], amount);
                     break;
             }
+
             player.sendMessage(PrefixMessage.serveur() + "le joueur a maintenant §b" + PlayerGestion.getPlayerMoney(args[1]) + " §aAkoins");
-            return false;
+            return true;
         }
 
         player.sendMessage(PrefixMessage.serveur() + "§b" + PlayerGestion.getPlayerMoney(player.getName()) + " §aAkoins");
 
+        return true;
+    }
 
-        return false;
+    private boolean isInteger(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 }
