@@ -1,0 +1,61 @@
+name: EtumPlugin
+version: '${project.version}'
+main: be.nadtum.etum.Main
+api-version: 1.19
+prefix: ETUM
+authors: [NadTum]
+description: Plugin gérant le serveur Etum
+website: https://etum.fr
+commands:
+  gm:
+    aliases:
+      gamemode
+    description: "permet de changer le mode de jeu du joueur"
+  grade:
+    description: "permet la gestion des grades staff et joueur (permission incluse)"
+  menu:
+  home:
+  delhome:
+  sethome:
+  craft:
+  ec:
+    aliases:
+      - enderchest
+  tpa:
+  tpaccept:
+  tpreject:
+  fly:
+  back:
+  money:
+    aliases:
+      - balance
+      - bal
+  mana:
+  claim:
+  unclaim:
+    description: permet d'enlever le claim
+  pay:
+  staff:
+    aliases:
+      - mode
+  job:
+  tempban:
+  tempmute:
+  unmute:
+  unban:
+  invsee:
+  region:
+    aliases:
+      - rg
+  spawn:
+    aliases:
+      - hub
+      - lobby
+  day:
+  night:
+  world:
+  city:
+    aliases:
+      - faction
+  tp:
+  motd:
