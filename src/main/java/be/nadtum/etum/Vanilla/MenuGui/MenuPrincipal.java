@@ -1,6 +1,6 @@
 package be.nadtum.etum.Vanilla.MenuGui;
 
-import be.nadtum.etum.Vanilla.City.menu.MenuCity;
+import be.nadtum.etum.Vanilla.MenuGui.City.MenuCity;
 
 import be.nadtum.etum.Utility.Modules.*;
 import be.nadtum.etum.Utility.Objets.InventoryBuilder;
@@ -86,10 +86,6 @@ public class MenuPrincipal implements Listener {
 
         if (event.getView().getTitle().equalsIgnoreCase(nameMenu)) {
             switch (event.getCurrentItem().getType()) {
-                case PLAYER_HEAD:
-                    player.closeInventory();
-                    MenuProfil.menu(player);
-                    break;
                 case RED_BED:
                     player.closeInventory();
                     MenuHome.menu(player);

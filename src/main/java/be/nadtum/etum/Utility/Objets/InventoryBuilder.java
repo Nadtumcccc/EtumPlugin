@@ -9,8 +9,11 @@ public class InventoryBuilder {
     Inventory inventory;
 
     public InventoryBuilder(String name, Integer nbCase){
-        inventory = Bukkit.createInventory(null,nbCase, name);
+        inventory = Bukkit.createInventory(null, nbCase, name);
     }
+
+
+
     public Inventory getInventory(){
         return inventory;
     }

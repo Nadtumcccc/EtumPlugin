@@ -10,7 +10,9 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -108,17 +110,12 @@ public class Claim implements Listener {
             }
         }
 
-
-
         //on vérifie si le joueur a une cité
         String cityname = PlayerGestion.getPlayerCityName(player.getName());
         if(cityname.equals("NoCity")){
 
             return;
         }
-
-
-
         switch (event.getPlayer().getInventory().getItemInMainHand().getType()){
             /*
             positionner le claim
@@ -236,46 +233,48 @@ public class Claim implements Listener {
     }
 
     @EventHandler
-    public void PlayerMoveInClaim(PlayerMoveEvent event){
+    public void playerMoveInClaim(PlayerMoveEvent event) {
         Player player = event.getPlayer();
-        if(!isInDefaultWorld(player)){
+        if (!isInDefaultWorld(player)) {
             return;
         }
 
-        if(player.getAllowFlight() && !PlayerGestion.canFly(player)){
-            player.teleport(new Location(player.getWorld()
-                    , player.getLocation().getX()
-                    , player.getLocation().getWorld().getHighestBlockYAt((int) player.getLocation().getX(), (int) player.getLocation().getZ())
-                    , player.getLocation().getZ()));
+        if (player.getAllowFlight() && !PlayerGestion.canFly(player)) {
+            Location highestBlockLocation = new Location(player.getWorld(), player.getLocation().getX(),
+                    player.getLocation().getWorld().getHighestBlockYAt((int) player.getLocation().getX(),
+                            (int) player.getLocation().getZ()), player.getLocation().getZ());
+            player.teleport(highestBlockLocation);
             player.setAllowFlight(false);
             player.setFlying(false);
         }
-        cityName = getNameCityOfClaim(event.getPlayer(), event.getPlayer().getLocation().getX(), event.getPlayer().getLocation().getZ());
-        if(cityOnWalk.containsKey(player)){
-            if(cityName == null){
+
+        String currentCityName = getNameCityOfClaim(player, player.getLocation().getX(), player.getLocation().getZ());
+
+        if (cityOnWalk.containsKey(player)) {
+            if (currentCityName == null) {
                 cityOnWalk.remove(player);
                 return;
             }
-
         }
-        if(cityName != null && !cityName.equals(cityOnWalk.get(player))){
-            cityOnWalk.put(player, cityName);
-            if(cityName.equalsIgnoreCase(PlayerGestion.getPlayerCityName(player.getName()))){
-                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(("§avous êtes dans votre cité")));
-            }else{
-                if(player.getAllowFlight() && !PlayerGestion.canFly(player)){
 
-                    player.teleport(new Location(player.getWorld()
-                            , player.getLocation().getX()
-                            , player.getLocation().getWorld().getHighestBlockYAt((int) player.getLocation().getX(), (int) player.getLocation().getZ())
-                            , player.getLocation().getZ()));
+        if (currentCityName != null && !currentCityName.equals(cityOnWalk.get(player))) {
+            cityOnWalk.put(player, currentCityName);
+            String playerCityName = PlayerGestion.getPlayerCityName(player.getName());
+
+            if (currentCityName.equalsIgnoreCase(playerCityName)) {
+                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(("§avous êtes dans votre cité")));
+            } else {
+                if (player.getAllowFlight() && !PlayerGestion.canFly(player)) {
+                    Location highestBlockLocation = new Location(player.getWorld(), player.getLocation().getX(),
+                            player.getLocation().getWorld().getHighestBlockYAt((int) player.getLocation().getX(),
+                                    (int) player.getLocation().getZ()), player.getLocation().getZ());
+                    player.teleport(highestBlockLocation);
                     player.setAllowFlight(false);
                     player.setFlying(false);
                 }
                 player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(("§cvous êtes dans la cité §4" + cityOnWalk.get(player))));
             }
         }
-
     }
 
     @EventHandler
@@ -295,79 +294,63 @@ public class Claim implements Listener {
     }
 
     //METHODES
-    public static Boolean canBuild(Player player, double xBlock, double zBlock){
-
-
+    public static boolean canBuild(Player player, double xBlock, double zBlock) {
         YamlConfiguration cfg_perms = FichierGestion.getCfgPermission();
+
         if (cfg_perms.contains("Grade." + PlayerGestion.getPlayerStaffGrade(player.getName()) + ".permission.build")) {
             return true;
         }
-        if(RegionGestion.getNameOfRegion(player, xBlock,zBlock) != null){
+
+        if (RegionGestion.getNameOfRegion(player, xBlock, zBlock) != null) {
             return false;
         }
 
-
-        if(!isInDefaultWorld(player)){
+        if (!isInDefaultWorld(player)) {
             return true;
         }
 
-        if(PlayerGestion.getPlayerCityName(player.getName()).equals("NoCity")) {
+        String playerCityName = PlayerGestion.getPlayerCityName(player.getName());
+        if (playerCityName.equals("NoCity")) {
             return false;
         }
 
-        if(!CityGestion.hasPermission(player.getName(), "build")){
+        if (!CityGestion.hasPermission(player.getName(), "build")) {
             return false;
         }
 
-        cityName = getNameCityOfClaim(player, xBlock, zBlock);
-
-        if(cityName != null){
-            if(cityName.equals(PlayerGestion.getPlayerCityName(player.getName()))){
-                if(cityCoinShow.containsKey(cityName)){
-                    if(!CityGestion.hasPermission(player.getName(), "claim")){
-                        player.sendMessage(PrefixMessage.erreur() + "le claim est en mode modification veuillez attendre");
-                    }
-                    return false;
+        String cityName = getNameCityOfClaim(player, xBlock, zBlock);
+        if (cityName != null) {
+            if (cityName.equals(playerCityName)) {
+                if (cityCoinShow.containsKey(cityName) && !CityGestion.hasPermission(player.getName(), "claim")) {
+                    player.sendMessage(PrefixMessage.erreur() + "le claim est en mode modification veuillez attendre");
                 }
-                return true;
-            }else{
+                return false;
+            } else {
                 player.sendMessage(PrefixMessage.erreur() + "tu es dans la cité " + cityName);
             }
         }
+
         return false;
     }
 
-    public static String getNameCityOfClaim(Player player, double xBlock, double zBlock){
-        if(FichierGestion.getCfgCity().contains("City")) {
+    public static String getNameCityOfClaim(Player player, double xBlock, double zBlock) {
+        ConfigurationSection citySection = FichierGestion.getCfgCity().getConfigurationSection("City");
+        if (citySection != null) {
+            for (String cityName : citySection.getKeys(false)) {
+                ConfigurationSection cityZoneSection = FichierGestion.getCfgCity().getConfigurationSection("City." + cityName + ".zone.coordonnées");
+                if (cityZoneSection != null && cityZoneSection.contains("x2")) {
+                    double x1 = cityZoneSection.getDouble("x1");
+                    double z1 = cityZoneSection.getDouble("z1");
+                    double x2 = cityZoneSection.getDouble("x2");
+                    double z2 = cityZoneSection.getDouble("z2");
 
-            for(String CityName : FichierGestion.getCfgCity().getConfigurationSection("City").getKeys(false)){
-                if(FichierGestion.getCfgCity().contains("City." + CityName + ".zone.coordonnées.x2")){
-                    x1 = FichierGestion.getCfgCity().getDouble("City." + CityName + ".zone.coordonnées.x1");
-                    z1 = FichierGestion.getCfgCity().getDouble("City." + CityName + ".zone.coordonnées.z1");
-                    x2 = FichierGestion.getCfgCity().getDouble("City." + CityName + ".zone.coordonnées.x2");
-                    z2 = FichierGestion.getCfgCity().getDouble("City." + CityName + ".zone.coordonnées.z2");
+                    double grandx = Math.max(x1, x2);
+                    double petitx = Math.min(x1, x2);
+                    double grandz = Math.max(z1, z2);
+                    double petitz = Math.min(z1, z2);
 
-
-
-
-                    if(x1 > x2){
-                        grandx = x1;
-                        petitx = x2;
-                    }else{
-                        grandx = x2;
-                        petitx = x1;
-                    }
-
-                    if(z1 > z2){
-                        grandz = z1;
-                        petitz = z2;
-                    }else{
-                        grandz = z2;
-                        petitz = z1;
-                    }
-
-                    if((xBlock  >= petitx && xBlock  <= grandx) && (zBlock  >= petitz && zBlock  <= grandz)) {
-                        return CityName;
+                    if ((xBlock >= petitx && xBlock <= grandx) && (zBlock >= petitz && zBlock <= grandz)) {
+                        return cityName;
                     }
                 }
             }
@@ -382,46 +365,41 @@ public class Claim implements Listener {
         cachecoordonnéez2.remove(player);
     }
 
-    public void getCoinClaim(String City, Player player, double x1,double x2,double z1,double z2){
+    public void getCoinClaim(String city, Player player, double x1, double x2, double z1, double z2) {
+        World world = player.getWorld();
+        int highestYAtX1Z1 = world.getHighestBlockYAt((int) x1, (int) z1);
+        int highestYAtX1Z2 = world.getHighestBlockYAt((int) x1, (int) z2);
+        int highestYAtX2Z1 = world.getHighestBlockYAt((int) x2, (int) z1);
+        int highestYAtX2Z2 = world.getHighestBlockYAt((int) x2, (int) z2);
 
-        cacheCoinMontrerx1z1.put(City,
-                player.getWorld().getBlockAt(new Location(player.getWorld(),x1, player.getWorld().getHighestBlockYAt((int) x1, (int) z1) ,z1)).getType());
-        cacheCoinMontrerx1z2.put(City,
-                player.getWorld().getBlockAt(new Location(player.getWorld(),x1, player.getWorld().getHighestBlockYAt((int) x1, (int) z2) ,z2)).getType());
-        cacheCoinMontrerx2z1.put(City,
-                player.getWorld().getBlockAt(new Location(player.getWorld(),x2, player.getWorld().getHighestBlockYAt((int) x2, (int) z1) ,z1)).getType());
-        cacheCoinMontrerx2z2.put(City,
-                player.getWorld().getBlockAt(new Location(player.getWorld(),x2, player.getWorld().getHighestBlockYAt((int) x2, (int) z2) ,z2)).getType());
+        Block blockX1Z1 = world.getBlockAt(new Location(world, x1, highestYAtX1Z1, z1));
+        Block blockX1Z2 = world.getBlockAt(new Location(world, x1, highestYAtX1Z2, z2));
+        Block blockX2Z1 = world.getBlockAt(new Location(world, x2, highestYAtX2Z1, z1));
+        Block blockX2Z2 = world.getBlockAt(new Location(world, x2, highestYAtX2Z2, z2));
 
-        coinMontrerx1z1.put(City, player.getWorld().getBlockAt(new Location(player.getWorld(),x1, player.getWorld().getHighestBlockYAt((int) x1, (int) z1) ,z1)));
-        coinMontrerx1z2.put(City, player.getWorld().getBlockAt(new Location(player.getWorld(),x1, player.getWorld().getHighestBlockYAt((int) x1, (int) z2) ,z2)));
-        coinMontrerx2z1.put(City, player.getWorld().getBlockAt(new Location(player.getWorld(),x2, player.getWorld().getHighestBlockYAt((int) x2, (int) z1) ,z1)));
-        coinMontrerx2z2.put(City, player.getWorld().getBlockAt(new Location(player.getWorld(),x2, player.getWorld().getHighestBlockYAt((int) x2, (int) z2) ,z2)));
+        cacheCoinMontrerx1z1.put(city, blockX1Z1.getType());
+        cacheCoinMontrerx1z2.put(city, blockX1Z2.getType());
+        cacheCoinMontrerx2z1.put(city, blockX2Z1.getType());
+        cacheCoinMontrerx2z2.put(city, blockX2Z2.getType());
 
-
+        coinMontrerx1z1.put(city, blockX1Z1);
+        coinMontrerx1z2.put(city, blockX1Z2);
+        coinMontrerx2z1.put(city, blockX2Z1);
+        coinMontrerx2z2.put(city, blockX2Z2);
     }
 
-    public static void setLastBlockTypeCoinClaim(String City) {
+    public static void setLastBlockTypeCoinClaim(String city) {
+        Block blockX1Z1 = coinMontrerx1z1.remove(city);
+        Block blockX1Z2 = coinMontrerx1z2.remove(city);
+        Block blockX2Z1 = coinMontrerx2z1.remove(city);
+        Block blockX2Z2 = coinMontrerx2z2.remove(city);
 
+        blockX1Z1.setType(cacheCoinMontrerx1z1.remove(city));
+        blockX1Z2.setType(cacheCoinMontrerx1z2.remove(city));
+        blockX2Z1.setType(cacheCoinMontrerx2z1.remove(city));
+        blockX2Z2.setType(cacheCoinMontrerx2z2.remove(city));
 
-        coinMontrerx1z1.get(City).setType(cacheCoinMontrerx1z1.get(City));
-        coinMontrerx1z2.get(City).setType(cacheCoinMontrerx1z2.get(City));
-        coinMontrerx2z1.get(City).setType(cacheCoinMontrerx2z1.get(City));
-        coinMontrerx2z2.get(City).setType(cacheCoinMontrerx2z2.get(City));
-
-        coinMontrerx1z1.remove(City);
-        coinMontrerx1z2.remove(City);
-        coinMontrerx2z1.remove(City);
-        coinMontrerx2z2.remove(City);
-
-        cacheCoinMontrerx1z1.remove(City);
-        cacheCoinMontrerx1z2.remove(City);
-        cacheCoinMontrerx2z1.remove(City);
-        cacheCoinMontrerx2z2.remove(City);
-
-        cityCoinShow.remove(City);
-
-
+        cityCoinShow.remove(city);
     }
 
     /*
@@ -527,46 +505,22 @@ public class Claim implements Listener {
                 }
 
 
-                //les coin
-                if((grandz > playerpetitz && grandz < playergrandz) && (grandx > playerpetitx && grandx < playergrandx)){
+                // Les coin
+                boolean isCoinOverlap = ((grandz > playerpetitz && grandz < playergrandz) && (grandx > playerpetitx && grandx < playergrandx))
+                        || ((petitz > playerpetitz && petitz < playergrandz) && (petitx > playerpetitx && petitx < playergrandx))
+                        || ((petitz > playerpetitz && petitz < playergrandz) && (grandx > playerpetitx && grandx < playergrandx))
+                        || ((grandz > playerpetitz && grandz < playergrandz) && (petitx > playerpetitx && petitx < playergrandx));
+
+                // Entre les points du claim
+                boolean isClaimOverlap = (playergrandx > grandx && playergrandx > petitx) && (playerpetitx < petitx && playerpetitx < grandx)
+                        && (playergrandz < grandz && playergrandz > petitz) && (playerpetitz < grandz && playerpetitz > petitz)
+                        || (playergrandz > grandz && playergrandz > petitz) && (playerpetitz < grandz && playerpetitz < petitz)
+                        && (playergrandx < grandx && playergrandx > petitx) && (playerpetitx < grandx && playerpetitx > petitx);
+
+                if (isCoinOverlap || isClaimOverlap) {
                     player.sendMessage(PrefixMessage.erreur() + "tu es dans la cité " + City);
                     cancelActionClaim(player);
                     return;
-                }
-
-                if((petitz > playerpetitz && petitz < playergrandz) && (petitx > playerpetitx && petitx < playergrandx)){
-                    player.sendMessage(PrefixMessage.erreur() + "tu es dans la cité " + City);
-                    cancelActionClaim(player);
-                    return;
-                }
-
-                if((petitz > playerpetitz && petitz < playergrandz) && (grandx > playerpetitx && grandx < playergrandx)){
-                    player.sendMessage(PrefixMessage.erreur() + "tu es dans la cité " + City);
-                    cancelActionClaim(player);
-                    return;
-                }
-
-                if((grandz > playerpetitz && grandz < playergrandz) && (petitx > playerpetitx && petitx < playergrandx)){
-                    player.sendMessage(PrefixMessage.erreur() + "tu es dans la cité " + City);
-                    cancelActionClaim(player);
-                    return;
-                }
-
-                //entre les points du claim
-                if((playergrandx > grandx && playergrandx > petitx) && ( playerpetitx < petitx && playerpetitx < grandx)){
-                    if((playergrandz < grandz && playergrandz > petitz) && (playerpetitz < grandz && playerpetitz > petitz)){
-                        player.sendMessage(PrefixMessage.erreur() + "tu es dans la cité " + City);
-                        cancelActionClaim(player);
-                        return;
-                    }
-                }
-
-                if((playergrandz > grandz && playergrandz > petitz) && (playerpetitz < grandz && playerpetitz < petitz)){
-                    if((playergrandx < grandx && playergrandx > petitx) && ( playerpetitx < grandx && playerpetitx > petitx)){
-                        player.sendMessage(PrefixMessage.erreur() + "tu es dans la cité " + City);
-                        cancelActionClaim(player);
-                        return;
-                    }
                 }
 
             }
@@ -687,33 +641,14 @@ public class Claim implements Listener {
             x2 = cfg.getDouble("City." + cityname + ".zone.coordonnées.x2");
             z2 = cfg.getDouble("City." + cityname + ".zone.coordonnées.z2");
 
-            if(Math.abs(x1) > Math.abs(x2)){
-                grandx = Math.abs(x1);
-                petitx = Math.abs(x2);
-            }else{
-                grandx = Math.abs(x2);
-                petitx = Math.abs(x1);
-            }
+            grandx = Math.max(Math.abs(x1), Math.abs(x2));
+            petitx = Math.min(Math.abs(x1), Math.abs(x2));
 
-            if(Math.abs(z1) > Math.abs(z2)){
-                grandz = Math.abs(z1);
-                petitz = Math.abs(z2);
-            }else{
-                grandz = Math.abs(z2);
-                petitz = Math.abs(z1);
-            }
+            grandz = Math.max(Math.abs(z1), Math.abs(z2));
+            petitz = Math.min(Math.abs(z1), Math.abs(z2));
 
-
-            Double longueur = grandx - petitx;
-            Double largeur = grandz - petitz;
-
-            if(longueur == 0){
-                longueur = 1.0;
-            }
-
-            if(largeur == 0){
-                largeur = 1.0;
-            }
+            Double longueur = Math.max(grandx - petitx, 1.0);
+            Double largeur = Math.max(grandz - petitz, 1.0);
 
             if(!(((longueur * largeur) * 15) <= PlayerGestion.getPlayerMoney(player.getName()))){
                 player.sendMessage(PrefixMessage.erreur() + "vous n'avez pas assez d'Akoins");
@@ -787,40 +722,48 @@ public class Claim implements Listener {
 
             //on vérifie si la pose finale ne se trouve pas sur un autre claim
 
-            if(!player.isSneaking())return;
+            if (!player.isSneaking()) {
+                return;
+            }
+
             cfg.set("City." + cityname + ".zone.coordonnées.x2", xBlock);
             cfg.set("City." + cityname + ".zone.coordonnées.z2", zBlock);
             verifIfClaimIsOnOtherClaim(player, cfg, cityname, xBlock, zBlock);
-            if(RegionGestion.verifIfClaimIsOnOtherRegion(player,FichierGestion.getCfgRegion(), cityname, xBlock, zBlock)){
+
+            if (RegionGestion.verifIfClaimIsOnOtherRegion(player, FichierGestion.getCfgRegion(), cityname, xBlock, zBlock)) {
                 return;
             }
 
             x1 = cfg.getDouble("City." + cityname + ".zone.coordonnées.x1");
             z1 = cfg.getDouble("City." + cityname + ".zone.coordonnées.z1");
-            x2 = cfg.getDouble("City." + cityname + ".zone.coordonnées.x2");
-            z2 = cfg.getDouble("City." + cityname + ".zone.coordonnées.z2");
+            x2 = xBlock;
+            z2 = zBlock;
 
-            if(calculAirClaim(x1, x2, z1, z2) > calculTotalClaimOfCity(PlayerGestion.getPlayerCityName(player.getName()))){
-                player.sendMessage(PrefixMessage.erreur() + "l'air de la cité est trop grande ["+ calculAirClaim(x1, x2, z1, z2) +"]");
+            double airClaim = calculAirClaim(x1, x2, z1, z2);
+            double totalClaimOfCity = calculTotalClaimOfCity(PlayerGestion.getPlayerCityName(player.getName()));
+
+            if (airClaim > totalClaimOfCity) {
+                player.sendMessage(PrefixMessage.erreur() + "l'air de la cité est trop grande [" + airClaim + "]");
                 isActionOnClaim.remove(player);
                 cancelActionClaim(player);
                 return;
             }
 
-            if(calculAirClaim(x1, x2, z1, z2) > calculAirClaim(cachecoordonnéex1.get(player), cachecoordonnéex2.get(player),
-                    cachecoordonnéez1.get(player), cachecoordonnéez2.get(player))){
-                if(!(((calculAirClaim(x1, x2, z1, z2) - calculAirClaim(cachecoordonnéex1.get(player), cachecoordonnéex2.get(player),
-                        cachecoordonnéez1.get(player), cachecoordonnéez2.get(player))) * 15) <= PlayerGestion.getPlayerMoney(player.getName()))){
+            double cachedAirClaim = calculAirClaim(cachecoordonnéex1.get(player), cachecoordonnéex2.get(player),
+                    cachecoordonnéez1.get(player), cachecoordonnéez2.get(player));
+
+            if (airClaim > cachedAirClaim) {
+                double difference = airClaim - cachedAirClaim;
+                long requiredMoney = (long) (difference * 15);
+
+                if (requiredMoney > PlayerGestion.getPlayerMoney(player.getName())) {
                     player.sendMessage(PrefixMessage.erreur() + "vous n'avez pas assez d'Akoins");
                     cancelActionClaim(player);
                     isActionOnClaim.remove(player);
                     return;
                 }
 
-                PlayerGestion.setPlayerMoney(player.getName(),
-                        (long) (PlayerGestion.getPlayerMoney(player.getName()) -
-                                ((calculAirClaim(x1, x2, z1, z2)
-                                        - calculAirClaim(cachecoordonnéex1.get(player), cachecoordonnéex2.get(player), cachecoordonnéez1.get(player), cachecoordonnéez2.get(player)))) * 15));
+                PlayerGestion.setPlayerMoney(player.getName(), PlayerGestion.getPlayerMoney(player.getName()) - requiredMoney);
                 player.sendMessage(PrefixMessage.serveur() + "votre cité a bien sa zone modifié");
             }
 

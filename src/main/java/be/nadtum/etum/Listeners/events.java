@@ -1,7 +1,7 @@
 package be.nadtum.etum.Listeners;
 
-import be.nadtum.etum.Vanilla.City.menu.MenuCity;
-import be.nadtum.etum.Vanilla.City.menu.MenuCityGestionMembre;
+import be.nadtum.etum.Vanilla.MenuGui.City.MenuCity;
+import be.nadtum.etum.Vanilla.MenuGui.City.MenuCityGestionMembre;
 import be.nadtum.etum.Vanilla.Economie.Métier.*;
 import be.nadtum.etum.Vanilla.Economie.shop.Shop_Serveur;
 import be.nadtum.etum.Vanilla.Economie.shop.Shop_Commerçant;

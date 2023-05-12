@@ -7,41 +7,40 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChatEvent;
+import org.jetbrains.annotations.NotNull;
 
 public class Chat implements Listener {
 
     @EventHandler
-    public void PlayerChat(PlayerChatEvent event){
-
+    public void onPlayerChat(@NotNull PlayerChatEvent event) {
         event.setCancelled(true);
 
         Player player = event.getPlayer();
+        String playerName = player.getName();
+        String playerGrade = PlayerGestion.getPlayerGrade(playerName);
+        String staffGrade = PlayerGestion.getPlayerStaffGrade(playerName);
+        String message = event.getMessage();
 
-        //gérer le muted
+        String chatFormat;
 
-
-        for (Player player1 : Bukkit.getOnlinePlayers()){
-            //chat avec un grade staff : affichage du grade + chat color
-            if (!PlayerGestion.getPlayerStaffGrade(player.getName()).equalsIgnoreCase("NoStaff")) {
-                player1.sendMessage(colorString(PlayerGestion.getGradeDesign(PlayerGestion.getPlayerStaffGrade(player.getName())) + " " + player.getName() + " §e: §f" + colorString(event.getMessage())));
-            }else{
-                //chat sans grade staff mais avec un grade ayant la permission chat color : affichage du grade de jeu + chat color
-                if (FichierGestion.getCfgPermission().contains("Grade." + PlayerGestion.getPlayerGrade(player.getName()) + ".permission.colorchat")) {
-                    player1.sendMessage(colorString(PlayerGestion.getGradeDesign(PlayerGestion.getPlayerGrade(player.getName())) + " " + player.getName() + " §e: §f" + colorString(event.getMessage())));
-                }else{
-                    //chat sans grade staff et sans chat color : affichage du grade de jeu
-                    player1.sendMessage(colorString(PlayerGestion.getGradeDesign(PlayerGestion.getPlayerGrade(player.getName()))) + " " + player.getName() + " §e: §f" + event.getMessage());
-                }
-            }
+        if (!staffGrade.equalsIgnoreCase("NoStaff")) {
+            chatFormat = PlayerGestion.getGradeDesign(staffGrade) + " " + playerName + " §e: §7" + colorString(message);
+        } else if (FichierGestion.getCfgPermission().contains("Grade." + playerGrade + ".permission.colorchat")) {
+            chatFormat = PlayerGestion.getGradeDesign(playerGrade) + " " + playerName + " §e: §7" + colorString(message);
+        } else {
+            chatFormat = PlayerGestion.getGradeDesign(playerGrade) + " " + playerName + " §e: §7" + message;
         }
 
-
+        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+            onlinePlayer.sendMessage(colorString(chatFormat));
+        }
     }
 
     public static String colorString(String message){
-        if(message == null)return "error var is null";
-        return ChatColor.translateAlternateColorCodes('&', message);
+        return message == null ? "error var is null" : ChatColor.translateAlternateColorCodes('&', message);
     }
+
+
 
 
 }

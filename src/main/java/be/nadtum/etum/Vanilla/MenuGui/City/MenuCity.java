@@ -1,4 +1,4 @@
-package be.nadtum.etum.Vanilla.City.menu;
+package be.nadtum.etum.Vanilla.MenuGui.City;
 
 import be.nadtum.etum.Vanilla.City.Fonctionnalité.Claim;
 import be.nadtum.etum.Vanilla.MenuGui.MenuPrincipal;

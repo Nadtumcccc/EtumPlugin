@@ -4,6 +4,8 @@ import be.nadtum.etum.Vanilla.City.Fonctionnalité.Claim;
 import be.nadtum.etum.Utility.Modules.FichierGestion;
 import be.nadtum.etum.Utility.Modules.PlayerGestion;
 import be.nadtum.etum.Utility.Modules.PrefixMessage;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -153,38 +155,30 @@ public class RegionGestion implements Listener {
     }
 
     @EventHandler
-    public void cancelSpawnMonsters(CreatureSpawnEvent event){
-        YamlConfiguration cfg = YamlConfiguration.loadConfiguration(FichierGestion.getFichierRegion());
-        if(cfg.contains("Region")) {
-            for(String regions : cfg.getConfigurationSection("Region.").getKeys(false)){
-                if(cfg.contains("Region." + regions + ".coordonnées.z2")){
-                    x1 = cfg.getDouble("Region." + regions + ".coordonnées.x1");
-                    z1 = cfg.getDouble("Region." + regions + ".coordonnées.z1");
-                    x2 = cfg.getDouble("Region." + regions + ".coordonnées.x2");
-                    z2 = cfg.getDouble("Region." + regions + ".coordonnées.z2");
+    public void cancelSpawnMonsters(CreatureSpawnEvent event) {
+        Location entityLocation = event.getEntity().getLocation();
+        World entityWorld = entityLocation.getWorld();
+        YamlConfiguration cfg = FichierGestion.getCfgRegion();
 
+        if (cfg.contains("Region")) {
+            for (String region : cfg.getConfigurationSection("Region.").getKeys(false)) {
+                String regionWorld = cfg.getString("Region." + region + ".coordonnées.world");
 
-                    if(x1 > x2){
-                        grandx = x1;
-                        petitx = x2;
-                    }else{
-                        grandx = x2;
-                        petitx = x1;
-                    }
+                if (entityWorld != null && entityWorld.getName().equalsIgnoreCase(regionWorld)) {
+                    double x1 = cfg.getDouble("Region." + region + ".coordonnées.x1");
+                    double z1 = cfg.getDouble("Region." + region + ".coordonnées.z1");
+                    double x2 = cfg.getDouble("Region." + region + ".coordonnées.x2");
+                    double z2 = cfg.getDouble("Region." + region + ".coordonnées.z2");
 
-                    if(z1 > z2){
-                        grandz = z1;
-                        petitz = z2;
-                    }else{
-                        grandz = z2;
-                        petitz = z1;
-                    }
-                    if(event.getEntity().getLocation().getWorld().getName().equalsIgnoreCase(cfg.getString("Region." + regions + ".coordonnées.world"))){
-                        if((event.getEntity().getLocation().getX()  >= petitx && event.getEntity().getLocation().getX()  <= grandx)
-                                && (event.getEntity().getLocation().getZ()  >= petitz && event.getEntity().getLocation().getZ()  <= grandz)) {
-                            if(event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.NATURAL)){
-                                event.setCancelled(true);
-                            }
+                    double grandx = Math.max(x1, x2);
+                    double petitx = Math.min(x1, x2);
+                    double grandz = Math.max(z1, z2);
+                    double petitz = Math.min(z1, z2);
+
+                    if (entityLocation.getX() >= petitx && entityLocation.getX() <= grandx
+                            && entityLocation.getZ() >= petitz && entityLocation.getZ() <= grandz) {
+                        if (event.getSpawnReason() == CreatureSpawnEvent.SpawnReason.NATURAL) {
+                            event.setCancelled(true);
                         }
                     }
                 }
@@ -220,94 +214,40 @@ public class RegionGestion implements Listener {
 
         if(cfg.contains("Region")) {
 
-            for(String regions : cfg.getConfigurationSection("Region.").getKeys(false)){
-                x1 = cfg.getDouble("Region." + regions + ".coordonnées.x1");
-                z1 = cfg.getDouble("Region." + regions + ".coordonnées.z1");
-                x2 = cfg.getDouble("Region." + regions + ".coordonnées.x2");
-                z2 = cfg.getDouble("Region." + regions + ".coordonnées.z2");
+            for (String region : cfg.getConfigurationSection("Region.").getKeys(false)) {
+                double x1 = cfg.getDouble("Region." + region + ".coordonnées.x1");
+                double z1 = cfg.getDouble("Region." + region + ".coordonnées.z1");
+                double x2 = cfg.getDouble("Region." + region + ".coordonnées.x2");
+                double z2 = cfg.getDouble("Region." + region + ".coordonnées.z2");
+
+                double grandx, petitx, grandz, petitz;
 
 
+                grandx = Math.max(x1, x2);
+                petitx = Math.min(x1, x2);
+                grandz = Math.max(z1, z2);
+                petitz = Math.min(z1, z2);
 
-                if(x1 > x2){
-                    grandx = x1;
-                    petitx = x2;
-                }else{
-                    grandx = x2;
-                    petitx = x1;
-                }
+                double playergrandx, playerpetitx, playergrandz, playerpetitz;
 
-                if(z1 > z2){
-                    grandz = z1;
-                    petitz = z2;
-                }else{
-                    grandz = z2;
-                    petitz = z1;
-                }
+                playergrandx = Math.max(x1Player, xBlock);
+                playerpetitx = Math.min(x1Player, xBlock);
+                playergrandz = Math.max(z1Player, zBlock);
+                playerpetitz = Math.min(z1Player, zBlock);
 
-
-                //vérifier si claim sur un autre claim
-
-                //si on est dans le cas d'une pose de claim on effectue le code qui execute des éléments en rapport avec une pose
-
-                if (x1Player > xBlock) {
-                    playergrandx = x1Player;
-                    playerpetitx = xBlock;
-                } else {
-                    playergrandx = xBlock;
-                    playerpetitx = x1Player;
-                }
-
-                if (z1Player > zBlock) {
-                    playergrandz = z1Player;
-                    playerpetitz = zBlock;
-                } else {
-                    playergrandz = zBlock;
-                    playerpetitz = z1Player;
-                }
-
-
-                //les coin
-                if((grandz > playerpetitz && grandz < playergrandz) && (grandx > playerpetitx && grandx < playergrandx)){
-                    player.sendMessage(PrefixMessage.erreur() + "tu es dans la region " + regions);
+                if (((grandz > playerpetitz && grandz < playergrandz) || (petitz > playerpetitz && petitz < playergrandz))
+                        && ((grandx > playerpetitx && grandx < playergrandx) || (petitx > playerpetitx && petitx < playergrandx))) {
+                    player.sendMessage(PrefixMessage.erreur() + "tu es dans la région " + region);
                     Claim.cancelActionClaim(player);
                     return true;
                 }
 
-                if((petitz > playerpetitz && petitz < playergrandz) && (petitx > playerpetitx && petitx < playergrandx)){
-                    player.sendMessage(PrefixMessage.erreur() + "tu es dans la region " + regions);
+                if ((playergrandx > petitx && playergrandx < grandx)
+                        && (playerpetitz > petitz && playerpetitz < grandz)) {
+                    player.sendMessage(PrefixMessage.erreur() + "tu es dans la région " + region);
                     Claim.cancelActionClaim(player);
                     return true;
                 }
-
-                if((petitz > playerpetitz && petitz < playergrandz) && (grandx > playerpetitx && grandx < playergrandx)){
-                    player.sendMessage(PrefixMessage.erreur() + "tu es dans la region " + regions);
-                    Claim.cancelActionClaim(player);
-                    return true;
-                }
-
-                if((grandz > playerpetitz && grandz < playergrandz) && (petitx > playerpetitx && petitx < playergrandx)){
-                    player.sendMessage(PrefixMessage.erreur() + "tu es dans la region " + regions);
-                    Claim.cancelActionClaim(player);
-                    return true;
-                }
-
-                //entre les points du claim
-                if((playergrandx > grandx && playergrandx > petitx) && ( playerpetitx < petitx && playerpetitx < grandx)){
-                    if((playergrandz < grandz && playergrandz > petitz) && (playerpetitz < grandz && playerpetitz > petitz)){
-                        player.sendMessage(PrefixMessage.erreur() + "tu es dans la region " + regions);
-                        Claim.cancelActionClaim(player);
-                        return true;
-                    }
-                }
-
-                if((playergrandz > grandz && playergrandz > petitz) && (playerpetitz < grandz && playerpetitz < petitz)){
-                    if((playergrandx < grandx && playergrandx > petitx) && ( playerpetitx < grandx && playerpetitx > petitx)){
-                        player.sendMessage(PrefixMessage.erreur() + "tu es dans la region " + regions);
-                        Claim.cancelActionClaim(player);
-                        return true;
-                    }
-                }
-
             }
 
             String regionname = getNameOfRegion(player, xBlock, zBlock);
