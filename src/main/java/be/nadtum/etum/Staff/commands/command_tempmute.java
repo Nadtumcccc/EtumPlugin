@@ -44,7 +44,7 @@ public class command_tempmute implements CommandExecutor {
         // 1d
         String format = args[2];
 
-        int duration = Integer.valueOf(args[1]);
+        int duration = Integer.parseInt(args[1]);
 
         long time = 0;
         String timesrt = "";
@@ -52,23 +52,23 @@ public class command_tempmute implements CommandExecutor {
         switch (format){
 
             case "s":
-                time = duration * 1000;
+                time = duration * 1000L;
                 timesrt = "secondes";
                 break;
             case "m":
-                time = duration * 1000 * 60;
+                time = (long) duration * 1000 * 60;
                 timesrt = "minutes";
                 break;
             case "h":
-                time = duration * 1000 * 60 * 60;
+                time = (long) duration * 1000 * 60 * 60;
                 timesrt = "heure(s)";
                 break;
             case "d":
-                time = duration * 1000 * 60 * 60 * 24;
+                time = (long) duration * 1000 * 60 * 60 * 24;
                 timesrt = "jour(s)";
                 break;
             case "w":
-                time = duration * 1000 * 60 * 60 * 24 * 7;
+                time = (long) duration * 1000 * 60 * 60 * 24 * 7;
                 timesrt = "semaine(s)";
                 break;
             default:

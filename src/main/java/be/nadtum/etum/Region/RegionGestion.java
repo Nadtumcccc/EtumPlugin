@@ -27,27 +27,12 @@ import java.util.HashMap;
 
 public class RegionGestion implements Listener {
 
-    private static Double playerpetitx;
-    private static Double playerpetitz;
-    private static Double playergrandx;
-    private static Double playergrandz;
-
-    private static Double petitx;
-    private static Double petitz;
-    private static Double grandx;
-    private static Double grandz;
-
-    private static Double x1;
-    private static Double z1;
-    private static Double x2;
-    private static Double z2;
-
     public static HashMap<Player, Integer> cachecoordonnéex1 = new HashMap<>();
     public static HashMap<Player, Integer> cachecoordonnéez1 = new HashMap<>();
     public static HashMap<Player, Integer> cachecoordonnéex2 = new HashMap<>();
     public static HashMap<Player, Integer> cachecoordonnéez2 = new HashMap<>();
 
-    private static HashMap<Player, Boolean> isActionOnRegion = new HashMap<>();
+    private static final HashMap<Player, Boolean> isActionOnRegion = new HashMap<>();
 
     @EventHandler
     public void setPoseRegion(PlayerInteractEvent event) {
@@ -270,12 +255,14 @@ public class RegionGestion implements Listener {
         if(cfg.contains("Region")) {
             for(String regions : cfg.getConfigurationSection("Region.").getKeys(false)){
                 if(cfg.contains("Region." + regions + ".coordonnées.z2")){
-                    x1 = cfg.getDouble("Region." + regions + ".coordonnées.x1");
-                    z1 = cfg.getDouble("Region." + regions + ".coordonnées.z1");
-                    x2 = cfg.getDouble("Region." + regions + ".coordonnées.x2");
-                    z2 = cfg.getDouble("Region." + regions + ".coordonnées.z2");
+                    Double x1 = cfg.getDouble("Region." + regions + ".coordonnées.x1");
+                    Double z1 = cfg.getDouble("Region." + regions + ".coordonnées.z1");
+                    Double x2 = cfg.getDouble("Region." + regions + ".coordonnées.x2");
+                    Double z2 = cfg.getDouble("Region." + regions + ".coordonnées.z2");
 
 
+                    Double petitx;
+                    Double grandx;
                     if(x1 > x2){
                         grandx = x1;
                         petitx = x2;
@@ -284,6 +271,8 @@ public class RegionGestion implements Listener {
                         petitx = x1;
                     }
 
+                    Double petitz;
+                    Double grandz;
                     if(z1 > z2){
                         grandz = z1;
                         petitz = z2;

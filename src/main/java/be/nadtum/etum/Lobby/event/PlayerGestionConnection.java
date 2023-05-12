@@ -1,6 +1,7 @@
 package be.nadtum.etum.Lobby.event;
 
 import be.nadtum.etum.Utility.Modules.*;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
@@ -23,9 +24,9 @@ public class PlayerGestionConnection implements Listener {
     public void PlayerJoinServer(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         PlayerGestion.createNewProfil(player);
-        event.setJoinMessage("§6[§a+§6] §4"
+        event.joinMessage(Component.text("§6[§a+§6] §4"
                 + (PlayerGestion.getPlayerStaffGrade(player.getName()).equalsIgnoreCase("NoStaff")
-                ? Chat.colorString(PlayerGestion.getGradeDesign(PlayerGestion.getPlayerGrade(player.getName()))) : Chat.colorString(PlayerGestion.getGradeDesign(PlayerGestion.getPlayerStaffGrade(player.getName())))) + " " + player.getName());
+                ? Chat.colorString(PlayerGestion.getGradeDesign(PlayerGestion.getPlayerGrade(player.getName()))) : Chat.colorString(PlayerGestion.getGradeDesign(PlayerGestion.getPlayerStaffGrade(player.getName())))) + " " + player.getName()));
 
 
         if(!player.hasPlayedBefore()){
