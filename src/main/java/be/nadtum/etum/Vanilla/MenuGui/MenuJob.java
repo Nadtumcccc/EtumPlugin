@@ -91,7 +91,7 @@ public class MenuJob implements Listener {
 
         if (event.getView().getTitle().equalsIgnoreCase(nameMenu)) {
 
-            if(event.getCurrentItem().getType().equals(Material.BARRIER)){
+            if(event.getCurrentItem().getType().equals(Material.DARK_OAK_DOOR)){
                 player.closeInventory();
                 MenuPrincipal.menu(player);
                 return;

@@ -59,7 +59,7 @@ public class MenuHome implements Listener {
                     break;
                 case STRUCTURE_VOID:
                     event.setCancelled(true);
-                case BARRIER:
+                case DARK_OAK_DOOR:
                     player.closeInventory();
                     MenuPrincipal.menu(player);
                     break;

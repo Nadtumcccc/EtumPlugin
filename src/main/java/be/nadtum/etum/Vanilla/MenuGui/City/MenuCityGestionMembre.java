@@ -159,7 +159,7 @@ public class MenuCityGestionMembre implements Listener {
                         menuMembre(player, event.getCurrentItem().getItemMeta().getDisplayName());
                     }
                     break;
-                case BARRIER:
+                case DARK_OAK_DOOR:
                     player.closeInventory();
                     MenuCity.menu(player);
                     break;

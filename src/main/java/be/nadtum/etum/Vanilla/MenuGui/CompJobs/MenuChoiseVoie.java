@@ -67,7 +67,7 @@ public class MenuChoiseVoie implements Listener {
                     player.closeInventory();
                     PlayerGestion.setPlayerJobsVoie(player.getName(), "essence");
                     break;
-                case BARRIER:
+                case DARK_OAK_DOOR:
                     player.closeInventory();
                     break;
                 default:
@@ -76,7 +76,6 @@ public class MenuChoiseVoie implements Listener {
             }
 
             MenuJob.menu(player);
-            return;
         }
     }
 

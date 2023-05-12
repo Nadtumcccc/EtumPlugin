@@ -60,7 +60,7 @@ public class MenuMondeRessource implements Listener {
                     player.closeInventory();
                     Teleportation.PlayerTpToSpawn(player, "End");
                     break;
-                case BARRIER:
+                case DARK_OAK_DOOR:
                     player.closeInventory();
                     MenuPrincipal.menu(player);
                     break;

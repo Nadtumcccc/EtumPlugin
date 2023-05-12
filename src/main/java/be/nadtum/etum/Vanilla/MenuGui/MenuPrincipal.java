@@ -84,7 +84,7 @@ public class MenuPrincipal implements Listener {
 
         if (event.getView().getTitle().equalsIgnoreCase(nameMenu)) {
             switch (event.getCurrentItem().getType()) {
-                case BARRIER:
+                case DARK_OAK_DOOR:
                     player.closeInventory();
                     break;
                 case RED_BED:

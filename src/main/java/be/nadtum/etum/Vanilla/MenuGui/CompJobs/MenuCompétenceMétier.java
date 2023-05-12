@@ -165,7 +165,7 @@ public class MenuCompétenceMétier implements Listener {
             return;
         }
 
-        if(event.getCurrentItem().getType().equals(Material.BARRIER)){
+        if(event.getCurrentItem().getType().equals(Material.DARK_OAK_DOOR)){
             player.closeInventory();
             MenuJob.menu(player);
             return;

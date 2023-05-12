@@ -7,7 +7,7 @@ import org.bukkit.inventory.Inventory;
 public class MenuGestion {
 
     public static ItemBuilder fill = new ItemBuilder(Material.MAGENTA_STAINED_GLASS_PANE, "§5Contour", 1);
-    public static ItemBuilder back = new ItemBuilder(Material.BARRIER, "§cRetour", 1);
+    public static ItemBuilder back = new ItemBuilder(Material.DARK_OAK_DOOR, "§cRetour", 1);
 
 
     public static void setupTemplate(Inventory inv) {

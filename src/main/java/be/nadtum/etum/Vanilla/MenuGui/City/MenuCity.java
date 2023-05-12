@@ -110,7 +110,7 @@ public class MenuCity implements Listener {
                         }
                     }
                     break;
-                case BARRIER:
+                case DARK_OAK_DOOR:
                     player.closeInventory();
                     MenuPrincipal.menu(player);
                     break;
@@ -137,7 +137,7 @@ public class MenuCity implements Listener {
                     CityGestion.setSpawn(player, PlayerGestion.getPlayerCityName(player.getName()));
                     event.setCancelled(true);
                     break;
-                case BARRIER:
+                case DARK_OAK_DOOR:
                     player.closeInventory();
                     MenuCity.menu(player);
                     break;
