@@ -17,7 +17,7 @@ import org.bukkit.scoreboard.Team;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class PlayerGestionConnection implements Listener {
+public class Connection implements Listener {
 
 
     @EventHandler

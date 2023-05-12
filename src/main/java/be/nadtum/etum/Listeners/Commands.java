@@ -1,11 +1,11 @@
 package be.nadtum.etum.Listeners;
 
-import be.nadtum.etum.Lobby.commands.CommandSpawn;
+import be.nadtum.etum.Vanilla.Player.Commands.CommandSpawn;
 import be.nadtum.etum.Main;
 import be.nadtum.etum.Region.command_region;
 import be.nadtum.etum.Staff.commands.*;
 import be.nadtum.etum.Vanilla.City.commands.command_city;
-import be.nadtum.etum.Vanilla.Commands.*;
+import be.nadtum.etum.Vanilla.Player.Commands.*;
 import be.nadtum.etum.Vanilla.Economie.commands.*;
 import be.nadtum.etum.Vanilla.MenuGui.commands.command_menu;
 

@@ -1,4 +1,4 @@
-package be.nadtum.etum.Lobby.commands;
+package be.nadtum.etum.Vanilla.Player.Commands;
 
 import be.nadtum.etum.Utility.Modules.*;
 import org.bukkit.Location;

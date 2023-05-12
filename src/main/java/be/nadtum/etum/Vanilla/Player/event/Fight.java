@@ -1,4 +1,4 @@
-package be.nadtum.etum.Vanilla.Player;
+package be.nadtum.etum.Vanilla.Player.event;
 
 import be.nadtum.etum.Utility.Modules.PlayerGestion;
 import org.bukkit.entity.Player;
@@ -6,7 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-public class JoueurGestionCombat implements Listener {
+public class Fight implements Listener {
 
 
 

@@ -1,4 +1,4 @@
-package be.nadtum.etum.Vanilla.Commands;
+package be.nadtum.etum.Vanilla.Player.Commands;
 
 import be.nadtum.etum.Utility.Modules.CityGestion;
 import be.nadtum.etum.Utility.Modules.FichierGestion;

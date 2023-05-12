@@ -1,4 +1,4 @@
-package be.nadtum.etum.Vanilla.Player;
+package be.nadtum.etum.Vanilla.Player.event;
 
 
 import be.nadtum.etum.Utility.Modules.Chat;
@@ -14,7 +14,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 
-public class JoueurGestionDeath implements Listener {
+public class Death implements Listener {
 
     @EventHandler
     public void PlayerDeath(PlayerDeathEvent event){

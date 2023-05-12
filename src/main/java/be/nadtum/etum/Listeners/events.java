@@ -5,7 +5,6 @@ import be.nadtum.etum.Vanilla.Economie.Métier.*;
 import be.nadtum.etum.Vanilla.Economie.shop.*;
 import be.nadtum.etum.Vanilla.City.Fonctionnalité.Claim;
 import be.nadtum.etum.Vanilla.Fonctionnalité.Spawner;
-import be.nadtum.etum.Lobby.event.PlayerGestionConnection;
 import be.nadtum.etum.Main;
 import be.nadtum.etum.Region.RegionGestion;
 import be.nadtum.etum.Staff.ACC.events.PlayerJoinQuit;
@@ -17,8 +16,8 @@ import be.nadtum.etum.Vanilla.MenuGui.MenuHome;
 import be.nadtum.etum.Vanilla.MenuGui.MenuJob;
 import be.nadtum.etum.Vanilla.MenuGui.MenuMondeRessource;
 import be.nadtum.etum.Vanilla.MenuGui.MenuPrincipal;
-import be.nadtum.etum.Vanilla.Player.JoueurGestionCombat;
-import be.nadtum.etum.Vanilla.Player.JoueurGestionDeath;
+import be.nadtum.etum.Vanilla.Player.event.Fight;
+import be.nadtum.etum.Vanilla.Player.event.Death;
 import org.bukkit.plugin.PluginManager;
 
 public class events {
@@ -40,8 +39,8 @@ public class events {
 
         // Player
         pm.registerEvents(new Chat(), main);
-        pm.registerEvents(new JoueurGestionDeath(), main);
-        pm.registerEvents(new JoueurGestionCombat(), main);
+        pm.registerEvents(new Death(), main);
+        pm.registerEvents(new Fight(), main);
 
         // Compétence métier
         pm.registerEvents(new MenuChoiseVoie(), main);
@@ -71,7 +70,7 @@ public class events {
         // City
         pm.registerEvents(new Claim(), main);
 
-        pm.registerEvents(new PlayerGestionConnection(), main);
+        pm.registerEvents(new be.nadtum.etum.Lobby.event.Connection(), main);
 
         // Staff
         // Modération
