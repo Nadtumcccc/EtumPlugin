@@ -23,7 +23,6 @@ public class command_motd implements CommandExecutor, TabExecutor {
             return false;
         }
 
-        Player player = (Player) sender;
         YamlConfiguration cfg = FichierGestion.getCfgSettings();
 
         if (args.length >= 2) {
@@ -38,9 +37,8 @@ public class command_motd implements CommandExecutor, TabExecutor {
         return false;
     }
 
-    @Nullable
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String s, @NotNull String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String s, @NotNull String @NotNull [] args) {
 
         if (args.length == 1) {
             return Arrays.asList("ligne_1", "ligne_2");

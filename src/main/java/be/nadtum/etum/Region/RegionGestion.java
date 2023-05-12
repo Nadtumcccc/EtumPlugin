@@ -145,27 +145,33 @@ public class RegionGestion implements Listener {
         World entityWorld = entityLocation.getWorld();
         YamlConfiguration cfg = FichierGestion.getCfgRegion();
 
-        if (cfg.contains("Region")) {
-            for (String region : cfg.getConfigurationSection("Region.").getKeys(false)) {
-                String regionWorld = cfg.getString("Region." + region + ".coordonnées.world");
+        if (!cfg.contains("Region")) {
+            return;
+        }
 
-                if (entityWorld != null && entityWorld.getName().equalsIgnoreCase(regionWorld)) {
-                    double x1 = cfg.getDouble("Region." + region + ".coordonnées.x1");
-                    double z1 = cfg.getDouble("Region." + region + ".coordonnées.z1");
-                    double x2 = cfg.getDouble("Region." + region + ".coordonnées.x2");
-                    double z2 = cfg.getDouble("Region." + region + ".coordonnées.z2");
+        String regionPrefix = "Region.";
 
-                    double grandx = Math.max(x1, x2);
-                    double petitx = Math.min(x1, x2);
-                    double grandz = Math.max(z1, z2);
-                    double petitz = Math.min(z1, z2);
+        for (String region : cfg.getConfigurationSection(regionPrefix).getValues(false).keySet()) {
+            String regionWorld = cfg.getString(regionPrefix + region + ".coordonnées.world");
 
-                    if (entityLocation.getX() >= petitx && entityLocation.getX() <= grandx
-                            && entityLocation.getZ() >= petitz && entityLocation.getZ() <= grandz) {
-                        if (event.getSpawnReason() == CreatureSpawnEvent.SpawnReason.NATURAL) {
-                            event.setCancelled(true);
-                        }
-                    }
+            if (entityWorld == null || !entityWorld.getName().equalsIgnoreCase(regionWorld)) {
+                continue;
+            }
+
+            double x1 = cfg.getDouble(regionPrefix + region + ".coordonnées.x1");
+            double z1 = cfg.getDouble(regionPrefix + region + ".coordonnées.z1");
+            double x2 = cfg.getDouble(regionPrefix + region + ".coordonnées.x2");
+            double z2 = cfg.getDouble(regionPrefix + region + ".coordonnées.z2");
+
+            double grandx = Math.max(x1, x2);
+            double petitx = Math.min(x1, x2);
+            double grandz = Math.max(z1, z2);
+            double petitz = Math.min(z1, z2);
+
+            if (entityLocation.getX() >= petitx && entityLocation.getX() <= grandx
+                    && entityLocation.getZ() >= petitz && entityLocation.getZ() <= grandz) {
+                if (event.getSpawnReason() == CreatureSpawnEvent.SpawnReason.NATURAL) {
+                    event.setCancelled(true);
                 }
             }
         }

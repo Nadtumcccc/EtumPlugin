@@ -53,7 +53,7 @@ public class MenuCityGestionMembre implements Listener {
 
         for(int i =0; i < 53; i++){
             if(inv.getInventory().getItem(i) == null){
-                inv.getInventory().setItem(i, MenuGestion.contour.getItem());
+                inv.getInventory().setItem(i, MenuGestion.fill.getItem());
             }
         }
 
@@ -129,7 +129,7 @@ public class MenuCityGestionMembre implements Listener {
 
         for(int i =0; i < 53; i++){
             if(inv.getInventory().getItem(i) == null){
-                inv.getInventory().setItem(i, MenuGestion.contour.getItem());
+                inv.getInventory().setItem(i, MenuGestion.fill.getItem());
             }
         }
 

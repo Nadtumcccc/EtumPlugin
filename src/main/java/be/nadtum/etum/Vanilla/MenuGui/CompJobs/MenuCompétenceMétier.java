@@ -144,7 +144,7 @@ public class MenuCompétenceMétier implements Listener {
         inv.getInventory().setItem(26, resetvoie.getItem());
         for(int i =0; i < 27; i++){
             if (inv.getInventory().getItem(i) == null) {
-                inv.getInventory().setItem(i, MenuGestion.contour.getItem());
+                inv.getInventory().setItem(i, MenuGestion.fill.getItem());
             }
         }
 

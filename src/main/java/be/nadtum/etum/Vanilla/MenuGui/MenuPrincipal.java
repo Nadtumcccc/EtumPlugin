@@ -41,6 +41,8 @@ public class MenuPrincipal implements Listener {
 
         InventoryBuilder inv = new InventoryBuilder(nameMenu, 54);
 
+        MenuGestion.setupTemplate(inv.getInventory());
+
         ItemBuilder profil = new ItemBuilder(Material.PLAYER_HEAD, "§eProfil : §b" + player.getName(), 1);
         SkullMeta skullMeta = (SkullMeta) profil.getItem().getItemMeta();
         skullMeta.setOwner(player.getName());
@@ -68,11 +70,7 @@ public class MenuPrincipal implements Listener {
         inv.getInventory().setItem(39, spawn.getItem());
         player.updateInventory();
 
-        for(int i =0; i < 54; i++){
-            if(inv.getInventory().getItem(i) == null){
-                inv.getInventory().setItem(i, MenuGestion.contour.getItem());
-            }
-        }
+
         player.openInventory(inv.getInventory());
     }
 
@@ -86,6 +84,9 @@ public class MenuPrincipal implements Listener {
 
         if (event.getView().getTitle().equalsIgnoreCase(nameMenu)) {
             switch (event.getCurrentItem().getType()) {
+                case BARRIER:
+                    player.closeInventory();
+                    break;
                 case RED_BED:
                     player.closeInventory();
                     MenuHome.menu(player);
@@ -118,7 +119,6 @@ public class MenuPrincipal implements Listener {
                     event.setCancelled(true);
                     break;
             }
-            return;
         }
     }
 

@@ -82,7 +82,7 @@ public class command_home implements CommandExecutor, TabExecutor {
                 player.sendMessage(PrefixMessage.serveur() + " Le home §b" + args[0] + " §a a été créé");
             }
         } else if (cmd.getName().equals("delhome")) {
-            String homePath = "Profil." + player.getUniqueId().toString() + ".Home.homes." + args[0];
+            String homePath = "Profil." + player.getUniqueId() + ".Home.homes." + args[0];
 
             if (FichierGestion.getCfgPlayers().isSet(homePath)) {
                 FichierGestion.getCfgPlayers().set(homePath, null);

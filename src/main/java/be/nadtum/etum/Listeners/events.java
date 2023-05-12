@@ -16,6 +16,7 @@ import be.nadtum.etum.Vanilla.MenuGui.MenuHome;
 import be.nadtum.etum.Vanilla.MenuGui.MenuJob;
 import be.nadtum.etum.Vanilla.MenuGui.MenuMondeRessource;
 import be.nadtum.etum.Vanilla.MenuGui.MenuPrincipal;
+import be.nadtum.etum.Vanilla.Player.event.Connection;
 import be.nadtum.etum.Vanilla.Player.event.Fight;
 import be.nadtum.etum.Vanilla.Player.event.Death;
 import org.bukkit.plugin.PluginManager;
@@ -70,7 +71,7 @@ public class events {
         // City
         pm.registerEvents(new Claim(), main);
 
-        pm.registerEvents(new be.nadtum.etum.Lobby.event.Connection(), main);
+        pm.registerEvents(new Connection(), main);
 
         // Staff
         // Modération

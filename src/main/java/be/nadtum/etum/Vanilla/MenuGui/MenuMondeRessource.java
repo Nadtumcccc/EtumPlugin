@@ -29,7 +29,7 @@ public class MenuMondeRessource implements Listener {
 
         for(int i =0; i < 54; i++){
             if (inv.getInventory().getItem(i) == null) {
-                inv.getInventory().setItem(i, MenuGestion.contour.getItem());
+                inv.getInventory().setItem(i, MenuGestion.fill.getItem());
             }
         }
         player.openInventory(inv.getInventory());

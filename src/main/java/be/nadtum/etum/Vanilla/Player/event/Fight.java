@@ -11,23 +11,18 @@ public class Fight implements Listener {
 
 
     @EventHandler
-    public void PvP(EntityDamageByEntityEvent event){
-
-
-        if(event.getEntity() instanceof Player && event.getDamager() instanceof Player){
-            Player player = ((Player) event.getDamager()).getPlayer();
-            Player target = ((Player) event.getEntity()).getPlayer();
-
-            //empêcher le pvp entre joueur de même guilde
-            if(PlayerGestion.getPlayerCityName(player.getName()).equalsIgnoreCase(PlayerGestion.getPlayerCityName(target.getName()))){
-                event.setCancelled(true);
-                return;
-            }
+    public void onPvp(EntityDamageByEntityEvent event) {
+        if (!(event.getEntity() instanceof Player) || !(event.getDamager() instanceof Player)) {
+            return;
         }
 
+        Player player = (Player) event.getDamager();
+        Player target = (Player) event.getEntity();
 
-
-
+        // Prevent PvP between players of the same guild
+        if (PlayerGestion.getPlayerCityName(player.getName()).equalsIgnoreCase(PlayerGestion.getPlayerCityName(target.getName()))) {
+            event.setCancelled(true);
+        }
     }
 
 

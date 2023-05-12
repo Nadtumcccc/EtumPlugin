@@ -40,7 +40,7 @@ public class MenuCity implements Listener {
         inv.getInventory().setItem(8, MenuGestion.back.getItem());
         for(int i =0; i < 9; i++){
             if(inv.getInventory().getItem(i) == null){
-                inv.getInventory().setItem(i, MenuGestion.contour.getItem());
+                inv.getInventory().setItem(i, MenuGestion.fill.getItem());
             }
         }
 
@@ -58,7 +58,7 @@ public class MenuCity implements Listener {
 
         for(int i =0; i < 9; i++){
             if(inv.getInventory().getItem(i) == null){
-                inv.getInventory().setItem(i, MenuGestion.contour.getItem());
+                inv.getInventory().setItem(i, MenuGestion.fill.getItem());
             }
         }
         player.openInventory(inv.getInventory());
