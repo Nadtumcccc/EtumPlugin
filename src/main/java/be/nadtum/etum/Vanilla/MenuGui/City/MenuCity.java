@@ -1,6 +1,7 @@
 package be.nadtum.etum.Vanilla.MenuGui.City;
 
 import be.nadtum.etum.Vanilla.City.Fonctionnalité.Claim;
+import be.nadtum.etum.Vanilla.MenuGui.MenuJob;
 import be.nadtum.etum.Vanilla.MenuGui.MenuPrincipal;
 import be.nadtum.etum.Utility.Modules.*;
 import be.nadtum.etum.Utility.Objets.InventoryBuilder;
@@ -24,7 +25,9 @@ public class MenuCity implements Listener {
 
     public static void menu(Player player){
 
-        InventoryBuilder inv = new InventoryBuilder(nameMenu, 9);
+        InventoryBuilder inv = new InventoryBuilder(nameMenu, 45);
+
+        inv.setupTemplate();
 
         ItemBuilder spawn = new ItemBuilder(Material.RED_BED,"§4Spawn",1);
         meta = spawn.getItem().getItemMeta();
@@ -37,30 +40,22 @@ public class MenuCity implements Listener {
 
         inv.getInventory().setItem(0, spawn.getItem());
         inv.getInventory().setItem(7, settings.getItem());
-        inv.getInventory().setItem(8, MenuGestion.back.getItem());
-        for(int i =0; i < 9; i++){
-            if(inv.getInventory().getItem(i) == null){
-                inv.getInventory().setItem(i, MenuGestion.fill.getItem());
-            }
-        }
+
 
         player.openInventory(inv.getInventory());
     }
     public static void menuSettings(Player player){
 
         InventoryBuilder inv = new InventoryBuilder(nameMenuSettings, 9);
+
+        inv.setupTemplate();
+
         ItemBuilder membres = new ItemBuilder(Material.PLAYER_HEAD, "§dMembres", 1);
 
         ItemBuilder spawn = new ItemBuilder(Material.RED_BED,"§6set-spawn",1);
         inv.getInventory().setItem(0, spawn.getItem());
         inv.getInventory().setItem(1, membres.getItem());
-        inv.getInventory().setItem(8, MenuGestion.back.getItem());
 
-        for(int i =0; i < 9; i++){
-            if(inv.getInventory().getItem(i) == null){
-                inv.getInventory().setItem(i, MenuGestion.fill.getItem());
-            }
-        }
         player.openInventory(inv.getInventory());
     }
 

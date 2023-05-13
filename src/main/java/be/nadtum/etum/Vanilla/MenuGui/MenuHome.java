@@ -1,7 +1,6 @@
 package be.nadtum.etum.Vanilla.MenuGui;
 
 import be.nadtum.etum.Utility.Modules.FichierGestion;
-import be.nadtum.etum.Utility.Modules.MenuGestion;
 import be.nadtum.etum.Utility.Objets.InventoryBuilder;
 import be.nadtum.etum.Utility.Objets.ItemBuilder;
 import org.bukkit.Material;
@@ -21,7 +20,7 @@ public class MenuHome implements Listener {
         YamlConfiguration cfg_profil = FichierGestion.getCfgPlayers();
         InventoryBuilder inv = new InventoryBuilder(nameMenu, 18);
 
-        MenuGestion.setupTemplate(inv.getInventory());
+        inv.setupTemplate();
 
         Integer nbCase = 0;
         if(cfg_profil.contains("Profil." + player.getUniqueId() + ".Home.homes")){
@@ -46,10 +45,8 @@ public class MenuHome implements Listener {
         Player player = (Player) event.getWhoClicked();
         if (event.getCurrentItem() == null) return;
 
-        if (event.getCurrentItem().getType().equals(Material.MAGENTA_STAINED_GLASS_PANE)) {
-            event.setCancelled(true);
-            return;
-        }
+        event.setCancelled(true);
+
         if (event.getView().getTitle().equalsIgnoreCase(nameMenu)) {
             switch (event.getCurrentItem().getType()) {
                 case OAK_SIGN:
@@ -57,10 +54,7 @@ public class MenuHome implements Listener {
                     String home_name = event.getCurrentItem().getItemMeta().getDisplayName();
                     player.performCommand("home " + home_name);
                     break;
-                case STRUCTURE_VOID:
-                    event.setCancelled(true);
                 case DARK_OAK_DOOR:
-                    player.closeInventory();
                     MenuPrincipal.menu(player);
                     break;
                 default:

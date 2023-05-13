@@ -5,6 +5,7 @@ import be.nadtum.etum.Utility.Modules.Chat;
 import be.nadtum.etum.Utility.Modules.FichierGestion;
 import be.nadtum.etum.Utility.Modules.PlayerGestion;
 import be.nadtum.etum.Utility.Modules.PrefixMessage;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -12,11 +13,100 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
+import java.util.Objects;
+
 public class command_grade implements CommandExecutor {
+
+    enum Grade {
+        AKIEN(0, 0, 0),
+        BOURGEOIS(1, 10000, 1),
+        IRON(2, 50000, 1),
+        GOLD(3, 100000, 1),
+        DIAMOND(4, 500000, 2),
+        EMERALD(5, 1000000, 2),
+        NETHERITE(6, 5000000, 3);
+
+        private final int priority;
+        private final int reward;
+        private final int home;
+
+        Grade(int priority, int money, int home) {
+            this.priority = priority;
+            this.reward = money;
+            this.home = home;
+        }
+
+        public int getPriority() {
+            return priority;
+        }
+
+        public int getMoney() {
+            return reward;
+        }
+
+        public int getHome() {
+            return home;
+        }
+
+        // Méthode pour obtenir l'objet Grade à partir du nom du grade
+        private static Grade getGrade(String gradeName) {
+            try {
+                return Grade.valueOf(gradeName);
+            } catch (IllegalArgumentException e) {
+                return null;
+            }
+        }
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
-         /* /grade [action]
+
+        if (!(sender instanceof Player)) {
+            // Permettre à la console de gérer les commandes
+
+            // grade buy grade_name player
+            if (!Objects.equals(args[0], "buy")) return false;
+
+            Player player = Bukkit.getPlayer(args[2]);
+            if (player == null) {
+                sender.sendMessage("Ce joueur n'existe pas ou n'est pas en ligne.");
+                return false;
+            }
+
+            String gradeName = args[1].toUpperCase();
+            String currentGradeName = PlayerGestion.getPlayerGrade(player.getName()).toUpperCase();
+
+            Grade grade = Grade.getGrade(gradeName);
+            Grade currentGrade = Grade.getGrade(currentGradeName);
+
+            // Vérifier si le grade acheté est plus élevé que le grade actuel du joueur
+            if (grade.getPriority() > currentGrade.getPriority()) {
+                PlayerGestion.setPlayerGrade(player.getName(), args[1]);
+                sender.sendMessage("Grade acheté avec succès !");
+            }
+
+            // Récompense en fonction du grade
+            int rewardAmount = grade.getMoney();
+            if (rewardAmount > 0) {
+                // Donner de l'argent au joueur
+                PlayerGestion.addPlayerMoney(player.getName(), (long) rewardAmount);
+                sender.sendMessage("Vous avez reçu " + rewardAmount + " d'argent en récompense !");
+            }
+
+            return false;
+        }
+
+
+
+
+        Player player = (Player) sender;
+
+        //vérifier s'il à la permission
+
+        if(!PlayerGestion.hasStaffPermission(player, "admin"))return false;
+
+        /* /grade [action]
             action :
             - create [grade]
             - delete [grade]
@@ -25,20 +115,6 @@ public class command_grade implements CommandExecutor {
             - delete [grade] (permission : string)
             - design [grade] [design : string]
          */
-        if (!(sender instanceof Player)) {
-            System.out.println(PrefixMessage.erreur() + "vous ne pouvez pas utiliser cette commande");
-            return false;
-        }
-        Player player = (Player) sender;
-
-        //vérifier s'il à la permission
-
-        if (!FichierGestion.getCfgPermission().contains("Grade." + PlayerGestion.getPlayerGrade(player.getName()) + ".permission.admin")) {
-            if (!player.isOp()) {
-                player.sendMessage(PrefixMessage.erreur() + "vous n'avez pas la permission d'utiliser cette commande");
-                return false;
-            }
-        }
 
         if(args.length == 3) {
             if(!GradeExiste(args[1], FichierGestion.getCfgPermission())){
@@ -70,19 +146,20 @@ public class command_grade implements CommandExecutor {
 
                 case "set":
 
-                    if(!(Bukkit.getPlayer(args[2]) instanceof Player)){
-                        player.sendMessage(PrefixMessage.erreur() + "le joueur n'est pas en ligne");
+                    if (!(Bukkit.getPlayer(args[2]) instanceof Player)) {
+                        String errorMessage = PrefixMessage.erreur() + "le joueur n'est pas en ligne";
+                        player.sendMessage(errorMessage);
                         return false;
                     }
 
-                    if( PlayerGestion.getPlayerGrade(args[2]).equalsIgnoreCase(args[1])){
-                        player.sendMessage(PrefixMessage.erreur() + "le joueur possède déjà ce grade");
+                    if (PlayerGestion.getPlayerGrade(args[2]).equalsIgnoreCase(args[1])) {
+                        String errorMessage = PrefixMessage.erreur() + "le joueur possède déjà ce grade";
+                        player.sendMessage(errorMessage);
                         return false;
                     }
 
-                     PlayerGestion.setPlayerGrade(args[2], args[1]);
-                    player.sendMessage(
-                            PrefixMessage.admin() + "le joueur §b" + Bukkit.getPlayer(args[2]).getName() + " §ea reçu le grade §b" + args[1]);
+                    PlayerGestion.setPlayerGrade(args[2], args[1]);
+                    player.sendMessage(Component.text(PrefixMessage.admin() + "le joueur §b" + Bukkit.getPlayer(args[2]).getName() + " §ea reçu le grade §b" + args[1]));
                     break;
                 case "setstaff":
                     if(!(Bukkit.getPlayer(args[2]) instanceof Player)){
@@ -152,4 +229,9 @@ public class command_grade implements CommandExecutor {
     private Boolean PermissionExiste(String grade ,String permission, YamlConfiguration cfg){
         return cfg.contains("Grade." + grade + ".permission." + permission);
     }
+
+    // Méthode pour obtenir l'objet Grade à partir du nom du grade
+
+
+
 }

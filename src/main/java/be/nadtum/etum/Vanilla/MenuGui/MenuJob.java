@@ -1,7 +1,5 @@
 package be.nadtum.etum.Vanilla.MenuGui;
 
-import be.nadtum.etum.Vanilla.MenuGui.CompJobs.MenuChoiseVoie;
-import be.nadtum.etum.Vanilla.MenuGui.CompJobs.MenuCompétenceMétier;
 import be.nadtum.etum.Utility.Modules.*;
 import be.nadtum.etum.Utility.Objets.InventoryBuilder;
 import be.nadtum.etum.Utility.Objets.ItemBuilder;
@@ -27,7 +25,10 @@ public class MenuJob implements Listener {
 
         InventoryBuilder inv = new InventoryBuilder(nameMenu, 54);
 
+        inv.setupTemplate();
+
         if(PlayerGestion.getPlayerJobName(player.getName()).equalsIgnoreCase("nojob")){
+
             ItemBuilder mineur = new ItemBuilder(Material.IRON_PICKAXE, "§7Mineur", 1);
 
             ItemBuilder chasseur = new ItemBuilder(Material.IRON_SWORD, "§4Chasseur", 1);
@@ -43,40 +44,27 @@ public class MenuJob implements Listener {
             inv.getInventory().setItem(12, bucheron.getItem());
             inv.getInventory().setItem(13, fermier.getItem());
             inv.getInventory().setItem(14, pecheur.getItem());
+
         }else{
 
-            ItemBuilder métier = new ItemBuilder(Material.ENCHANTED_BOOK, PlayerGestion.getPlayerJobName(player.getName()), 1);
-            meta = métier.getItem().getItemMeta();
-            lore = new ArrayList<String>();
-            lore.add("§6Voie§e : §b" + PlayerGestion.getPlayerJobsVoie(player.getName()));
-            lore.add("§6Niveau§e : §b" + PlayerGestion.getPlayerJobNiveau(player.getName()));
-            lore.add("§6XP§e : §b" + PlayerGestion.getPlayerJobXp(player.getName()) + "§e/"
+            ItemBuilder jobs = new ItemBuilder(Material.ENCHANTED_BOOK, PlayerGestion.getPlayerJobName(player.getName()), 1);
+            jobs.addLore("§6Voie§e : §b" + PlayerGestion.getPlayerJobsVoie(player.getName()));
+            jobs.addLore("§6Niveau§e : §b" + PlayerGestion.getPlayerJobNiveau(player.getName()));
+            jobs.addLore("§6XP§e : §b" + PlayerGestion.getPlayerJobXp(player.getName()) + "§e/"
                     + 500 * PlayerGestion.getPlayerJobNiveau(player.getName()) * 2);
-            meta.setLore(lore);
-            métier.getItem().setItemMeta(meta);
 
             ItemBuilder quitterMétier = new ItemBuilder(Material.BOOK, "Quitter le métier", 1);
-            meta = quitterMétier.getItem().getItemMeta();
-            lore = new ArrayList<String>();
-            lore.add(PlayerGestion.getPlayerMoney(player.getName()) < 500 ? "§4vous n'avez pas assez de money" : "§2vous avez assez de money");
-            meta.setLore(lore);
-            quitterMétier.getItem().setItemMeta(meta);
+            quitterMétier.addLore(PlayerGestion.getPlayerMoney(player.getName()) < 500 ? "§4vous n'avez pas assez de money" : "§2vous avez assez de money");
 
-            ItemBuilder compétence = new ItemBuilder(Material.SPYGLASS, "compétence métier", 1);
+            ItemBuilder ability = new ItemBuilder(Material.SPYGLASS, "compétence métier", 1);
 
-            inv.getInventory().setItem(10, métier.getItem());
-            inv.getInventory().setItem(11,compétence.getItem());
+            inv.getInventory().setItem(10, jobs.getItem());
+            inv.getInventory().setItem(11,ability.getItem());
             inv.getInventory().setItem(37, quitterMétier.getItem());
 
         }
 
-        inv.getInventory().setItem(8, MenuGestion.back.getItem());
 
-        for(int i =0; i < 54; i++){
-            if(inv.getInventory().getItem(i) == null){
-                inv.getInventory().setItem(i, MenuGestion.fill.getItem());
-            }
-        }
         player.openInventory(inv.getInventory());
     }
 
@@ -144,11 +132,6 @@ public class MenuJob implements Listener {
                     menu(player);
                     break;
                 case SPYGLASS:
-                    if(PlayerGestion.getPlayerJobsVoie(player.getName()).equalsIgnoreCase("pas de voie")){
-                        MenuChoiseVoie.menuChoixDeLaVoix(player);
-                    }else{
-                        MenuCompétenceMétier.menu(player);
-                    }
                     break;
                 default:
                     event.setCancelled(true);

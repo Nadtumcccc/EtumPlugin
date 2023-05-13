@@ -1,7 +1,7 @@
 package be.nadtum.etum.Listeners;
 
 import be.nadtum.etum.Vanilla.MenuGui.City.*;
-import be.nadtum.etum.Vanilla.Economie.Métier.*;
+import be.nadtum.etum.Vanilla.Player.Métier.*;
 import be.nadtum.etum.Vanilla.Economie.shop.*;
 import be.nadtum.etum.Vanilla.City.Fonctionnalité.Claim;
 import be.nadtum.etum.Vanilla.Fonctionnalité.Spawner;
@@ -10,8 +10,6 @@ import be.nadtum.etum.Region.RegionGestion;
 import be.nadtum.etum.Staff.ACC.events.PlayerJoinQuit;
 import be.nadtum.etum.Utility.Modules.*;
 
-import be.nadtum.etum.Vanilla.MenuGui.CompJobs.MenuChoiseVoie;
-import be.nadtum.etum.Vanilla.MenuGui.CompJobs.MenuCompétenceMétier;
 import be.nadtum.etum.Vanilla.MenuGui.MenuHome;
 import be.nadtum.etum.Vanilla.MenuGui.MenuJob;
 import be.nadtum.etum.Vanilla.MenuGui.MenuMondeRessource;
@@ -43,9 +41,7 @@ public class events {
         pm.registerEvents(new Death(), main);
         pm.registerEvents(new Fight(), main);
 
-        // Compétence métier
-        pm.registerEvents(new MenuChoiseVoie(), main);
-        pm.registerEvents(new MenuCompétenceMétier(), main);
+
 
         // Menu
         // Menu gestion de base
@@ -62,10 +58,10 @@ public class events {
         pm.registerEvents(new Shop_Commerçant(), main);
         pm.registerEvents(new Shop_Serveur(), main);
 
-        pm.registerEvents(new Mineur(), main);
-        pm.registerEvents(new Bucheron(), main);
+
+        pm.registerEvents(new ActionManager(), main);
         pm.registerEvents(new Fermier(), main);
-        pm.registerEvents(new Chasseur(), main);
+
         pm.registerEvents(new Pêcheur(), main);
 
         // City

@@ -28,6 +28,8 @@ public class MenuCityGestionMembre implements Listener {
 
         InventoryBuilder inv = new InventoryBuilder(nameMenu, 54);
 
+        inv.setupTemplate();
+
         int compteur = 0;
 
         for(String membre : FichierGestion.getCfgCity().getConfigurationSection
@@ -49,13 +51,7 @@ public class MenuCityGestionMembre implements Listener {
         }
 
 
-        inv.getInventory().setItem(53, MenuGestion.back.getItem());
 
-        for(int i =0; i < 53; i++){
-            if(inv.getInventory().getItem(i) == null){
-                inv.getInventory().setItem(i, MenuGestion.fill.getItem());
-            }
-        }
 
 
         player.openInventory(inv.getInventory());
@@ -64,6 +60,8 @@ public class MenuCityGestionMembre implements Listener {
     public static void menuMembre(Player player,String membre){
 
         InventoryBuilder inv = new InventoryBuilder(nameMenuMembre, 54);
+
+        inv.setupTemplate();
 
         ItemBuilder profil = new ItemBuilder(Material.PLAYER_HEAD, membre, 1);
         SkullMeta skullMeta = (SkullMeta) profil.getItem().getItemMeta();
@@ -117,8 +115,6 @@ public class MenuCityGestionMembre implements Listener {
         ItemBuilder kick = new ItemBuilder(Material.DIAMOND_AXE, "§4kick le membre de la guilde",1);
 
 
-
-        inv.getInventory().setItem(8, MenuGestion.back.getItem());
         inv.getInventory().setItem(10, profil.getItem());
         inv.getInventory().setItem(19, build.getItem());
         inv.getInventory().setItem(20, admin.getItem());
@@ -127,11 +123,7 @@ public class MenuCityGestionMembre implements Listener {
         inv.getInventory().setItem(23, modération.getItem());
         inv.getInventory().setItem(43, kick.getItem());
 
-        for(int i =0; i < 53; i++){
-            if(inv.getInventory().getItem(i) == null){
-                inv.getInventory().setItem(i, MenuGestion.fill.getItem());
-            }
-        }
+
 
         player.openInventory(inv.getInventory());
     }

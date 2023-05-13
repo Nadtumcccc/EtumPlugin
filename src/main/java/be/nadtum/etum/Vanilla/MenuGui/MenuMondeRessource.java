@@ -1,6 +1,5 @@
 package be.nadtum.etum.Vanilla.MenuGui;
 
-import be.nadtum.etum.Utility.Modules.MenuGestion;
 import be.nadtum.etum.Utility.Modules.Teleportation;
 import be.nadtum.etum.Utility.Objets.InventoryBuilder;
 import be.nadtum.etum.Utility.Objets.ItemBuilder;
@@ -17,7 +16,12 @@ public class MenuMondeRessource implements Listener {
 
     public static void menu(Player player) {
 
+
+
         InventoryBuilder inv = new InventoryBuilder(nameMenu, 54);
+
+        inv.setupTemplate();
+
         ItemBuilder overworld = new ItemBuilder(Material.GRASS_BLOCK, "§2OverWorld", 1);
         ItemBuilder nether = new ItemBuilder(Material.NETHER_BRICK, "§4Nether", 1);
         ItemBuilder end = new ItemBuilder(Material.END_CRYSTAL, "§5End", 1);
@@ -25,13 +29,8 @@ public class MenuMondeRessource implements Listener {
         inv.getInventory().setItem(20, overworld.getItem());
         inv.getInventory().setItem(22, nether.getItem());
         inv.getInventory().setItem(24, end.getItem());
-        inv.getInventory().setItem(8, MenuGestion.back.getItem());
 
-        for(int i =0; i < 54; i++){
-            if (inv.getInventory().getItem(i) == null) {
-                inv.getInventory().setItem(i, MenuGestion.fill.getItem());
-            }
-        }
+
         player.openInventory(inv.getInventory());
 
     }
@@ -45,30 +44,26 @@ public class MenuMondeRessource implements Listener {
         Player player = (Player) event.getWhoClicked();
         if (event.getCurrentItem() == null) return;
 
+        event.setCancelled(true);
 
         if (event.getView().getTitle().equalsIgnoreCase(nameMenu)) {
             switch (event.getCurrentItem().getType()) {
                 case GRASS_BLOCK:
-                    player.closeInventory();
                     Teleportation.PlayerTpToSpawn(player, "OverWorld");
                     break;
                 case NETHER_BRICK:
-                    player.closeInventory();
                     Teleportation.PlayerTpToSpawn(player, "Nether");
                     break;
                 case END_CRYSTAL:
-                    player.closeInventory();
                     Teleportation.PlayerTpToSpawn(player, "End");
                     break;
                 case DARK_OAK_DOOR:
-                    player.closeInventory();
                     MenuPrincipal.menu(player);
                     break;
                 default:
-                    event.setCancelled(true);
                     break;
             }
-            return;
+
         }
     }
 }

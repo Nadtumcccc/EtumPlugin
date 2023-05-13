@@ -14,15 +14,15 @@ public class Teleportation {
 
         YamlConfiguration cfg = FichierGestion.getCfgSettings();
 
-        Double x = cfg.getDouble("Warps." + spawn + ".x");
-        Double z = cfg.getDouble("Warps." + spawn + ".z");
-        Double y = cfg.getDouble("Warps." + spawn + ".y");
-        float yaw = (float) cfg.getDouble("Warps." + spawn + ".yaw");
-        float pitch = (float) cfg.getDouble("Warps." + spawn + ".pitch");
-        String worldname = cfg.getString("Warps." + spawn + ".world");
+        Double x = cfg.getDouble("Spawn." + spawn + ".x");
+        Double z = cfg.getDouble("Spawn." + spawn + ".z");
+        Double y = cfg.getDouble("Spawn." + spawn + ".y");
+        float yaw = (float) cfg.getDouble("Spawn." + spawn + ".yaw");
+        float pitch = (float) cfg.getDouble("Spawn." + spawn + ".pitch");
+        String worldname = cfg.getString("Spawn." + spawn + ".world");
 
         if(worldname == null){
-            player.sendMessage(PrefixMessage.erreur() + " le warp §4" + spawn + " §cn'existe pas");
+            player.sendMessage(PrefixMessage.erreur() + " le spawn §4" + spawn + " §cn'existe pas");
             return;
         }
 

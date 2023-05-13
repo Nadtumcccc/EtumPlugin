@@ -1,4 +1,4 @@
-package be.nadtum.etum.Vanilla.Economie.Métier;
+package be.nadtum.etum.Vanilla.Player.Métier;
 
 import be.nadtum.etum.Utility.Modules.*;
 import net.md_5.bungee.api.ChatMessageType;

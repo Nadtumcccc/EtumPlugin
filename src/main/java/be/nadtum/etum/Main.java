@@ -4,12 +4,21 @@ import be.nadtum.etum.Listeners.Commands;
 import be.nadtum.etum.Listeners.events;
 import be.nadtum.etum.Utility.Modules.FichierGestion;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin implements Listener {
 
+    private static Main instance;
+
+    public static Plugin getInstance() {
+        return instance;
+    }
+
     @Override
     public void onEnable() {
+        instance = this;
+
         registerListeners();
     }
 

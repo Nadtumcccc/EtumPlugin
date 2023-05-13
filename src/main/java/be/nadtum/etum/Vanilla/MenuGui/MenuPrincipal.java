@@ -41,7 +41,7 @@ public class MenuPrincipal implements Listener {
 
         InventoryBuilder inv = new InventoryBuilder(nameMenu, 54);
 
-        MenuGestion.setupTemplate(inv.getInventory());
+        inv.setupTemplate();
 
         ItemBuilder profil = new ItemBuilder(Material.PLAYER_HEAD, "§eProfil : §b" + player.getName(), 1);
         SkullMeta skullMeta = (SkullMeta) profil.getItem().getItemMeta();
@@ -88,7 +88,6 @@ public class MenuPrincipal implements Listener {
                     player.closeInventory();
                     break;
                 case RED_BED:
-                    player.closeInventory();
                     MenuHome.menu(player);
                     break;
                 case TOTEM_OF_UNDYING:
@@ -96,15 +95,12 @@ public class MenuPrincipal implements Listener {
                         event.setCancelled(true);
                         return;
                     }
-                    player.closeInventory();
                     MenuCity.menu(player);
                     break;
                 case IRON_AXE:
-                    player.closeInventory();
                     MenuJob.menu(player);
                     break;
                 case GOLD_ORE:
-                    player.closeInventory();
                     MenuMondeRessource.menu(player);
                     break;
                 case BEACON:
@@ -112,7 +108,6 @@ public class MenuPrincipal implements Listener {
                     Teleportation.PlayerTpToSpawn(player, "Spawn");
                     break;
                 case GHAST_TEAR:
-                    player.closeInventory();
                     player.sendMessage("random téléporte en développement");
                     break;
                 default:

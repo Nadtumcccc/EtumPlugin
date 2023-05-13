@@ -2,6 +2,7 @@ package be.nadtum.etum.Utility.Objets;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -37,7 +38,9 @@ public class ItemBuilder {
         itemStack.setItemMeta(meta);
     }
 
+
     public ItemStack getItem() {
         return itemStack;
     }
+
 }

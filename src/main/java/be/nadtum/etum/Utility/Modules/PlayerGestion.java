@@ -77,11 +77,19 @@ public class PlayerGestion {
         FichierGestion.getCfgPlayers().set("Profil." + getUUIDFromName(playerName) + ".job.niveau", niveau);
     }
 
+    public static void addPlayerJobNiveau(String playerName, Integer niveau){
+        FichierGestion.getCfgPlayers().set("Profil." + getUUIDFromName(playerName) + ".job.niveau", getPlayerJobNiveau(playerName) + niveau);
+    }
+
     public static Integer getPlayerJobXp(String playerName){
         return FichierGestion.getCfgPlayers().getInt("Profil." + getUUIDFromName(playerName).toString() + ".job.xp");
     }
     public static void setPlayerJobXp(String playerName, Integer xp){
-        FichierGestion.getCfgPlayers().set("Profil." + getUUIDFromName(playerName).toString() + ".job.xp", xp);
+        FichierGestion.getCfgPlayers().set("Profil." + getUUIDFromName(playerName) + ".job.xp", xp);
+    }
+
+    public static void addPlayerJobXp(String playerName, Integer xp){
+        FichierGestion.getCfgPlayers().set("Profil." + getUUIDFromName(playerName) + ".job.xp", getPlayerJobXp(playerName) + xp);
     }
 
     public static Integer getPlayerHomeCount(String playerName){
@@ -193,6 +201,17 @@ public class PlayerGestion {
 
     public static boolean hasPermission(Player player, String permission) {
         String playerGradePermission = "Grade." + PlayerGestion.getPlayerGrade(player.getName()) + ".permission." + permission;
+
+        if (!FichierGestion.getCfgPermission().contains(playerGradePermission) && !player.isOp()) {
+            //player.sendMessage(PrefixMessage.erreur() + " Vous n'avez pas la permission d'utiliser cette commande");
+            return false;
+        }
+
+        return true;
+    }
+
+    public static boolean hasStaffPermission(Player player, String permission) {
+        String playerGradePermission = "Grade." + PlayerGestion.getPlayerStaffGrade(player.getName()) + ".permission." + permission;
 
         if (!FichierGestion.getCfgPermission().contains(playerGradePermission) && !player.isOp()) {
             //player.sendMessage(PrefixMessage.erreur() + " Vous n'avez pas la permission d'utiliser cette commande");
