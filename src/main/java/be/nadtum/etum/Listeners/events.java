@@ -23,7 +23,7 @@ public class events {
 
     PluginManager pluginManager;
 
-    public void evens(Main main){
+    public events(Main main) {
 
         this.pluginManager = main.getServer().getPluginManager();
 
@@ -38,7 +38,9 @@ public class events {
         registerEconomyEvents(main);
         registerCityEvents(main);
         registerStaffEvents(main);
+
     }
+
 
 
     private void registerServerEvents(Main main) {
@@ -67,7 +69,10 @@ public class events {
     private void registerEconomyEvents(Main main) {
         pluginManager.registerEvents(new Shop_Commerçant(), main);
         pluginManager.registerEvents(new Shop_Serveur(), main);
+        pluginManager.registerEvents(new ActionManager(), main);
     }
+
+
 
     private void registerCityEvents(Main main) {
         pluginManager.registerEvents(new Claim(), main);

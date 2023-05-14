@@ -83,8 +83,6 @@ public class ActionManager implements Listener {
         String playerName = player.getName();
         String playerJob = PlayerGestion.getPlayerJobName(playerName);
 
-        player.sendMessage(Component.text(entity));
-
         YamlConfiguration cfg = FichierGestion.getCfgJobs();
 
         // Check if the player gains xp from this entity type
