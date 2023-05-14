@@ -43,8 +43,7 @@ public class ActionManager implements Listener {
             return;
         }
 
-        if (event.getBlock().getState().getBlockData() instanceof Ageable) {
-            Ageable ageable = (Ageable) event.getBlock().getState().getBlockData();
+        if (event.getBlock().getState().getBlockData() instanceof Ageable ageable) {
             if (ageable.getAge() != 7) {
                 return;
             }
