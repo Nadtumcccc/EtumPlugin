@@ -1,4 +1,4 @@
-package be.nadtum.etum.Vanilla.Player.Métier;
+package be.nadtum.etum.Vanilla.Player.Jobs;
 
 
 import be.nadtum.etum.Main;

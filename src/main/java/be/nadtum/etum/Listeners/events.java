@@ -1,7 +1,7 @@
 package be.nadtum.etum.Listeners;
 
 import be.nadtum.etum.Vanilla.MenuGui.City.*;
-import be.nadtum.etum.Vanilla.Player.Métier.*;
+import be.nadtum.etum.Vanilla.Player.Jobs.*;
 import be.nadtum.etum.Vanilla.Economie.shop.*;
 import be.nadtum.etum.Vanilla.City.Fonctionnalité.Claim;
 import be.nadtum.etum.Vanilla.Fonctionnalité.Spawner;
@@ -21,57 +21,62 @@ import org.bukkit.plugin.PluginManager;
 
 public class events {
 
-    protected PluginManager pm;
+    PluginManager pluginManager;
 
-    public events(Main main) {
-        pm = main.getServer().getPluginManager();
+    public void evens(Main main){
+
+        this.pluginManager = main.getServer().getPluginManager();
 
         // Fichier load server
         FichierGestion.CreateFiles();
         FichierGestion.LoadConfig();
 
-        // MOTD
-        pm.registerEvents(new ServerList(), main);
-
-        // Fonctionnalité
-        pm.registerEvents(new Spawner(), main);
-
-        // Player
-        pm.registerEvents(new Chat(), main);
-        pm.registerEvents(new Death(), main);
-        pm.registerEvents(new Fight(), main);
-
-
-
-        // Menu
-        // Menu gestion de base
-        pm.registerEvents(new MenuPrincipal(), main);
-        pm.registerEvents(new MenuJob(), main);
-        pm.registerEvents(new MenuMondeRessource(), main);
-        pm.registerEvents(new MenuHome(), main);
-
-        // Menu city
-        pm.registerEvents(new MenuCity(), main);
-        pm.registerEvents(new MenuCityGestionMembre(), main);
-
-        // Economie
-        pm.registerEvents(new Shop_Commerçant(), main);
-        pm.registerEvents(new Shop_Serveur(), main);
-
-
-        pm.registerEvents(new ActionManager(), main);
-        pm.registerEvents(new Fermier(), main);
-
-        pm.registerEvents(new Pêcheur(), main);
-
-        // City
-        pm.registerEvents(new Claim(), main);
-
-        pm.registerEvents(new Connection(), main);
-
-        // Staff
-        // Modération
-        pm.registerEvents(new PlayerJoinQuit(), main);
-        pm.registerEvents(new RegionGestion(), main);
+        registerServerEvents(main);
+        registerFunctionalityEvents(main);
+        registerPlayerEvents(main);
+        registerMenuEvents(main);
+        registerEconomyEvents(main);
+        registerCityEvents(main);
+        registerStaffEvents(main);
     }
+
+
+    private void registerServerEvents(Main main) {
+        pluginManager.registerEvents(new ServerList(), main);
+    }
+
+    private void registerFunctionalityEvents(Main main) {
+        pluginManager.registerEvents(new Spawner(), main);
+    }
+
+    private void registerPlayerEvents(Main main) {
+        pluginManager.registerEvents(new Chat(), main);
+        pluginManager.registerEvents(new Death(), main);
+        pluginManager.registerEvents(new Fight(), main);
+    }
+
+    private void registerMenuEvents(Main main) {
+        pluginManager.registerEvents(new MenuPrincipal(), main);
+        pluginManager.registerEvents(new MenuJob(), main);
+        pluginManager.registerEvents(new MenuMondeRessource(), main);
+        pluginManager.registerEvents(new MenuHome(), main);
+        pluginManager.registerEvents(new MenuCity(), main);
+        pluginManager.registerEvents(new MenuCityGestionMembre(), main);
+    }
+
+    private void registerEconomyEvents(Main main) {
+        pluginManager.registerEvents(new Shop_Commerçant(), main);
+        pluginManager.registerEvents(new Shop_Serveur(), main);
+    }
+
+    private void registerCityEvents(Main main) {
+        pluginManager.registerEvents(new Claim(), main);
+        pluginManager.registerEvents(new Connection(), main);
+    }
+
+    private void registerStaffEvents(Main main) {
+        pluginManager.registerEvents(new PlayerJoinQuit(), main);
+        pluginManager.registerEvents(new RegionGestion(), main);
+    }
+
 }
