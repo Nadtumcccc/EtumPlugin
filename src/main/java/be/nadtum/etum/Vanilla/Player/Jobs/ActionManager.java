@@ -2,9 +2,7 @@ package be.nadtum.etum.Vanilla.Player.Jobs;
 
 
 import be.nadtum.etum.Main;
-import be.nadtum.etum.Utility.Modules.FichierGestion;
-import be.nadtum.etum.Utility.Modules.HashMapGestion;
-import be.nadtum.etum.Utility.Modules.PlayerGestion;
+import be.nadtum.etum.Utility.Modules.*;
 import be.nadtum.etum.Vanilla.City.Fonctionnalité.Claim;
 import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.ChatMessageType;
@@ -53,6 +51,12 @@ public class ActionManager implements Listener {
 
         if (HashMapGestion.blockPlaced.containsKey(block)) {
             HashMapGestion.blockPlaced.remove(block);
+            return;
+        }
+
+        if(Claim.cityCoinShow.containsKey(PlayerGestion.getPlayerCityName(player.getName()))){
+            player.sendMessage(Component.text(PrefixMessage.serveur() + "le claim est en train d'être édité"));
+            event.setCancelled(true);
             return;
         }
 
