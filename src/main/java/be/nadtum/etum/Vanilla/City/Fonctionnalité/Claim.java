@@ -41,27 +41,26 @@ public class Claim implements Listener {
 
     public static HashMap<Player, Boolean> isActionOnClaim = new HashMap<>();
 
-    private static String cityName;
     public static HashMap<Player, String> cityOnWalk = new HashMap<>();
 
-    private static HashMap<Player, Double> cachecoordonnéex1 = new HashMap<>();
-    private static HashMap<Player, Double> cachecoordonnéez1 = new HashMap<>();
-    private static HashMap<Player, Double> cachecoordonnéex2 = new HashMap<>();
-    private static HashMap<Player, Double> cachecoordonnéez2 = new HashMap<>();
+    private static final HashMap<Player, Double> cachecoordonnéex1 = new HashMap<>();
+    private static final HashMap<Player, Double> cachecoordonnéez1 = new HashMap<>();
+    private static final HashMap<Player, Double> cachecoordonnéex2 = new HashMap<>();
+    private static final HashMap<Player, Double> cachecoordonnéez2 = new HashMap<>();
 
     public static HashMap<String, Boolean> cityCoinShow = new HashMap<>();
 
     //hashmap pour récupérer les block coin d'une cité qui seraii montrer
-    private static HashMap<String, Block> coinMontrerx1z1 = new HashMap<>();
-    private static HashMap<String, Block> coinMontrerx1z2 = new HashMap<>();
-    private static HashMap<String, Block> coinMontrerx2z1 = new HashMap<>();
-    private static HashMap<String, Block> coinMontrerx2z2 = new HashMap<>();
+    private static final HashMap<String, Block> coinMontrerx1z1 = new HashMap<>();
+    private static final HashMap<String, Block> coinMontrerx1z2 = new HashMap<>();
+    private static final HashMap<String, Block> coinMontrerx2z1 = new HashMap<>();
+    private static final HashMap<String, Block> coinMontrerx2z2 = new HashMap<>();
 
     //hashmap pour récupérer les block coin des block montrer
-    private static HashMap<String, Material> cacheCoinMontrerx1z1 = new HashMap<>();
-    private static HashMap<String, Material> cacheCoinMontrerx1z2 = new HashMap<>();
-    private static HashMap<String, Material> cacheCoinMontrerx2z1 = new HashMap<>();
-    private static HashMap<String, Material> cacheCoinMontrerx2z2= new HashMap<>();
+    private static final HashMap<String, Material> cacheCoinMontrerx1z1 = new HashMap<>();
+    private static final HashMap<String, Material> cacheCoinMontrerx1z2 = new HashMap<>();
+    private static final HashMap<String, Material> cacheCoinMontrerx2z1 = new HashMap<>();
+    private static final HashMap<String, Material> cacheCoinMontrerx2z2= new HashMap<>();
 
 
     /*
@@ -525,7 +524,7 @@ public class Claim implements Listener {
 
             }
 
-            cityName = getNameCityOfClaim(player, xBlock, zBlock);
+            String cityName = getNameCityOfClaim(player, xBlock, zBlock);
 
             if(cityName != null){
                 if(!cityName.equals(PlayerGestion.getPlayerCityName(player.getName()))){
