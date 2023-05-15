@@ -11,6 +11,9 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
@@ -33,23 +36,27 @@ public class ActionManager implements Listener {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
+        Player player = event.getPlayer();
+        Block block = event.getBlock();
 
-        if (!Claim.canBuild(event.getPlayer(), event.getBlock().getX(), event.getBlock().getZ())) {
+        if (!Claim.canBuild(player, block.getX(), block.getZ())) {
             return;
         }
 
-        if (HashMapGestion.blockPlaced.containsKey(event.getBlock())) {
-            HashMapGestion.blockPlaced.remove(event.getBlock());
-            return;
-        }
-
-        if (event.getBlock().getState().getBlockData() instanceof Ageable ageable) {
-            if (ageable.getAge() != 7) {
+        if (FichierGestion.getCfgJobs().contains("Jobs.Fermier." + block.getType() + ".age")) {
+            int growthStatus = block.getData();
+            if (growthStatus == 7) {
+                selector(String.valueOf(block.getType()), player);
                 return;
             }
         }
 
-        selector(String.valueOf(event.getBlock().getType()), event.getPlayer());
+        if (HashMapGestion.blockPlaced.containsKey(block)) {
+            HashMapGestion.blockPlaced.remove(block);
+            return;
+        }
+
+        selector(String.valueOf(block.getType()), player);
     }
 
     @EventHandler
@@ -72,7 +79,7 @@ public class ActionManager implements Listener {
     @EventHandler
     public void onFish(@NotNull PlayerFishEvent event) {
         if (event.getState() == PlayerFishEvent.State.CAUGHT_FISH) {
-            selector(Objects.requireNonNull(event.getCaught()).getName(), event.getPlayer());
+            selector(Objects.requireNonNull(event.getCaught()).getName().toUpperCase(), event.getPlayer());
         }
     }
 

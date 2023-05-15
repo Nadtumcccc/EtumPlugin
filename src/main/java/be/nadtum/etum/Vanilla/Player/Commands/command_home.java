@@ -31,46 +31,43 @@ public class command_home implements CommandExecutor, TabExecutor {
      * @return {@code true} si la commande s'est exécutée correctement, sinon {@code false}.
      */
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
 
-        Player player = (Player) sender;
-
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             System.out.println("Vous ne pouvez pas utiliser cette commande");
-        } else {
-
-            if (args.length == 0) {
-                player.sendMessage(PrefixMessage.erreur() + " /(del)(set)home [home]");
-            } else if (PlayerGestion.hasPermission(player, "admin") && args.length >= 3 && args[0].equals("add")) {
-                Player targetPlayer = Bukkit.getPlayer(args[1]);
-                if (targetPlayer instanceof Player) {
-                    String playerName = targetPlayer.getName();
-                    int currentHomeCount = PlayerGestion.getPlayerHomeCount(playerName);
-                    int additionalHomeCount = Integer.valueOf(args[2]);
-                    int newHomeCount = currentHomeCount + additionalHomeCount;
-
-                    PlayerGestion.setPlayerHomeCount(playerName, newHomeCount);
-
-                    player.sendMessage(PrefixMessage.admin() + "Le joueur §b" + playerName + "§a a maintenant §b" + newHomeCount + "§a homes");
-                }
-            }
+            return false;
         }
 
+        if (args.length == 0) {
+            player.sendMessage(PrefixMessage.erreur() + "/(del)(set)home [home]");
+        } else if (PlayerGestion.hasPermission(player, "admin") && args.length >= 3 && args[0].equals("add")) {
+            Player targetPlayer = Bukkit.getPlayer(args[1]);
+            if (targetPlayer != null) {
+                String playerName = targetPlayer.getName();
+                int currentHomeCount = PlayerGestion.getPlayerHomeCount(playerName);
+                int additionalHomeCount = Integer.parseInt(args[2]);
+                int newHomeCount = currentHomeCount + additionalHomeCount;
+
+                PlayerGestion.setPlayerHomeCount(playerName, newHomeCount);
+
+                player.sendMessage(PrefixMessage.admin() + "Le joueur §b" + playerName + "§a a maintenant §b" + newHomeCount + "§a homes");
+            }
+        }
 
         if(!PlayerGestion.hasPermission(player, "default")) return false;
 
 
         if (cmd.getName().equals("sethome")) {
-            String homePath = "Profil." + player.getUniqueId().toString() + ".Home.homes." + args[0];
+            String homePath = "Profil." + player.getUniqueId() + ".Home.homes." + args[0];
 
             if (FichierGestion.getCfgPlayers().isSet(homePath)) {
-                player.sendMessage(PrefixMessage.erreur() + " Le home §4" + args[0] + " §c a déjà été créé");
+                player.sendMessage(PrefixMessage.erreur() + "Le home §4" + args[0] + " §c a déjà été créé");
             } else {
                 ConfigurationSection homesSection = FichierGestion.getCfgPlayers().getConfigurationSection("Profil." + player.getUniqueId() + ".Home.homes");
                 if (homesSection != null) {
                     int nbHome = homesSection.getKeys(false).size();
                     if (nbHome >= PlayerGestion.getPlayerHomeCount(player.getName())) {
-                        player.sendMessage(PrefixMessage.erreur() + " Vous avez trop de homes." +
+                        player.sendMessage(PrefixMessage.erreur() + "Vous avez trop de homes." +
                                 "\nVous avez §c[" + nbHome + "] homes");
                         return false;
                     }
@@ -79,26 +76,26 @@ public class command_home implements CommandExecutor, TabExecutor {
                 FichierGestion.getCfgPlayers().set(homePath, player.getLocation());
                 FichierGestion.saveFile(FichierGestion.getCfgPlayers(), FichierGestion.getFichierPlayers());
 
-                player.sendMessage(PrefixMessage.serveur() + " Le home §b" + args[0] + " §a a été créé");
+                player.sendMessage(PrefixMessage.serveur() + "Le home §b" + args[0] + " §a a été créé");
             }
         } else if (cmd.getName().equals("delhome")) {
             String homePath = "Profil." + player.getUniqueId() + ".Home.homes." + args[0];
 
             if (FichierGestion.getCfgPlayers().isSet(homePath)) {
                 FichierGestion.getCfgPlayers().set(homePath, null);
-                player.sendMessage(PrefixMessage.serveur() + " le home §b" + args[0] + " §aa été supprimé");
+                player.sendMessage(PrefixMessage.serveur() + "le home §b" + args[0] + " §aa été supprimé");
                 FichierGestion.saveFile(FichierGestion.getCfgPlayers(), FichierGestion.getFichierPlayers());
             } else {
-                player.sendMessage(PrefixMessage.erreur() + " le home n'a pas été créé");
+                player.sendMessage(PrefixMessage.erreur() + "le home n'a pas été créé");
             }
         } else if (cmd.getName().equals("home")) {
             String homePath = "Profil." + player.getUniqueId() + ".Home.homes." + args[0];
 
             if (!FichierGestion.getCfgPlayers().isSet(homePath)) {
-                player.sendMessage(PrefixMessage.erreur() + " le home n'a pas été créé");
+                player.sendMessage(PrefixMessage.erreur() + "le home n'a pas été créé");
             } else {
                 player.teleport(FichierGestion.getCfgPlayers().getLocation(homePath));
-                player.sendMessage(PrefixMessage.serveur() + " vous avez été téléporté au home §b" + args[0]);
+                player.sendMessage(PrefixMessage.serveur() + "vous avez été téléporté au home §b" + args[0]);
             }
         }
 
