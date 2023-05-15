@@ -4,38 +4,51 @@ import be.nadtum.etum.Utility.Modules.FichierGestion;
 import be.nadtum.etum.Utility.Objets.InventoryBuilder;
 import be.nadtum.etum.Utility.Objets.ItemBuilder;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.Objects;
 
 public class MenuHome implements Listener {
 
     private static String nameMenu = "Menu : Home";
 
-    public static void menu(Player player){
-
+    public static void menu(Player player) {
         YamlConfiguration cfg_profil = FichierGestion.getCfgPlayers();
-        InventoryBuilder inv = new InventoryBuilder(nameMenu, 18);
+        InventoryBuilder inv = new InventoryBuilder(nameMenu, 45);
 
         inv.setupTemplate();
 
-        Integer nbCase = 0;
-        if(cfg_profil.contains("Profil." + player.getUniqueId() + ".Home.homes")){
-            for (String home_name : cfg_profil.getConfigurationSection("Profil." + player.getUniqueId().toString() + ".Home.homes").getKeys(false)) {
-                ItemBuilder home = new ItemBuilder(Material.OAK_SIGN, home_name , 1);
+        int nbCase = 0;
+        ConfigurationSection homesSection = cfg_profil.getConfigurationSection("Profil." + player.getUniqueId() + ".Home.homes");
+        if (homesSection != null) {
+            for (String homeName : Objects.requireNonNull(homesSection.getKeys(false))) {
+                ItemBuilder home = new ItemBuilder(Material.OAK_SIGN, homeName, 1);
+
+                while (nbCase < inv.getInventory().getSize() && inv.getInventory().getItem(nbCase) != null) {
+                    nbCase++;
+                }
+
+                if (nbCase >= inv.getInventory().getSize()) {
+                    break;
+                }
+
                 inv.getInventory().setItem(nbCase, home.getItem());
-                nbCase = nbCase + 1;
+                nbCase++;
             }
         }
 
-
-
         player.openInventory(inv.getInventory());
-
     }
+
+
+
 
     @EventHandler
     public void PlayerMenu(InventoryClickEvent event) {

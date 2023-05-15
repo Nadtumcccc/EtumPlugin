@@ -5,6 +5,8 @@ import be.nadtum.etum.Utility.Objets.InventoryBuilder;
 import be.nadtum.etum.Utility.Objets.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,40 +21,42 @@ import java.util.UUID;
 
 public class MenuCityGestionMembre implements Listener {
 
-    private static String nameMenu = "Menu : Cité | [Liste Membres]";
-    private static String nameMenuMembre = "Menu : Cité | Settings Membre";
-    private static ItemMeta meta;
-    private static List<String> lore;
+    private static final String nameMenu = "Menu : Cité | [Liste Membres]";
+    private static final String nameMenuMembre = "Menu : Cité | Settings Membre";
 
-    public static void menu(Player player){
-
+    public static void menu(Player player) {
         InventoryBuilder inv = new InventoryBuilder(nameMenu, 54);
-
         inv.setupTemplate();
 
-        int compteur = 0;
+        int nbCase = 0;
+        ConfigurationSection membresSection = FichierGestion.getCfgCity().getConfigurationSection("City." + PlayerGestion.getPlayerCityName(player.getName()) + ".membres");
+        if (membresSection != null) {
+            for (String membre : membresSection.getKeys(false)) {
+                UUID membreUUID = UUID.fromString(membre);
+                OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(membreUUID);
 
-        for(String membre : FichierGestion.getCfgCity().getConfigurationSection
-                ("City." + PlayerGestion.getPlayerCityName(player.getName()) + ".membres").getKeys(false)){
+                ItemBuilder profil = new ItemBuilder(Material.PLAYER_HEAD, offlinePlayer.getName(), 1);
+                SkullMeta skullMeta = (SkullMeta) profil.getItem().getItemMeta();
 
-            ItemBuilder profil = new ItemBuilder(Material.PLAYER_HEAD,Bukkit.getOfflinePlayer(UUID.fromString(membre)).getName(), 1);
-            SkullMeta skullMeta = (SkullMeta) profil.getItem().getItemMeta();
-            skullMeta.setOwner(Bukkit.getOfflinePlayer(UUID.fromString(membre)).getName());
-            List<String> lore = new ArrayList<String>();
-            lore.add("§6Grade  §e: " + Chat.colorString(PlayerGestion.getGradeDesign(PlayerGestion.getPlayerGrade(Bukkit.getOfflinePlayer(UUID.fromString(membre)).getName()))));
-            lore.add("§6Claim §e: §b" + PlayerGestion.getPlayerClaimCount(Bukkit.getOfflinePlayer(UUID.fromString(membre)).getName()));
-            lore.add("§6Money  §e: §b" + PlayerGestion.getPlayerMoney(Bukkit.getOfflinePlayer(UUID.fromString(membre)).getName()));
-            lore.add(!Bukkit.getOfflinePlayer(UUID.fromString(membre)).isOnline() ? "§4or ligne" : "§2en ligne");
-            skullMeta.setLore(lore);
-            profil.getItem().setItemMeta(skullMeta);
+                skullMeta.setOwner(offlinePlayer.getName());
 
-            inv.getInventory().setItem(compteur, profil.getItem());
-            compteur++;
+                List<String> lore = new ArrayList<>();
+                lore.add("§6Grade  §e: " + Chat.colorString(PlayerGestion.getGradeDesign(PlayerGestion.getPlayerGrade(offlinePlayer.getName()))));
+                lore.add("§6Claim §e: §b" + PlayerGestion.getPlayerClaimCount(offlinePlayer.getName()));
+                lore.add("§6Money  §e: §b" + PlayerGestion.getPlayerMoney(offlinePlayer.getName()));
+                lore.add(offlinePlayer.isOnline() ? "§2en ligne" : "§4hors ligne");
+
+                skullMeta.setLore(lore);
+                profil.getItem().setItemMeta(skullMeta);
+
+                while (nbCase < inv.getInventory().getSize() && inv.getInventory().getItem(nbCase) != null) {
+                    nbCase++;
+                }
+
+                inv.getInventory().setItem(nbCase, profil.getItem());
+                nbCase++;
+            }
         }
-
-
-
-
 
         player.openInventory(inv.getInventory());
     }
@@ -77,40 +81,24 @@ public class MenuCityGestionMembre implements Listener {
         //shop: true
         //upgrade: true
         ItemBuilder build = new ItemBuilder(Material.GRASS_BLOCK,"§2BUILD",1);
-        meta = build.getItem().getItemMeta();
-        lore = new ArrayList<String>();
-        lore.add(CityGestion.hasPermission(membre,"build") ? "§2oui" : "§4non");
-        meta.setLore(lore);
-        build.getItem().setItemMeta(meta);
+        build.addLore(CityGestion.hasPermission(membre,"build") ? "§2oui" : "§4non");
+
 
 
         ItemBuilder admin = new ItemBuilder(Material.IRON_HOE,"§cADMIN",1);
-        meta = admin.getItem().getItemMeta();
-        lore = new ArrayList<String>();
-        lore.add(CityGestion.hasPermission(membre,"admin") ? "§2oui" : "§4non");
-        meta.setLore(lore);
-        admin.getItem().setItemMeta(meta);
+        admin.addLore(CityGestion.hasPermission(membre,"admin") ? "§2oui" : "§4non");
+
 
         ItemBuilder claim = new ItemBuilder(Material.GOLDEN_SHOVEL,"§6CLAIM",1);
-        meta = claim.getItem().getItemMeta();
-        lore = new ArrayList<String>();
-        lore.add(CityGestion.hasPermission(membre,"claim") ? "§2oui" : "§4non");
-        meta.setLore(lore);
-        claim.getItem().setItemMeta(meta);
+        claim.addLore(CityGestion.hasPermission(membre,"claim") ? "§2oui" : "§4non");
+
 
         ItemBuilder invite = new ItemBuilder(Material.NAME_TAG,"§bINVITE",1);
-        meta = invite.getItem().getItemMeta();
-        lore = new ArrayList<String>();
-        lore.add(CityGestion.hasPermission(membre,"invite") ? "§2oui" : "§4non");
-        meta.setLore(lore);
-        invite.getItem().setItemMeta(meta);
+        invite.addLore(CityGestion.hasPermission(membre,"invite") ? "§2oui" : "§4non");
 
         ItemBuilder modération = new ItemBuilder(Material.IRON_AXE,"§bMODERATION",1);
-        meta = modération.getItem().getItemMeta();
-        lore = new ArrayList<String>();
-        lore.add(CityGestion.hasPermission(membre,"modération") ? "§2oui" : "§4non");
-        meta.setLore(lore);
-        modération.getItem().setItemMeta(meta);
+        modération.addLore(CityGestion.hasPermission(membre,"modération") ? "§2oui" : "§4non");
+
 
         ItemBuilder kick = new ItemBuilder(Material.DIAMOND_AXE, "§4kick le membre de la guilde",1);
 
@@ -129,102 +117,77 @@ public class MenuCityGestionMembre implements Listener {
     }
 
     @EventHandler
-    public void PlayerMenu(InventoryClickEvent event) {
+    public void onPlayerMenu(InventoryClickEvent event) {
+        if (event.getSlotType() == InventoryType.SlotType.OUTSIDE || event.getClickedInventory().getType() == InventoryType.PLAYER || event.getCurrentItem() == null) {
+            return;
+        }
 
-        if (event.getSlotType().equals(InventoryType.SlotType.OUTSIDE)) return;
+        event.setCancelled(true);
         Player player = (Player) event.getWhoClicked();
-        if (event.getClickedInventory().getType().equals(InventoryType.PLAYER)) return;
-        if (event.getCurrentItem() == null) return;
 
-
-        if (event.getCurrentItem().getType().equals(Material.MAGENTA_STAINED_GLASS_PANE)) {
-            event.setCancelled(true);
-            return;
-        }
         if (event.getView().getTitle().equalsIgnoreCase(nameMenu)) {
-            switch (event.getCurrentItem().getType()) {
-                case PLAYER_HEAD:
-                    if(event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(player.getDisplayName())){
-                        event.setCancelled(true);
-                    }else{
-                        player.closeInventory();
-                        menuMembre(player, event.getCurrentItem().getItemMeta().getDisplayName());
-                    }
-                    break;
-                case DARK_OAK_DOOR:
-                    player.closeInventory();
-                    MenuCity.menu(player);
-                    break;
-                default:
-                    event.setCancelled(true);
-                    break;
-            }
+            handleMainMenuClick(event, player);
+        } else if (event.getView().getTitle().equalsIgnoreCase(nameMenuMembre)) {
+            handleMembreMenuClick(event, player);
+        }
+    }
 
-            return;
+    private void handleMainMenuClick(InventoryClickEvent event, Player player) {
+        Material itemType = event.getCurrentItem().getType();
+        String displayName = event.getCurrentItem().getItemMeta().getDisplayName();
+
+        if (itemType == Material.PLAYER_HEAD) {
+            if (displayName.equalsIgnoreCase(player.getDisplayName())) {
+                event.setCancelled(true);
+            } else {
+                player.closeInventory();
+                menuMembre(player, displayName);
+            }
+        } else if (itemType == Material.DARK_OAK_DOOR) {
+            player.closeInventory();
+            MenuCity.menu(player);
+        }
+    }
+
+    private void handleMembreMenuClick(InventoryClickEvent event, Player player) {
+        Material itemType = event.getCurrentItem().getType();
+        String membre = event.getClickedInventory().getItem(10).getItemMeta().getDisplayName();
+
+        switch (itemType) {
+            case GRASS_BLOCK:
+                togglePermission(player, membre, "build");
+                break;
+            case IRON_AXE:
+                togglePermission(player, membre, "modération");
+                break;
+            case NAME_TAG:
+                togglePermission(player, membre, "invite");
+                break;
+            case GOLDEN_SHOVEL:
+                togglePermission(player, membre, "claim");
+                break;
+            case IRON_HOE:
+                togglePermission(player, membre, "admin");
+                break;
+            case BARRIER:
+                player.closeInventory();
+                menu(player);
+                break;
+            default:
+                event.setCancelled(true);
+                break;
+        }
+    }
+
+    private void togglePermission(Player player, String membre, String permission) {
+        if (CityGestion.hasPermission(membre, permission)) {
+            CityGestion.removePermission(membre, permission);
+        } else {
+            CityGestion.setPermission(membre, permission);
         }
 
-        if (event.getView().getTitle().equalsIgnoreCase(nameMenuMembre)) {
-            String membre = event.getClickedInventory().getItem(10).getItemMeta().getDisplayName();
-            switch (event.getCurrentItem().getType()) {
-                case GRASS_BLOCK:
-                    if(CityGestion.hasPermission(membre,"build")){
-                        CityGestion.removePermission(membre,"build");
-                    }else{
-                        CityGestion.setPermission(membre,"build");
-                    }
-
-                    player.closeInventory();
-                    menuMembre(player, membre);
-                    break;
-                case IRON_AXE:
-                    if(CityGestion.hasPermission(membre,"modération")){
-                        CityGestion.removePermission(membre,"modération");
-                    }else{
-                        CityGestion.setPermission(membre,"modération");
-                    }
-
-                    player.closeInventory();
-                    menuMembre(player, membre);
-                    break;
-                case NAME_TAG:
-                    if(CityGestion.hasPermission(membre,"invite")){
-                        CityGestion.removePermission(membre,"invite");
-                    }else{
-                        CityGestion.setPermission(membre,"invite");
-                    }
-                    player.closeInventory();
-                    menuMembre(player, membre);
-                    break;
-                case GOLDEN_SHOVEL:
-                    if(CityGestion.hasPermission(membre,"claim")){
-                        CityGestion.removePermission(membre,"claim");
-                    }else{
-                        CityGestion.setPermission(membre,"claim");
-                    }
-
-                    player.closeInventory();
-                    menuMembre(player, membre);
-                    break;
-                case IRON_HOE:
-                    if(CityGestion.hasPermission(membre,"admin")){
-                        CityGestion.removePermission(membre,"admin");
-                    }else{
-                        CityGestion.setPermission(membre,"admin");
-                    }
-
-                    player.closeInventory();
-                    menuMembre(player, membre);
-                    break;
-                case BARRIER:
-                    player.closeInventory();
-                    menu(player);
-                    break;
-                default:
-                    event.setCancelled(true);
-                    break;
-            }
-            return;
-        }
+        player.closeInventory();
+        menuMembre(player, membre);
     }
 
 }
