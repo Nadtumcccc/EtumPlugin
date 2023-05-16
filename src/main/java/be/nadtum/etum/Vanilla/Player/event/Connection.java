@@ -23,11 +23,12 @@ public class Connection implements Listener {
     @EventHandler
     public void onPlayerJoinServer(PlayerJoinEvent event) {
         Player player = event.getPlayer();
+
+        PlayerGestion.createNewProfil(player);
+
         String playerName = player.getName();
         String playerStaffGrade = PlayerGestion.getPlayerStaffGrade(playerName);
         String playerGrade = PlayerGestion.getPlayerGrade(playerName);
-
-        PlayerGestion.createNewProfil(player);
 
         String joinMessage;
         if (playerStaffGrade.equalsIgnoreCase("NoStaff")) {
