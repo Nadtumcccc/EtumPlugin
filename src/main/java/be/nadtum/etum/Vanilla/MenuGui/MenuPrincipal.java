@@ -3,7 +3,6 @@ package be.nadtum.etum.Vanilla.MenuGui;
 import be.nadtum.etum.Vanilla.MenuGui.City.MenuCity;
 
 import be.nadtum.etum.Utility.Modules.*;
-import be.nadtum.etum.Utility.Objets.InventoryBuilder;
 import be.nadtum.etum.Utility.Objets.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

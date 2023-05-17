@@ -1,7 +1,7 @@
 package be.nadtum.etum.Vanilla.MenuGui.City;
 
 import be.nadtum.etum.Utility.Modules.*;
-import be.nadtum.etum.Utility.Objets.InventoryBuilder;
+import be.nadtum.etum.Vanilla.MenuGui.InventoryBuilder;
 import be.nadtum.etum.Utility.Objets.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -12,7 +12,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;

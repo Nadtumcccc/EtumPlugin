@@ -1,7 +1,6 @@
 package be.nadtum.etum.Vanilla.MenuGui;
 
 import be.nadtum.etum.Utility.Modules.*;
-import be.nadtum.etum.Utility.Objets.InventoryBuilder;
 import be.nadtum.etum.Utility.Objets.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -11,7 +10,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MenuJob implements Listener {

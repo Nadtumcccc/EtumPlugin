@@ -4,7 +4,7 @@ package be.nadtum.etum.Staff.commands;
 import be.nadtum.etum.Utility.Modules.FichierGestion;
 import be.nadtum.etum.Utility.Modules.PlayerGestion;
 import be.nadtum.etum.Utility.Modules.PrefixMessage;
-import be.nadtum.etum.Utility.Objets.DataPunish;
+import be.nadtum.etum.Staff.DataPunish;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

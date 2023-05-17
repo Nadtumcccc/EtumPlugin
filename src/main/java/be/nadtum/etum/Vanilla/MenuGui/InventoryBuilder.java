@@ -1,5 +1,6 @@
-package be.nadtum.etum.Utility.Objets;
+package be.nadtum.etum.Vanilla.MenuGui;
 
+import be.nadtum.etum.Utility.Objets.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;

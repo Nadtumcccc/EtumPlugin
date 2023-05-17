@@ -1,4 +1,4 @@
-package be.nadtum.etum.Vanilla.City.Fonctionnalité;
+package be.nadtum.etum.Vanilla.City.Management;
 
 import be.nadtum.etum.Region.RegionGestion;
 import be.nadtum.etum.Utility.Modules.CityGestion;

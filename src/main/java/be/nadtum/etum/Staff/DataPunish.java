@@ -1,4 +1,4 @@
-package be.nadtum.etum.Utility.Objets;
+package be.nadtum.etum.Staff;
 
 import be.nadtum.etum.Utility.Modules.FichierGestion;
 import org.bukkit.configuration.file.YamlConfiguration;

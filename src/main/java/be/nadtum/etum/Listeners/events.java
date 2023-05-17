@@ -3,7 +3,7 @@ package be.nadtum.etum.Listeners;
 import be.nadtum.etum.Vanilla.MenuGui.City.*;
 import be.nadtum.etum.Vanilla.Player.Jobs.*;
 import be.nadtum.etum.Vanilla.Economie.shop.*;
-import be.nadtum.etum.Vanilla.City.Fonctionnalité.Claim;
+import be.nadtum.etum.Vanilla.City.Management.Claim;
 import be.nadtum.etum.Vanilla.Fonctionnalité.Spawner;
 import be.nadtum.etum.Main;
 import be.nadtum.etum.Region.RegionGestion;

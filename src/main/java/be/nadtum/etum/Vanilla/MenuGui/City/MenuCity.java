@@ -1,10 +1,10 @@
 package be.nadtum.etum.Vanilla.MenuGui.City;
 
-import be.nadtum.etum.Vanilla.City.Fonctionnalité.Claim;
+import be.nadtum.etum.Vanilla.City.Management.Claim;
 
 import be.nadtum.etum.Vanilla.MenuGui.MenuPrincipal;
 import be.nadtum.etum.Utility.Modules.*;
-import be.nadtum.etum.Utility.Objets.InventoryBuilder;
+import be.nadtum.etum.Vanilla.MenuGui.InventoryBuilder;
 import be.nadtum.etum.Utility.Objets.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -16,8 +16,8 @@ import org.bukkit.event.inventory.InventoryType;
 
 public class MenuCity implements Listener {
 
-    private static String nameMenu = "Menu : Cité";
-    private static String nameMenuSettings = "Menu : Cité | Settings";
+    private static final String nameMenu = "Menu : Cité";
+    private static final String nameMenuSettings = "Menu : Cité | Settings";
 
     public static void menu(Player player){
 

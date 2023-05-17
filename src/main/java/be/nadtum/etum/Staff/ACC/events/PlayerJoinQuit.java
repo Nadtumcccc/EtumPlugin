@@ -2,7 +2,7 @@ package be.nadtum.etum.Staff.ACC.events;
 
 import be.nadtum.etum.Utility.Modules.HashMapGestion;
 import be.nadtum.etum.Utility.Modules.PrefixMessage;
-import be.nadtum.etum.Utility.Objets.DataPunish;
+import be.nadtum.etum.Staff.DataPunish;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

@@ -1,7 +1,6 @@
 package be.nadtum.etum.Vanilla.MenuGui;
 
 import be.nadtum.etum.Utility.Modules.FichierGestion;
-import be.nadtum.etum.Utility.Objets.InventoryBuilder;
 import be.nadtum.etum.Utility.Objets.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -11,7 +10,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.Objects;
 
