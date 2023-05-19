@@ -1,6 +1,5 @@
 package be.nadtum.etum.Vanilla.Player.Jobs;
 
-
 import be.nadtum.etum.Main;
 import be.nadtum.etum.Utility.Modules.*;
 import be.nadtum.etum.Vanilla.City.Management.Claim;
@@ -29,6 +28,8 @@ import java.util.UUID;
 
 public class ActionManager implements Listener {
 
+    private final HashMap<UUID, BossBar> bossBarHashMap = new HashMap<>();
+
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
@@ -38,12 +39,9 @@ public class ActionManager implements Listener {
             return;
         }
 
-        if (FichierGestion.getCfgJobs().contains("Jobs.Fermier." + block.getType() + ".age")) {
-            int growthStatus = block.getData();
-            if (growthStatus == 7) {
-                selector(String.valueOf(block.getType()), player);
-                return;
-            }
+        if (isMatureCrop(block)) {
+            selector(block.getType().name(), player);
+            return;
         }
 
         if (HashMapGestion.blockPlaced.containsKey(block)) {
@@ -51,18 +49,17 @@ public class ActionManager implements Listener {
             return;
         }
 
-        if(Claim.cityCoinShow.containsKey(PlayerGestion.getPlayerCityName(player.getName()))){
+        if (Claim.cityCoinShow.containsKey(PlayerGestion.getPlayerCityName(player.getName()))) {
             player.sendMessage(Component.text(PrefixMessage.serveur() + "le claim est en train d'être édité"));
             event.setCancelled(true);
             return;
         }
 
-        selector(String.valueOf(block.getType()), player);
+        selector(block.getType().name(), player);
     }
 
     @EventHandler
-    public void BlockPlaced(BlockPlaceEvent event){
-
+    public void onBlockPlaced(BlockPlaceEvent event) {
         YamlConfiguration cfg = FichierGestion.getCfgJobs();
 
         if (!cfg.contains("Jobs." + PlayerGestion.getPlayerJobName(event.getPlayer().getName()) + "." + event.getBlock().getType())) {
@@ -73,59 +70,56 @@ public class ActionManager implements Listener {
 
     @EventHandler
     public void onEntityKill(@NotNull EntityDeathEvent event) {
-        if(event.getEntity().getKiller() == null) return;
-        selector(String.valueOf(event.getEntity().getType()), Objects.requireNonNull(event.getEntity().getKiller()));
+        if (event.getEntity().getKiller() == null) return;
+        selector(event.getEntity().getType().name(), Objects.requireNonNull(event.getEntity().getKiller()));
     }
 
     @EventHandler
     public void onFish(@NotNull PlayerFishEvent event) {
         if (event.getState() == PlayerFishEvent.State.CAUGHT_FISH) {
-            selector(Objects.requireNonNull(event.getCaught()).getName().toUpperCase(), event.getPlayer());
+            selector(event.getCaught().getName().toUpperCase(), event.getPlayer());
         }
     }
 
-    private final HashMap<UUID, BossBar> bossBarHashMap = new HashMap<>();
+    private boolean isMatureCrop(Block block) {
+        YamlConfiguration cfg = FichierGestion.getCfgJobs();
+        return cfg.contains("Jobs.Fermier." + block.getType() + ".age") && block.getData() == 7;
+    }
 
     public void selector(String entity, @NotNull Player player) {
-
         String playerName = player.getName();
         String playerJob = PlayerGestion.getPlayerJobName(playerName);
-
         YamlConfiguration cfg = FichierGestion.getCfgJobs();
 
         // Check if the player gains xp from this entity type
-        if (!cfg.contains("Jobs." + playerJob + "." + entity + ".gain_xp")) {
-            return;
+        if (cfg.contains("Jobs." + playerJob + "." + entity + ".gain_xp")) {
+            int gain_xp = cfg.getInt("Jobs." + playerJob + "." + entity + ".gain_xp");
+            int xp_for_next_level = PlayerGestion.getPlayerJobNiveau(playerName) * 500;
+
+            // Check if the player should level up
+            if (PlayerGestion.getPlayerJobXp(playerName) + gain_xp >= xp_for_next_level) {
+                PlayerGestion.setPlayerJobXp(playerName, 0);
+                PlayerGestion.addPlayerJobNiveau(playerName, 1);
+                player.playSound(player.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_BREAK, 1, 1);
+            }
+
+            // Add the xp gain to the player's total
+            PlayerGestion.addPlayerJobXp(playerName, gain_xp);
+
+            // Update the player's boss bar
+            BossBar bossBar = bossBarHashMap.getOrDefault(player.getUniqueId(), Bukkit.createBossBar("", BarColor.BLUE, BarStyle.SOLID));
+            bossBar.setTitle(PlayerGestion.getPlayerJobName(player.getName()) + " §e: §e[§6" + PlayerGestion.getPlayerJobXp(player.getName()) + " §b/ §6" + xp_for_next_level + "§e]");
+            bossBar.setProgress((double) PlayerGestion.getPlayerJobXp(player.getName()) / xp_for_next_level);
+            bossBar.addPlayer(player);
+            bossBarHashMap.put(player.getUniqueId(), bossBar);
+
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), bossBar::removeAll, 100L);
         }
 
-        int gain_xp = cfg.getInt("Jobs." + playerJob + "." + entity + ".gain_xp");
-
-
-        int xp_for_next_level = PlayerGestion.getPlayerJobNiveau(playerName) * 500;
-
-        // Check if the player should level up
-        if (PlayerGestion.getPlayerJobXp(playerName) + gain_xp >= xp_for_next_level) {
-            PlayerGestion.setPlayerJobXp(playerName, 0);
-            PlayerGestion.addPlayerJobNiveau(playerName, 1);
-            player.playSound(player.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_BREAK, 1, 1);
+        if (cfg.contains("Jobs." + playerJob + "." + entity + ".money")) {
+            int gain_money = cfg.getInt("Jobs." + playerJob + "." + entity + ".money");
+            PlayerGestion.addPlayerMoney(player.getName(), (long) gain_money);
+            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(("§7vous avez gagné §f" + gain_money + " §7de money")));
         }
-
-        // Add the xp gain to the player's total;
-        PlayerGestion.addPlayerJobXp(playerName, gain_xp);
-
-        // Update the player's boss bar
-        BossBar bossBar = bossBarHashMap.getOrDefault(player.getUniqueId(), Bukkit.createBossBar("", BarColor.BLUE, BarStyle.SOLID));
-        bossBar.setTitle(PlayerGestion.getPlayerJobName(player.getName()) + " §e: §e[§6" + PlayerGestion.getPlayerJobXp(player.getName()) + " §b/ §6" + xp_for_next_level + "§e]");
-        bossBar.setProgress((double) PlayerGestion.getPlayerJobXp(player.getName()) / xp_for_next_level);
-        bossBar.addPlayer(player);
-        bossBarHashMap.put(player.getUniqueId(), bossBar);
-
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), bossBar::removeAll, 100L);
-
-        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(("§7vous avez gagné §f" + gain_xp + " §7expérience")));
-
-
     }
-
-
 }

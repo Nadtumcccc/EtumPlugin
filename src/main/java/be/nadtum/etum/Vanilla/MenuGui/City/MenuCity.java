@@ -4,7 +4,7 @@ import be.nadtum.etum.Vanilla.City.Management.Claim;
 
 import be.nadtum.etum.Vanilla.MenuGui.MenuPrincipal;
 import be.nadtum.etum.Utility.Modules.*;
-import be.nadtum.etum.Vanilla.MenuGui.InventoryBuilder;
+import be.nadtum.etum.Utility.Objets.InventoryBuilder;
 import be.nadtum.etum.Utility.Objets.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

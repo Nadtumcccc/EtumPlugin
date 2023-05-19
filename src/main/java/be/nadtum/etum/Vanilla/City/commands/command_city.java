@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class command_city implements CommandExecutor, TabExecutor {
             leave
             invite [Player : String(Type Player)]
      */
-    private static HashMap<Player, Player> invite = new HashMap<>();
+    private static final HashMap<Player, Player> invite = new HashMap<>();
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -260,28 +261,19 @@ public class command_city implements CommandExecutor, TabExecutor {
     @Nullable
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String s, @NotNull String[] args) {
-
-        if(args.length == 1){
-            List<String> list = new ArrayList<>();
-
-            list.add("create");
-            list.add("leave");
-            list.add("spawn");
-            list.add("invite");
-            list.add("kick");
-            return list;
+        if (args.length == 1) {
+            return Arrays.asList("create", "leave", "spawn", "invite", "kick");
         }
 
-        if(args.length == 2 && args[0].equalsIgnoreCase("invite")){
+        if (args.length == 2 && args[0].equalsIgnoreCase("invite")) {
             List<String> list = new ArrayList<>();
-
             list.add("accepter");
             list.add("rejeter");
 
-
-            for (Player player : Bukkit.getOnlinePlayers()){
+            for (Player player : Bukkit.getOnlinePlayers()) {
                 list.add(player.getName());
             }
+
             return list;
         }
 

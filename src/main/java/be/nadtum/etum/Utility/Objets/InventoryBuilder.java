@@ -1,4 +1,4 @@
-package be.nadtum.etum.Vanilla.MenuGui;
+package be.nadtum.etum.Utility.Objets;
 
 import be.nadtum.etum.Utility.Objets.ItemBuilder;
 import org.bukkit.Bukkit;
@@ -28,21 +28,16 @@ public class InventoryBuilder {
         ItemStack contourItem = contour.getItem();
         ItemStack backItem = back.getItem();
 
-        // Set the contour items for the top row
+        // Set the contour items for the top row and bottom row
         for (int i = 0; i < 9; i++) {
-            inventory.setItem(i, contourItem);
-        }
-
-        int bottomRowIndex = (numRows - 1) * 9;
-        // Set the contour items for the bottom row
-        for (int i = 0; i < 9; i++) {
-            inventory.setItem(bottomRowIndex + i, contourItem);
+            inventory.setItem(i, contourItem); // Top row
+            inventory.setItem((numRows - 1) * 9 + i, contourItem); // Bottom row
         }
 
         // Set the contour items for the left and right sides
         for (int row = 1; row < numRows - 1; row++) {
-            inventory.setItem(row * 9, contourItem); // Contour gauche
-            inventory.setItem(row * 9 + 8, contourItem); // Contour droit
+            inventory.setItem(row * 9, contourItem); // Left side
+            inventory.setItem(row * 9 + 8, contourItem); // Right side
         }
 
         inventory.setItem(inventorySize - 5, backItem);

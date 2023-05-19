@@ -1,7 +1,7 @@
 package be.nadtum.etum.Vanilla.MenuGui.City;
 
 import be.nadtum.etum.Utility.Modules.*;
-import be.nadtum.etum.Vanilla.MenuGui.InventoryBuilder;
+import be.nadtum.etum.Utility.Objets.InventoryBuilder;
 import be.nadtum.etum.Utility.Objets.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;

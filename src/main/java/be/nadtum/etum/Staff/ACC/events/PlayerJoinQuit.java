@@ -12,72 +12,51 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerJoinQuit implements Listener {
 
-
     @EventHandler
-    public void PlayerJoinEvent(PlayerJoinEvent event) {
+    public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        for(Player modos : HashMapGestion.getVanish().keySet()){
+        for (Player modos : HashMapGestion.getVanish().keySet()) {
             player.hidePlayer(modos);
         }
-
-
     }
 
     @EventHandler
-    public void PlayerLoginEvent(PlayerLoginEvent event){
-        Player p = event.getPlayer();
+    public void onPlayerLogin(PlayerLoginEvent event) {
+        Player player = event.getPlayer();
+        DataPunish data = new DataPunish(player.getUniqueId());
 
-        DataPunish data = new DataPunish(p.getUniqueId());
+        if (!data.exist()) {
+            return;
+        }
 
-        if(!data.exist())return;
-
-        if(data.isTempbanned()){
-            if(data.getTempbannedMilliseconds() <= System.currentTimeMillis()){
+        if (data.isTempbanned()) {
+            if (data.getTempbannedMilliseconds() <= System.currentTimeMillis()) {
                 data.setUnTempbanned();
-            }else{
-                //au lieu de dire à partir de, utiliser jusqu'au et reprendre le bout de code du projet staffmode
-                event.disallow(PlayerLoginEvent.Result.KICK_OTHER, "§evous avez été ban par §b§l" + data.getTempbannedFrom() +
-                        "\n §eà partir de " + data.getTempbannedTimestamp() + " §ependant §b" + data.getTempmutedChiffre() + " §e" + data.getTempbannedFormat() +
-                        "\n §eraison : §b§l" + data.getTempbannedReason());
+            } else {
+                String kickMessage = "§evous avez été ban par §b§l" + data.getTempbannedFrom() +
+                        "\n §eà partir de " + data.getTempbannedTimestamp() + " §ependant §b" + data.getTempbannedFormat() +
+                        "\n §eraison : §b§l" + data.getTempbannedReason();
+                event.disallow(PlayerLoginEvent.Result.KICK_OTHER, kickMessage);
             }
         }
     }
 
-
-
-
-
     @EventHandler
-    public void PlayerQuitEvent(PlayerQuitEvent e) {
-        Player player = e.getPlayer();
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
 
-        if(HashMapGestion.getInventaire().containsKey(player)){
+        if (HashMapGestion.getInventaire().containsKey(player)) {
             player.getInventory().clear();
 
-            //remettre l'inventaire de jeu
-            for (int i = 0; i < 35;i++){
-                player.getInventory().setItem(i,HashMapGestion.getInventaire().get(player)[i]);
-            }
-
-            player.getInventory().setBoots(HashMapGestion.getArmor().get(player)[0]);
-            player.getInventory().setLeggings(HashMapGestion.getArmor().get(player)[1]);
-            player.getInventory().setChestplate(HashMapGestion.getArmor().get(player)[2]);
-
-            player.getInventory().setHelmet(HashMapGestion.getArmor().get(player)[3]);
+            // Remettre l'inventaire de jeu
+            player.getInventory().setContents(HashMapGestion.getInventaire().get(player));
+            player.getInventory().setArmorContents(HashMapGestion.getArmor().get(player));
 
             player.sendMessage(PrefixMessage.admin() + " vous avez quitté le mode staff");
             HashMapGestion.getInventaire().remove(player);
-            if(HashMapGestion.getVanish().containsKey(player)){
-                HashMapGestion.getVanish().remove(player);
-            }
+            HashMapGestion.getVanish().remove(player);
             player.setAllowFlight(false);
             player.setFlying(false);
-
         }
-
     }
-
-
-
-
 }
