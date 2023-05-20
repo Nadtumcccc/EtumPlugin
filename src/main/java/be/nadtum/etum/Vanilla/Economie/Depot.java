@@ -1,11 +1,9 @@
 package be.nadtum.etum.Vanilla.Economie;
 
-import be.nadtum.etum.Main;
 import be.nadtum.etum.Utility.Modules.FichierGestion;
 import be.nadtum.etum.Utility.Modules.PlayerGestion;
 import be.nadtum.etum.Utility.Objets.InventoryBuilder;
 import be.nadtum.etum.Utility.Objets.ItemBuilder;
-import be.nadtum.etum.Vanilla.MenuGui.MenuPrincipal;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -20,7 +18,6 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
-import java.util.Random;
 
 public class Depot implements Listener {
 
@@ -59,7 +56,7 @@ public class Depot implements Listener {
             createGuiDepot(this, getGuiDepot());
         }
 
-        private void createGuiDepot(JobMenu jobMenu, InventoryBuilder inventoryBuilder) {
+        private void createGuiDepot(@NotNull JobMenu jobMenu, @NotNull InventoryBuilder inventoryBuilder) {
             // Logique pour créer le menu spécifique à chaque métier
             inventoryBuilder.getInventory().clear();
             inventoryBuilder.setupTemplate();
@@ -111,7 +108,7 @@ public class Depot implements Listener {
     }
 
 
-    public static void menu(Player player) {
+    public static void menu(@NotNull Player player) {
         String jobName = PlayerGestion.getPlayerJobName(player.getName());
         JobMenu jobMenu = JobMenu.valueOf(jobName.toUpperCase());
         jobMenu.update();
@@ -122,7 +119,7 @@ public class Depot implements Listener {
 
 
     @EventHandler
-    public void PlayerMenu(InventoryClickEvent event) {
+    public void PlayerMenu(@NotNull InventoryClickEvent event) {
 
         if (event.getSlotType().equals(InventoryType.SlotType.OUTSIDE)) return;
         if(event.getClickedInventory().getType().equals(InventoryType.PLAYER))return;
@@ -145,7 +142,7 @@ public class Depot implements Listener {
         }
     }
 
-    public void sellItem(ItemStack stack, YamlConfiguration config, Player player, InventoryClickEvent event) {
+    public void sellItem(@NotNull ItemStack stack, @NotNull YamlConfiguration config, @NotNull Player player, @NotNull InventoryClickEvent event) {
         String jobName = PlayerGestion.getPlayerJobName(player.getName());
         String targetPath = "Jobs." + jobName + "." + stack.getType() + ".depot";
 
@@ -234,25 +231,39 @@ public class Depot implements Listener {
         player.updateInventory();
     }
 
-    private static int getPriceFinal(int amount, int mainValue){
+    private static int getPriceFinal(int amount, int mainValue) {
         int priceFinal = mainValue;
         int increment = 1;
-        int threshold = 1000;
+        int threshold = 500;
 
         if (amount < threshold) {
-            increment = 1;
+            while (amount < threshold) {
+                increment--;
+                amount += threshold;
+                threshold = (increment >= -2 * mainValue) ? 200 : 150;
+            }
         } else {
-            increment = 1;
             while (amount >= threshold) {
                 increment++;
                 amount -= threshold;
-                threshold = (increment <= 2 * mainValue) ? 300 : 250;
+                threshold = (increment <= 2 * mainValue) ? 200 : 150;
             }
         }
 
-        priceFinal += increment;
-        return Math.min(priceFinal, 2 * mainValue);
+        // Calcul du prix selon la formule de l'offre et de la demande
+        double demand = 1.0 / (priceFinal + 1);
+        double supply = 1.0 / (mainValue + increment + 1);
+        double price = demand / supply;
+
+        // Arrondir le prix à l'entier le plus proche
+        priceFinal = (int) Math.round(price);
+
+        priceFinal = Math.max(priceFinal, 1);
+        priceFinal = Math.min(priceFinal, 2 * mainValue);
+
+        return priceFinal;
     }
+
 
 
 
