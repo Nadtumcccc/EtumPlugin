@@ -14,7 +14,7 @@ public class CityGestion {
     }
 
     public static Boolean hasPermission(String player, String permission){
-        return FichierGestion.getCfgCity().contains("City." + PlayerGestion.getPlayerCityName(player) + ".membres." + PlayerGestion.getUUIDFromName(player).toString() + ".permission." + permission);
+        return FichierGestion.getCfgCity().contains("City." + PlayerGestion.getPlayerCityName(player) + ".membres." + PlayerGestion.getUUIDFromName(player) + ".permission." + permission);
     }
     public static void setPermission(String player, String permission){
         FichierGestion.getCfgCity().set("City." + PlayerGestion.getPlayerCityName(player) + ".membres." + PlayerGestion.getUUIDFromName(player).toString() + ".permission." + permission, permission);

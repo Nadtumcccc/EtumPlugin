@@ -44,8 +44,6 @@ public class MenuMondeRessource implements Listener {
         Player player = (Player) event.getWhoClicked();
         if (event.getCurrentItem() == null) return;
 
-        event.setCancelled(true);
-
         if (event.getView().getTitle().equalsIgnoreCase(nameMenu)) {
             switch (event.getCurrentItem().getType()) {
                 case GRASS_BLOCK:
@@ -61,6 +59,7 @@ public class MenuMondeRessource implements Listener {
                     MenuPrincipal.menu(player);
                     break;
                 default:
+                    event.setCancelled(true);
                     break;
             }
 

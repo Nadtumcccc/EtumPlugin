@@ -292,7 +292,6 @@ public class Claim implements Listener {
         }
     }
 
-    //METHODES
     public static boolean canBuild(Player player, double xBlock, double zBlock) {
         YamlConfiguration cfg_perms = FichierGestion.getCfgPermission();
 
@@ -309,11 +308,7 @@ public class Claim implements Listener {
         }
 
         String playerCityName = PlayerGestion.getPlayerCityName(player.getName());
-        if (playerCityName.equals("NoCity")) {
-            return false;
-        }
-
-        if (!CityGestion.hasPermission(player.getName(), "build")) {
+        if (playerCityName.equals("NoCity") || !CityGestion.hasPermission(player.getName(), "build")) {
             return false;
         }
 
@@ -322,8 +317,9 @@ public class Claim implements Listener {
             if (cityName.equals(playerCityName)) {
                 if (cityCoinShow.containsKey(cityName) && !CityGestion.hasPermission(player.getName(), "claim")) {
                     player.sendMessage(PrefixMessage.erreur() + "le claim est en mode modification veuillez attendre");
+                    return false;
                 }
-                return false;
+                return true;
             } else {
                 player.sendMessage(PrefixMessage.erreur() + "tu es dans la cité " + cityName);
             }

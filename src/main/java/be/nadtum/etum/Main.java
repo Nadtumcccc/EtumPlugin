@@ -3,6 +3,7 @@ package be.nadtum.etum;
 import be.nadtum.etum.Listeners.Commands;
 import be.nadtum.etum.Listeners.events;
 import be.nadtum.etum.Utility.Modules.FichierGestion;
+import be.nadtum.etum.Vanilla.Economie.Depot;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -20,6 +21,7 @@ public class Main extends JavaPlugin implements Listener {
         instance = this;
 
         registerListeners();
+        Depot.initializeJobMenus();
     }
 
     @Override

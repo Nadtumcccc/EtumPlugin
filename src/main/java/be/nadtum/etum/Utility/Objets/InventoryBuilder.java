@@ -12,8 +12,8 @@ public class InventoryBuilder {
 
     Inventory inventory;
 
-    private final ItemBuilder back = new ItemBuilder(Material.DARK_OAK_DOOR, "§cRetour", 1);
-    private final ItemBuilder contour = new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE, " ", 1);
+    public static final ItemBuilder back = new ItemBuilder(Material.DARK_OAK_DOOR, "§cRetour", 1);
+    public static final ItemBuilder contour = new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE, " ", 1);
 
     public InventoryBuilder(String name, Integer nbCase){
         inventory = Bukkit.createInventory(null, nbCase, name);

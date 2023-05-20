@@ -57,7 +57,7 @@ public class MenuHome implements Listener {
         Player player = (Player) event.getWhoClicked();
         if (event.getCurrentItem() == null) return;
 
-        event.setCancelled(true);
+
 
         if (event.getView().getTitle().equalsIgnoreCase(nameMenu)) {
             switch (event.getCurrentItem().getType()) {
@@ -70,6 +70,7 @@ public class MenuHome implements Listener {
                     MenuPrincipal.menu(player);
                     break;
                 default:
+                    event.setCancelled(true);
                     break;
             }
         }

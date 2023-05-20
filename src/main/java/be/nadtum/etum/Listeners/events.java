@@ -1,5 +1,6 @@
 package be.nadtum.etum.Listeners;
 
+import be.nadtum.etum.Vanilla.Economie.Depot;
 import be.nadtum.etum.Vanilla.MenuGui.City.*;
 import be.nadtum.etum.Vanilla.Player.Jobs.*;
 import be.nadtum.etum.Vanilla.Economie.shop.*;
@@ -69,6 +70,7 @@ public class events {
     private void registerEconomyEvents(Main main) {
         pluginManager.registerEvents(new Shop_Commerçant(), main);
         pluginManager.registerEvents(new Shop_Serveur(), main);
+        pluginManager.registerEvents(new Depot(), main);
         pluginManager.registerEvents(new ActionManager(), main);
     }
 

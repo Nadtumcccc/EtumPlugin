@@ -1,11 +1,13 @@
 package be.nadtum.etum.Vanilla.MenuGui;
 
 import be.nadtum.etum.Utility.Objets.InventoryBuilder;
+import be.nadtum.etum.Vanilla.Economie.Depot;
 import be.nadtum.etum.Vanilla.MenuGui.City.MenuCity;
 
 import be.nadtum.etum.Utility.Modules.*;
 import be.nadtum.etum.Utility.Objets.ItemBuilder;
 import org.bukkit.Material;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -59,10 +61,12 @@ public class MenuPrincipal implements Listener {
         ItemBuilder random = new ItemBuilder(Material.GHAST_TEAR, "§4Random §cLocation", 1);
         ItemBuilder jobs = new ItemBuilder(Material.IRON_AXE, "§6Jobs", 1);
         ItemBuilder guilde = new ItemBuilder(Material.TOTEM_OF_UNDYING, "§5City", 1);
+        ItemBuilder dirt = new ItemBuilder(Material.DIRT, "§5Dirt", 1);
 
 
         inv.getInventory().setItem(10, profil.getItem());
         inv.getInventory().setItem(11, home.getItem());
+        inv.getInventory().setItem(12, dirt.getItem());
         inv.getInventory().setItem(16, jobs.getItem());
         inv.getInventory().setItem(25, guilde.getItem());
         inv.getInventory().setItem(37, mressource.getItem());
@@ -86,6 +90,9 @@ public class MenuPrincipal implements Listener {
             switch (event.getCurrentItem().getType()) {
                 case DARK_OAK_DOOR:
                     player.closeInventory();
+                    break;
+                case DIRT:
+                    Depot.menu(player);
                     break;
                 case RED_BED:
                     MenuHome.menu(player);
