@@ -231,38 +231,20 @@ public class Depot implements Listener {
         player.updateInventory();
     }
 
-    private static int getPriceFinal(int amount, int mainValue) {
-        int priceFinal = mainValue;
-        int increment = 1;
-        int threshold = 500;
+    private static int getPriceFinal(int amount, final int mainValue) {
+        final int threshold = 1000;
+        final double reductionPercentage = 0.1;
 
-        if (amount < threshold) {
-            while (amount < threshold) {
-                increment--;
-                amount += threshold;
-                threshold = (increment >= -2 * mainValue) ? 200 : 150;
-            }
-        } else {
-            while (amount >= threshold) {
-                increment++;
-                amount -= threshold;
-                threshold = (increment <= 2 * mainValue) ? 200 : 150;
-            }
+        if (amount >= threshold) {
+            final int reductionCount = amount / threshold;
+            final int totalReduction = (int) (reductionCount * mainValue * reductionPercentage);
+            return mainValue - totalReduction;
         }
 
-        // Calcul du prix selon la formule de l'offre et de la demande
-        double demand = 1.0 / (priceFinal + 1);
-        double supply = 1.0 / (mainValue + increment + 1);
-        double price = demand / supply;
-
-        // Arrondir le prix à l'entier le plus proche
-        priceFinal = (int) Math.round(price);
-
-        priceFinal = Math.max(priceFinal, 1);
-        priceFinal = Math.min(priceFinal, 2 * mainValue);
-
-        return priceFinal;
+        return mainValue;
     }
+
+
 
 
 
