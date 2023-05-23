@@ -24,6 +24,7 @@ public class Depot implements Listener {
     private static final String nameMenu = "Menu : Dépôt";
     private static final HashMap<String, InventoryBuilder> jobMenus = new HashMap<>();
 
+    // Énumération des menus spécifiques à chaque métier
     public enum JobMenu {
         MINEUR("Mineur"),
         BÛCHERON("Bûcheron"),
@@ -103,12 +104,13 @@ public class Depot implements Listener {
         }
     }
 
+    // Initialise les menus spécifiques à chaque métier
     public static void initializeJobMenus() {
         JobMenu.createJobMenus();
     }
 
-
-    public static void menu(@NotNull Player player) {
+    // Ouvre le menu de dépôt pour un joueur spécifique
+    public static void openDepotMenu(@NotNull Player player) {
         String jobName = PlayerGestion.getPlayerJobName(player.getName());
         JobMenu jobMenu = JobMenu.valueOf(jobName.toUpperCase());
         jobMenu.update();
@@ -117,23 +119,30 @@ public class Depot implements Listener {
         player.openInventory(inventoryBuilder.getInventory());
     }
 
-
+    // Gère les clics sur le menu de dépôt du joueur
     @EventHandler
-    public void PlayerMenu(@NotNull InventoryClickEvent event) {
+    public void onInventoryClick(@NotNull InventoryClickEvent event) {
+        // Vérifie si le joueur a cliqué en dehors de l'inventaire ou dans l'inventaire du joueur
+        if (event.getSlotType().equals(InventoryType.SlotType.OUTSIDE) || event.getClickedInventory().getType().equals(InventoryType.PLAYER)) {
+            return;
+        }
 
-        if (event.getSlotType().equals(InventoryType.SlotType.OUTSIDE)) return;
-        if(event.getClickedInventory().getType().equals(InventoryType.PLAYER))return;
         Player player = (Player) event.getWhoClicked();
-        if (event.getCurrentItem() == null) return;
+        if (event.getCurrentItem() == null) {
+            return;
+        }
 
+        // Vérifie si le menu ouvert est le menu de dépôt
         if (event.getView().getTitle().equalsIgnoreCase(nameMenu)) {
             event.setCancelled(true);
 
+            // Vérifie si le joueur a cliqué sur le bouton de retour
             if (event.getCurrentItem().getType().equals(InventoryBuilder.back.getItem().getType())) {
                 player.closeInventory();
                 return;
             }
 
+            // Vérifie si le joueur a cliqué sur les bords de l'inventaire
             if (event.getCurrentItem().getType().equals(InventoryBuilder.contour.getItem().getType())) {
                 return;
             }
@@ -142,6 +151,7 @@ public class Depot implements Listener {
         }
     }
 
+    // Vend un objet et met à jour les stocks, l'inventaire du joueur et les données du GUI
     public void sellItem(@NotNull ItemStack stack, @NotNull YamlConfiguration config, @NotNull Player player, @NotNull InventoryClickEvent event) {
         String jobName = PlayerGestion.getPlayerJobName(player.getName());
         String targetPath = "Jobs." + jobName + "." + stack.getType() + ".depot";
@@ -159,11 +169,9 @@ public class Depot implements Listener {
         // Récupérer les objets correspondants dans l'inventaire du joueur
         int availableAmount = getPlayerInventoryItems(player, stack);
 
-
-        player.sendMessage(availableAmount + " " +  quantity);
         // Vérifier si le joueur a suffisamment d'objets à vendre
         if (quantity > availableAmount) {
-            player.sendMessage(ChatColor.RED + "Vous n'avez pas suffisamment d'objets à vendre.");
+            player.sendMessage(ChatColor.DARK_RED + "Vous n'avez pas suffisamment d'objets à vendre.");
             return;
         }
 
@@ -173,11 +181,11 @@ public class Depot implements Listener {
         // Mettre à jour la quantité dans la configuration du métier
         config.set(targetPath + ".amount", stockAmount + quantity);
 
+        // Calculer le prix total en fonction de la quantité vendue
         priceFinal = priceFinal * quantity;
 
         // Donner de l'argent au joueur
         PlayerGestion.addPlayerMoney(player.getName(), (long) priceFinal);
-        // Ajoutez ici votre logique pour donner de l'argent au joueur, en utilisant par exemple une économie virtuelle ou une autre méthode.
 
         // Envoyer un message au joueur avec les informations de la transaction
         player.sendMessage(ChatColor.GREEN + "Vous avez vendu " + quantity + " " + stack.getType().toString().toUpperCase() + " pour " + priceFinal + " pièces.");
@@ -185,7 +193,6 @@ public class Depot implements Listener {
         // Recharger le GUI avec les nouvelles données
         JobMenu jobMenu = JobMenu.valueOf(jobName.toUpperCase());
         jobMenu.update();
-
 
         // Rafraîchir l'inventaire du joueur pour refléter les nouvelles données
         player.updateInventory();
@@ -231,6 +238,7 @@ public class Depot implements Listener {
         player.updateInventory();
     }
 
+    // Calcule le prix final en fonction de la quantité et de la valeur initiale de l'objet
     private static int getPriceFinal(int amount, final int mainValue) {
         final int threshold = 1000;
         final double reductionPercentage = 0.1;
@@ -243,12 +251,5 @@ public class Depot implements Listener {
 
         return mainValue;
     }
-
-
-
-
-
-
-
-
 }
+
