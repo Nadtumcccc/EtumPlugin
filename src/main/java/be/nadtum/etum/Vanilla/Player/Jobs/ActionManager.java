@@ -121,5 +121,7 @@ public class ActionManager implements Listener {
             PlayerGestion.addPlayerMoney(player.getName(), (long) gain_money);
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(("§7vous avez gagné §f" + gain_money + " §7de money")));
         }
+
+        player.sendMessage(Component.text("Jobs." + playerJob + "." + entity + "."));
     }
 }

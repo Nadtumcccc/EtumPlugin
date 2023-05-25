@@ -1,6 +1,4 @@
 package be.nadtum.etum.Vanilla.City.Builder;
 
-
-public class ClaimBuilder {
-
+public class CityBuilder {
 }
