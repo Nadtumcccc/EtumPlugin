@@ -17,25 +17,20 @@ public class MenuJob implements Listener {
 
     private static String nameMenu = "Menu : Métier";
 
-    public static void menu(Player player){
-
+    public static void menu(Player player) {
         ItemMeta meta;
         List<String> lore;
 
+        // Création de l'inventaire
         InventoryBuilder inv = new InventoryBuilder(nameMenu, 54);
-
         inv.setupTemplate();
 
-        if(PlayerGestion.getPlayerJobName(player.getName()).equalsIgnoreCase("nojob")){
-
+        if (PlayerGestion.getPlayerJobName(player.getName()).equalsIgnoreCase("nojob")) {
+            // Menu pour choisir un métier
             ItemBuilder mineur = new ItemBuilder(Material.IRON_PICKAXE, "§7Mineur", 1);
-
             ItemBuilder chasseur = new ItemBuilder(Material.IRON_SWORD, "§4Chasseur", 1);
-
             ItemBuilder bucheron = new ItemBuilder(Material.IRON_AXE, "§2Bûcheron", 1);
-
             ItemBuilder fermier = new ItemBuilder(Material.IRON_HOE, "§aFermier", 1);
-
             ItemBuilder pecheur = new ItemBuilder(Material.FISHING_ROD, "§bPêcheur", 1);
 
             inv.getInventory().setItem(10, mineur.getItem());
@@ -43,9 +38,8 @@ public class MenuJob implements Listener {
             inv.getInventory().setItem(12, bucheron.getItem());
             inv.getInventory().setItem(13, fermier.getItem());
             inv.getInventory().setItem(14, pecheur.getItem());
-
-        }else{
-
+        } else {
+            // Affichage du métier choisi et options associées
             ItemBuilder jobs = new ItemBuilder(Material.ENCHANTED_BOOK, PlayerGestion.getPlayerJobName(player.getName()), 1);
             jobs.addLore("§6Voie§e : §b" + PlayerGestion.getPlayerJobsVoie(player.getName()));
             jobs.addLore("§6Niveau§e : §b" + PlayerGestion.getPlayerJobNiveau(player.getName()));
@@ -58,48 +52,50 @@ public class MenuJob implements Listener {
             ItemBuilder ability = new ItemBuilder(Material.SPYGLASS, "compétence métier", 1);
 
             inv.getInventory().setItem(10, jobs.getItem());
-            inv.getInventory().setItem(11,ability.getItem());
+            inv.getInventory().setItem(11, ability.getItem());
             inv.getInventory().setItem(37, quitterMétier.getItem());
-
         }
-
 
         player.openInventory(inv.getInventory());
     }
 
     @EventHandler
     public void PlayerMenu(InventoryClickEvent event) {
+        // Vérification de l'événement de clic sur l'inventaire
+        if (event.getSlotType().equals(InventoryType.SlotType.OUTSIDE))
+            return;
+        if (event.getClickedInventory().getType().equals(InventoryType.PLAYER))
+            return;
 
-        if (event.getSlotType().equals(InventoryType.SlotType.OUTSIDE)) return;
-        if(event.getClickedInventory().getType().equals(InventoryType.PLAYER))return;
         Player player = (Player) event.getWhoClicked();
-        if (event.getCurrentItem() == null) return;
-
+        if (event.getCurrentItem() == null)
+            return;
 
         if (event.getView().getTitle().equalsIgnoreCase(nameMenu)) {
-
-            if(event.getCurrentItem().getType().equals(Material.DARK_OAK_DOOR)){
+            // Gestion des actions du menu
+            if (event.getCurrentItem().getType().equals(Material.DARK_OAK_DOOR)) {
                 player.closeInventory();
                 MenuPrincipal.menu(player);
                 return;
             }
 
-            if(PlayerGestion.getPlayerJobName(player.getName()).equalsIgnoreCase("nojob")){
-                switch (event.getCurrentItem().getType()){
+            if (PlayerGestion.getPlayerJobName(player.getName()).equalsIgnoreCase("nojob")) {
+                // Sélection du métier
+                switch (event.getCurrentItem().getType()) {
                     case IRON_PICKAXE:
-                        PlayerGestion.setPlayerJobName(player.getName(),"Mineur");
+                        PlayerGestion.setPlayerJobName(player.getName(), "Mineur");
                         break;
                     case IRON_AXE:
-                        PlayerGestion.setPlayerJobName(player.getName(),"Bûcheron");
+                        PlayerGestion.setPlayerJobName(player.getName(), "Bûcheron");
                         break;
                     case IRON_SWORD:
-                        PlayerGestion.setPlayerJobName(player.getName(),"Chasseur");
+                        PlayerGestion.setPlayerJobName(player.getName(), "Chasseur");
                         break;
                     case IRON_HOE:
-                        PlayerGestion.setPlayerJobName(player.getName(),"Fermier");
+                        PlayerGestion.setPlayerJobName(player.getName(), "Fermier");
                         break;
                     case FISHING_ROD:
-                        PlayerGestion.setPlayerJobName(player.getName(),"Pêcheur");
+                        PlayerGestion.setPlayerJobName(player.getName(), "Pêcheur");
                         break;
                     default:
                         event.setCancelled(true);
@@ -112,34 +108,30 @@ public class MenuJob implements Listener {
                 return;
             }
 
-
-            switch (event.getCurrentItem().getType()){
-
+            switch (event.getCurrentItem().getType()) {
                 case BOOK:
-                    if(PlayerGestion.getPlayerMoney(player.getName()) < 500){
+                    // Quitter le métier
+                    if (PlayerGestion.getPlayerMoney(player.getName()) < 500) {
                         event.setCancelled(true);
                         return;
                     }
-                    player.closeInventory();
+
                     PlayerGestion.setPlayerJobXp(player.getName(), 0);
-                    PlayerGestion.setPlayerJobNiveau(player.getName(),1);
+                    PlayerGestion.setPlayerJobNiveau(player.getName(), 1);
                     PlayerGestion.setPlayerJobName(player.getName(), "nojob");
                     PlayerGestion.setPlayerJobsVoie(player.getName(), null);
 
                     player.sendMessage(PrefixMessage.serveur() + "vous avez quitté votre métier");
-                    PlayerGestion.setPlayerMoney(player.getName(), PlayerGestion.getPlayerMoney(player.getName()) - 500);
+                    PlayerGestion.addPlayerMoney(player.getName(), (long) -500);
                     menu(player);
                     break;
                 case SPYGLASS:
+                    // Compétence du métier
                     break;
                 default:
                     event.setCancelled(true);
                     break;
             }
-
-
         }
-
     }
-
 }
