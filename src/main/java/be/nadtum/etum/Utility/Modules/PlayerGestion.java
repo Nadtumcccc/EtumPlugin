@@ -31,9 +31,6 @@ public class PlayerGestion {
         FichierGestion.getCfgPlayers().set("Profil." + PlayerGestion.getUUIDFromName(player.getName()) + ".staff.puissance", 0);
 
         player.sendMessage(PrefixMessage.serveur() + "votre profil a bien été créé");
-
-        File fb = new File("plugins//fichiers//modération//" + player.getUniqueId() + ".yml");
-        FichierGestion.createNewFile(fb);
     }
 
 

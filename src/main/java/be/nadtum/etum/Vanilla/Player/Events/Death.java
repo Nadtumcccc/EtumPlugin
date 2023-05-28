@@ -1,4 +1,4 @@
-package be.nadtum.etum.Vanilla.Player.event;
+package be.nadtum.etum.Vanilla.Player.Events;
 
 
 import be.nadtum.etum.Utility.Modules.Chat;

@@ -15,16 +15,16 @@ import be.nadtum.etum.Vanilla.MenuGui.MenuHome;
 import be.nadtum.etum.Vanilla.MenuGui.MenuJob;
 import be.nadtum.etum.Vanilla.MenuGui.MenuMondeRessource;
 import be.nadtum.etum.Vanilla.MenuGui.MenuPrincipal;
-import be.nadtum.etum.Vanilla.Player.event.Connection;
-import be.nadtum.etum.Vanilla.Player.event.Fight;
-import be.nadtum.etum.Vanilla.Player.event.Death;
+import be.nadtum.etum.Vanilla.Player.Events.Connection;
+import be.nadtum.etum.Vanilla.Player.Events.Fight;
+import be.nadtum.etum.Vanilla.Player.Events.Death;
 import org.bukkit.plugin.PluginManager;
 
-public class events {
+public class Events {
 
     PluginManager pluginManager;
 
-    public events(Main main) {
+    public Events(Main main) {
 
         this.pluginManager = main.getServer().getPluginManager();
 

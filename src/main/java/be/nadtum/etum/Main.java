@@ -1,7 +1,7 @@
 package be.nadtum.etum;
 
 import be.nadtum.etum.Listeners.Commands;
-import be.nadtum.etum.Listeners.events;
+import be.nadtum.etum.Listeners.Events;
 import be.nadtum.etum.Utility.Modules.FichierGestion;
 import be.nadtum.etum.Vanilla.Economie.Depot;
 import org.bukkit.event.Listener;
@@ -31,7 +31,7 @@ public class Main extends JavaPlugin implements Listener {
 
     private void registerListeners() {
         new Commands(this);
-        new events(this);
+        new Events(this);
     }
 
     private void saveFiles() {
