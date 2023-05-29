@@ -59,7 +59,6 @@ public class MenuCity implements Listener {
         }
 
         Player player = (Player) event.getWhoClicked();
-        event.setCancelled(true);
 
         if (event.getCurrentItem().getType() == Material.MAGENTA_STAINED_GLASS_PANE) {
             return;

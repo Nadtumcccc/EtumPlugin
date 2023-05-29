@@ -4,6 +4,7 @@ import be.nadtum.etum.Utility.Modules.FichierGestion;
 import be.nadtum.etum.Utility.Modules.PlayerGestion;
 import be.nadtum.etum.Utility.Objets.InventoryBuilder;
 import be.nadtum.etum.Utility.Objets.ItemBuilder;
+import net.citizensnpcs.api.event.NPCRightClickEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -250,6 +251,15 @@ public class Depot implements Listener {
         }
 
         return mainValue;
+    }
+
+    @EventHandler
+    public void openDepot(NPCRightClickEvent event) {
+        if (!(event.getNPC().getId() == 0)) {
+            return;
+        }
+
+        openDepotMenu(event.getClicker());
     }
 }
 

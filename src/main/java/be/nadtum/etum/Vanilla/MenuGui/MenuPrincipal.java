@@ -61,12 +61,10 @@ public class MenuPrincipal implements Listener {
         ItemBuilder random = new ItemBuilder(Material.GHAST_TEAR, "§4Random §cLocation", 1);
         ItemBuilder jobs = new ItemBuilder(Material.IRON_AXE, "§6Jobs", 1);
         ItemBuilder guilde = new ItemBuilder(Material.TOTEM_OF_UNDYING, "§5City", 1);
-        ItemBuilder dirt = new ItemBuilder(Material.DIRT, "§5Dirt", 1);
 
 
         inv.getInventory().setItem(10, profil.getItem());
         inv.getInventory().setItem(11, home.getItem());
-        inv.getInventory().setItem(12, dirt.getItem());
         inv.getInventory().setItem(16, jobs.getItem());
         inv.getInventory().setItem(25, guilde.getItem());
         inv.getInventory().setItem(37, mressource.getItem());
@@ -82,7 +80,7 @@ public class MenuPrincipal implements Listener {
     public void PlayerMenu(InventoryClickEvent event) {
 
         if (event.getSlotType().equals(InventoryType.SlotType.OUTSIDE)) return;
-        if(event.getClickedInventory().getType().equals(InventoryType.PLAYER))return;
+        if (event.getClickedInventory().getType().equals(InventoryType.PLAYER))return;
         Player player = (Player) event.getWhoClicked();
         if (event.getCurrentItem() == null) return;
 
@@ -90,9 +88,6 @@ public class MenuPrincipal implements Listener {
             switch (event.getCurrentItem().getType()) {
                 case DARK_OAK_DOOR:
                     player.closeInventory();
-                    break;
-                case DIRT:
-                    Depot.menu(player);
                     break;
                 case RED_BED:
                     MenuHome.menu(player);

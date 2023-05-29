@@ -62,14 +62,10 @@ public class MenuJob implements Listener {
     @EventHandler
     public void PlayerMenu(InventoryClickEvent event) {
         // Vérification de l'événement de clic sur l'inventaire
-        if (event.getSlotType().equals(InventoryType.SlotType.OUTSIDE))
-            return;
-        if (event.getClickedInventory().getType().equals(InventoryType.PLAYER))
-            return;
-
+        if (event.getSlotType().equals(InventoryType.SlotType.OUTSIDE)) return;
+        if (event.getClickedInventory().getType().equals(InventoryType.PLAYER)) return;
         Player player = (Player) event.getWhoClicked();
-        if (event.getCurrentItem() == null)
-            return;
+        if (event.getCurrentItem() == null) return;
 
         if (event.getView().getTitle().equalsIgnoreCase(nameMenu)) {
             // Gestion des actions du menu

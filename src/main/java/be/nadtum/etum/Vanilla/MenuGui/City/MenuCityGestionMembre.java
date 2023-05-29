@@ -34,7 +34,7 @@ public class MenuCityGestionMembre implements Listener {
                 UUID membreUUID = UUID.fromString(membre);
                 OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(membreUUID);
 
-                ItemBuilder profil = new ItemBuilder(Material.PLAYER_HEAD, offlinePlayer.getName(), 1);
+                ItemBuilder profil = new ItemBuilder(Material.PLAYER_HEAD, offlinePlayer.getName() == null ? "null": offlinePlayer.getName(), 1);
                 SkullMeta skullMeta = (SkullMeta) profil.getItem().getItemMeta();
 
                 skullMeta.setOwner(offlinePlayer.getName());
@@ -120,8 +120,6 @@ public class MenuCityGestionMembre implements Listener {
         if (event.getSlotType() == InventoryType.SlotType.OUTSIDE || event.getClickedInventory().getType() == InventoryType.PLAYER || event.getCurrentItem() == null) {
             return;
         }
-
-        event.setCancelled(true);
         Player player = (Player) event.getWhoClicked();
 
         if (event.getView().getTitle().equalsIgnoreCase(nameMenu)) {

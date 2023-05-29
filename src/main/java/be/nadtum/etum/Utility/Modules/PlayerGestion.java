@@ -16,6 +16,7 @@ public class PlayerGestion {
         if(PlayerGestion.hasData(player.getName())){
             return;
         }
+
         FichierGestion.getCfgPlayers().set("Profil." + PlayerGestion.getUUIDFromName(player.getName()) + ".name", player.getName());
         FichierGestion.getCfgPlayers().set("Profil." + PlayerGestion.getUUIDFromName(player.getName()) + ".grade", "Akien");
         FichierGestion.getCfgPlayers().set("Profil." + PlayerGestion.getUUIDFromName(player.getName()) + ".money", 500);
