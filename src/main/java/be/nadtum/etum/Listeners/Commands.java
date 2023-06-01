@@ -43,7 +43,7 @@ public class Commands {
         main.getCommand("unclaim").setExecutor(new CommandClaim());
 
         // Mana Command
-        main.getCommand("mana").setExecutor(new command_mana());
+        main.getCommand("mana").setExecutor(new CommandMana());
 
         // Job Command
         main.getCommand("job").setExecutor(new command_job());

@@ -8,23 +8,15 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class Fight implements Listener {
 
-
-
     @EventHandler
     public void onPvp(EntityDamageByEntityEvent event) {
-        if (!(event.getEntity() instanceof Player) || !(event.getDamager() instanceof Player)) {
+        if (!(event.getEntity() instanceof Player target) || !(event.getDamager() instanceof Player player)) {
             return;
         }
 
-        Player player = (Player) event.getDamager();
-        Player target = (Player) event.getEntity();
-
         // Prevent PvP between players of the same guild
-        if (PlayerGestion.getPlayerCityName(player.getName()).equalsIgnoreCase(PlayerGestion.getPlayerCityName(target.getName()))) {
+        if (PlayerGestion.isSameCity(player, target)) {
             event.setCancelled(true);
         }
     }
-
-
-
 }

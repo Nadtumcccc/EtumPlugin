@@ -24,12 +24,10 @@ public class command_tpa implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             System.out.println(PrefixMessage.erreur() + "vous ne pouvez pas utiliser cette commande");
             return false;
         }
-
-        Player player = (Player) sender;
 
         YamlConfiguration cfg = FichierGestion.getCfgPermission();
 

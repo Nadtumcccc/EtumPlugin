@@ -17,7 +17,6 @@ public class DataPunish {
     public DataPunish(UUID uuid){
         fb = FichierGestion.getFichierPlayers();
         this.uuid = uuid;
-
     }
 
     public boolean exist(){

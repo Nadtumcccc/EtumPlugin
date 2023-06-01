@@ -244,6 +244,10 @@ public class PlayerGestion {
     }
 
 
-
+    public static boolean isSameCity(Player player, Player target) {
+        String playerCity = getPlayerCityName(player.getName());
+        String targetCity = getPlayerCityName(target.getName());
+        return playerCity.equalsIgnoreCase(targetCity);
+    }
 
 }

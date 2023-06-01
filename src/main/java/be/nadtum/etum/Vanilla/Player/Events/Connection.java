@@ -1,6 +1,8 @@
 package be.nadtum.etum.Vanilla.Player.Events;
 
 import be.nadtum.etum.Utility.Modules.*;
+import be.nadtum.etum.Vanilla.Player.Class.HomeClass;
+import be.nadtum.etum.Vanilla.Player.Class.PlayerClass;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;

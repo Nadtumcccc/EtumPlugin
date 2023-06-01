@@ -1,46 +1,59 @@
 package be.nadtum.etum.Vanilla.Player.Events;
 
-
 import be.nadtum.etum.Utility.Modules.Chat;
 import be.nadtum.etum.Utility.Modules.HashMapGestion;
 import be.nadtum.etum.Utility.Modules.PlayerGestion;
-
+import net.kyori.adventure.text.Component;
 import org.bukkit.Sound;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-
 import org.bukkit.event.entity.PlayerDeathEvent;
-
+import org.jetbrains.annotations.NotNull;
 
 public class Death implements Listener {
 
     @EventHandler
-    public void PlayerDeath(PlayerDeathEvent event){
-        if(!(event.getEntity() instanceof Player))return;
-        Player killer = null;
-        if(event.getEntity().getKiller() instanceof Player){
-            killer = event.getEntity().getKiller();
+    public void onPlayerDeath(@NotNull PlayerDeathEvent event) {
+        Player player = event.getEntity();
+        Player killer = player.getKiller();
+
+        if (killer != null) {
+            handlePlayerKilledByPlayer(player, killer, event);
+        } else {
+            handlePlayerDeath(player, event);
         }
-        Player player = event.getEntity().getPlayer();
+    }
+
+    private void handlePlayerKilledByPlayer(Player victim, Player killer, @NotNull PlayerDeathEvent event) {
+        String victimName = getPlayerDisplayName(victim);
+        String killerName = getPlayerDisplayName(killer);
+
+        String deathMessage = victimName + " a été tué par " + killerName;
+        event.deathMessage(Component.text(deathMessage));
+    }
+
+    private void handlePlayerDeath(Player player, @NotNull PlayerDeathEvent event) {
+        String playerName = getPlayerDisplayName(player);
+        String deathMessage = playerName + " §avient de mourir";
+        event.deathMessage(Component.text(deathMessage));
+
         player.playSound(player.getLocation(), Sound.ENTITY_WITHER_SPAWN, 4, 1);
 
-        String prefixName = null;
-        if(!PlayerGestion.getPlayerStaffGrade(player.getName()).equalsIgnoreCase("NoStaff")){
-            prefixName = Chat.colorString(PlayerGestion.getGradeDesign(PlayerGestion.getPlayerStaffGrade(player.getName())) + " " + player.getName());
-        }else{
-            prefixName = Chat.colorString(PlayerGestion.getGradeDesign(PlayerGestion.getPlayerGrade(player.getName())) + " " + player.getName());
-        }
-        if(killer != null){
-            event.setDeathMessage(prefixName + " a été tué par " + Chat.colorString(PlayerGestion.getGradeDesign(PlayerGestion.getPlayerGrade(player.getName())) + " " + killer.getName()));
-            return;
-        }
-        event.setDeathMessage(prefixName + " §avient de mourir ");
-        if(PlayerGestion.hasPermission(player, "back")){
+        if (PlayerGestion.hasPermission(player, "back")) {
             HashMapGestion.back.put(player, player.getLocation());
         }
     }
 
+    private @NotNull String getPlayerDisplayName(@NotNull Player player) {
+        String grade = PlayerGestion.getPlayerStaffGrade(player.getName());
+        if (grade.equalsIgnoreCase("NoStaff")) {
+            grade = PlayerGestion.getPlayerGrade(player.getName());
+        }
 
+        String prefix = PlayerGestion.getGradeDesign(grade);
+        String name = player.getName();
+
+        return Chat.colorString(prefix + " " + name);
+    }
 }
