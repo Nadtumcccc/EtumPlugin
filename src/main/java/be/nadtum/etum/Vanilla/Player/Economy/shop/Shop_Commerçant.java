@@ -1,4 +1,4 @@
-package be.nadtum.etum.Vanilla.Economie.shop;
+package be.nadtum.etum.Vanilla.Player.Economy.shop;
 
 
 import be.nadtum.etum.Utility.Modules.FichierGestion;
@@ -18,7 +18,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 public class Shop_Commerçant implements Listener {
 

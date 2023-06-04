@@ -1,10 +1,10 @@
-package be.nadtum.etum.Staff.commands;
+package be.nadtum.etum.Moderation.commands;
 
 
 import be.nadtum.etum.Utility.Modules.FichierGestion;
 import be.nadtum.etum.Utility.Modules.PlayerGestion;
 import be.nadtum.etum.Utility.Modules.PrefixMessage;
-import be.nadtum.etum.Staff.DataPunish;
+import be.nadtum.etum.Moderation.DataPunish;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -17,12 +17,10 @@ public class command_unmute implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
-        if(!(sender instanceof Player)){
+        if(!(sender instanceof Player player)){
             System.out.println(PrefixMessage.erreur() + "vous ne pouvez pas utiliser cette commande");
             return false;
         }
-
-        Player player = (Player)sender;
 
         YamlConfiguration cfg = FichierGestion.getCfgPermission();
 
@@ -40,7 +38,7 @@ public class command_unmute implements CommandExecutor {
 
         DataPunish data = new DataPunish(PlayerGestion.getUUIDFromName(args[0]));
 
-        if(!data.exist()){
+        if(data.exist()){
             player.sendMessage(PrefixMessage.erreur() + "fichier joueur inexistant contactez un membre de l'administation au plus vite !");
             return false;
         }

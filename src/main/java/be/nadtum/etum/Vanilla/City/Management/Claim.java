@@ -629,7 +629,7 @@ public class Claim implements Listener {
             }
 
 
-            FichierGestion.saveFile(cfg, FichierGestion.getFichierCity());
+            FichierGestion.saveFile(cfg, FichierGestion.getCityFile());
 
             x1 = cfg.getDouble("City." + cityname + ".zone.coordonnées.x1");
             z1 = cfg.getDouble("City." + cityname + ".zone.coordonnées.z1");

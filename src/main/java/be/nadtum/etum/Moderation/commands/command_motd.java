@@ -1,4 +1,4 @@
-package be.nadtum.etum.Staff.commands;
+package be.nadtum.etum.Moderation.commands;
 
 import be.nadtum.etum.Utility.Modules.FichierGestion;
 import org.bukkit.command.Command;
@@ -8,9 +8,7 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 

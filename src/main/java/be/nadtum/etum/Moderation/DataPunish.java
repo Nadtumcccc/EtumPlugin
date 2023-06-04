@@ -1,4 +1,4 @@
-package be.nadtum.etum.Staff;
+package be.nadtum.etum.Moderation;
 
 import be.nadtum.etum.Utility.Modules.FichierGestion;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -10,8 +10,8 @@ import java.util.UUID;
 
 public class DataPunish {
 
-    private File fb;
-    private UUID uuid;
+    private final File fb;
+    private final UUID uuid;
     YamlConfiguration cfg = FichierGestion.getCfgPlayers();
 
     public DataPunish(UUID uuid){
@@ -20,7 +20,7 @@ public class DataPunish {
     }
 
     public boolean exist(){
-        return fb.exists();
+        return !fb.exists();
     }
 
     public void setTempbanned(String from, String reason, long time, Integer chiffre,String format){

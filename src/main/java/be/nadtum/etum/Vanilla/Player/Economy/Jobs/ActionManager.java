@@ -1,4 +1,4 @@
-package be.nadtum.etum.Vanilla.Player.Jobs;
+package be.nadtum.etum.Vanilla.Player.Economy.Jobs;
 
 import be.nadtum.etum.Main;
 import be.nadtum.etum.Utility.Modules.*;

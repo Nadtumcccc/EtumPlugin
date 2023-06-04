@@ -44,7 +44,7 @@ public class CityGestion {
         FichierGestion.getCfgCity().set("City." + cityName + ".settings.maxSurfaceClaim", 1000);
         PlayerGestion.setPlayerCityName(player.getName(), cityName);
 
-        FichierGestion.saveFile(FichierGestion.getCfgCity(), FichierGestion.getFichierCity());
+        FichierGestion.saveFile(FichierGestion.getCfgCity(), FichierGestion.getCityFile());
         FichierGestion.saveFile(FichierGestion.getCfgPlayers(), FichierGestion.getFichierPlayers());
     }
 
@@ -57,7 +57,7 @@ public class CityGestion {
         }
         FichierGestion.getCfgCity().set("City." + PlayerGestion.getPlayerCityName(player.getName()), null);
         PlayerGestion.setPlayerCityName(player.getName(), "NoCity");
-        FichierGestion.saveFile(FichierGestion.getCfgCity(), FichierGestion.getFichierCity());
+        FichierGestion.saveFile(FichierGestion.getCfgCity(), FichierGestion.getCityFile());
         FichierGestion.saveFile(FichierGestion.getCfgPlayers(), FichierGestion.getFichierPlayers());
     }
 

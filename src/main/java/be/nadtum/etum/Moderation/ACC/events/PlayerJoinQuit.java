@@ -1,8 +1,8 @@
-package be.nadtum.etum.Staff.ACC.events;
+package be.nadtum.etum.Moderation.ACC.events;
 
 import be.nadtum.etum.Utility.Modules.HashMapGestion;
 import be.nadtum.etum.Utility.Modules.PrefixMessage;
-import be.nadtum.etum.Staff.DataPunish;
+import be.nadtum.etum.Moderation.DataPunish;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,7 +25,7 @@ public class PlayerJoinQuit implements Listener {
         Player player = event.getPlayer();
         DataPunish data = new DataPunish(player.getUniqueId());
 
-        if (!data.exist()) {
+        if (data.exist()) {
             return;
         }
 

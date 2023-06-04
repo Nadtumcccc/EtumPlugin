@@ -1,12 +1,11 @@
 package be.nadtum.etum.Listeners;
 
+import be.nadtum.etum.Vanilla.City.commands.CommandCity;
 import be.nadtum.etum.Vanilla.Player.Commands.CommandSpawn;
 import be.nadtum.etum.Main;
 import be.nadtum.etum.Region.command_region;
-import be.nadtum.etum.Staff.commands.*;
-import be.nadtum.etum.Vanilla.City.commands.command_city;
+import be.nadtum.etum.Moderation.commands.*;
 import be.nadtum.etum.Vanilla.Player.Commands.*;
-import be.nadtum.etum.Vanilla.Economie.commands.*;
 import be.nadtum.etum.Vanilla.MenuGui.commands.command_menu;
 
 public class Commands {
@@ -22,8 +21,9 @@ public class Commands {
         main.getCommand("tempmute").setExecutor(new command_tempmute());
         main.getCommand("unban").setExecutor(new command_unban());
         main.getCommand("unmute").setExecutor(new command_unmute());
-        main.getCommand("gm").setExecutor(new command_gamemode());
+        main.getCommand("gm").setExecutor(new CommandGamemode());
         main.getCommand("grade").setExecutor(new command_grade());
+        main.getCommand("etum").setExecutor(new command_etum());
 
         // Menu Commands
         main.getCommand("menu").setExecutor(new command_menu());
@@ -35,8 +35,8 @@ public class Commands {
 
         // Economy Commands
         main.getCommand("ec").setExecutor(new command_ec());
-        main.getCommand("money").setExecutor(new command_money());
-        main.getCommand("pay").setExecutor(new command_pay());
+        main.getCommand("money").setExecutor(new CommandMoney());
+        main.getCommand("pay").setExecutor(new CommandPay());
 
         // Claim Commands
         main.getCommand("claim").setExecutor(new CommandClaim());
@@ -49,7 +49,7 @@ public class Commands {
         main.getCommand("job").setExecutor(new command_job());
 
         // City Command
-        main.getCommand("city").setExecutor(new command_city());
+        main.getCommand("city").setExecutor(new CommandCity());
 
         // Spawn Command
         main.getCommand("spawn").setExecutor(new CommandSpawn());

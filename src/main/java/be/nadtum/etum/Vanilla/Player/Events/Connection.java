@@ -14,30 +14,24 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
-
+import org.jetbrains.annotations.NotNull;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Connection implements Listener {
 
-
     @EventHandler
-    public void onPlayerJoinServer(PlayerJoinEvent event) {
+    public void onPlayerJoinServer(@NotNull PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        PlayerGestion.createNewProfil(player);
+        PlayerClass.createFile(player);
 
         String playerName = player.getName();
         String playerStaffGrade = PlayerGestion.getPlayerStaffGrade(playerName);
         String playerGrade = PlayerGestion.getPlayerGrade(playerName);
 
-        String joinMessage;
-        if (playerStaffGrade.equalsIgnoreCase("NoStaff")) {
-            joinMessage = "§6[§a+§6] §4" + Chat.colorString(PlayerGestion.getGradeDesign(playerGrade)) + " " + playerName;
-        } else {
-            joinMessage = "§6[§a+§6] §4" + Chat.colorString(PlayerGestion.getGradeDesign(playerStaffGrade)) + " " + playerName;
-        }
+        String joinMessage = "§6[§a+§6] " + Chat.colorString(playerStaffGrade.equalsIgnoreCase("NoStaff") ? PlayerGestion.getGradeDesign(playerGrade) : PlayerGestion.getGradeDesign(playerStaffGrade)) + " " + playerName;
         event.joinMessage(Component.text(joinMessage));
 
         if (!player.hasPlayedBefore()) {
@@ -62,47 +56,29 @@ public class Connection implements Listener {
             onlinePlayer.setPlayerListHeaderFooter(header, footer);
         }
 
-        String nameTag;
-        if (playerStaffGrade.equalsIgnoreCase("NoStaff")) {
-            nameTag = Chat.colorString(PlayerGestion.getGradeDesign(playerGrade)) + " ";
-        } else {
-            nameTag = Chat.colorString(PlayerGestion.getGradeDesign(playerStaffGrade)) + " ";
-        }
+        String nameTag = Chat.colorString(playerStaffGrade.equalsIgnoreCase("NoStaff") ? PlayerGestion.getGradeDesign(playerGrade) : PlayerGestion.getGradeDesign(playerStaffGrade)) + " ";
         onNameTag(player, nameTag);
 
         player.sendTitle("§aBienvenue sur §bEtum", "Nous te souhaitons une bonne session", 20, 30, 30);
 
-
-        player.sendMessage(new StringBuilder()
-                .append("§a-------------------------------")
-                .append("\n§aMoney §e: §b").append(PlayerGestion.getPlayerMoney(player.getName()))
-                .append("\n§aGrade §e: §b").append(PlayerGestion.getPlayerGrade(player.getName()))
-                .append("\n§aMétier §e: §b").append(PlayerGestion.getPlayerJobName(player.getName())).append("§e, §aniveau §e: §b").append(PlayerGestion.getPlayerJobNiveau(player.getName()))
-                .append("\n§a-------------------------------")
-                .toString());
-
-        String uuid = PlayerGestion.getUUIDFromName(player.getName()).toString();
-        String lastConnection = new SimpleDateFormat("dd.MM.yyyy HH.mm").format(new Date());
-        FichierGestion.getCfgPlayers().set("Profil." + uuid + ".lastconnection", lastConnection);
+        player.sendMessage("§a-------------------------------");
+        player.sendMessage("§aMoney §e: §b" + PlayerGestion.getPlayerMoney(playerName));
+        player.sendMessage("§aGrade §e: §b" + PlayerGestion.getPlayerGrade(playerName));
+        player.sendMessage("§aMétier §e: §b" + PlayerGestion.getPlayerJobName(playerName) + "§e, §aniveau §e: §b" + PlayerGestion.getPlayerJobNiveau(playerName));
+        player.sendMessage("§a-------------------------------");
 
         player.setGameMode(GameMode.SURVIVAL);
     }
 
     @EventHandler
-    public void onPlayerQuitServer(PlayerQuitEvent event) {
+    public void onPlayerQuitServer(@NotNull PlayerQuitEvent event) {
         Player player = event.getPlayer();
         String playerName = player.getName();
         String playerStaffGrade = PlayerGestion.getPlayerStaffGrade(playerName);
         String playerGrade = PlayerGestion.getPlayerGrade(playerName);
-        String quitMessage;
+        String quitMessage = "§6[§4-§6] " + Chat.colorString(playerStaffGrade.equalsIgnoreCase("NoStaff") ? PlayerGestion.getGradeDesign(playerGrade) : PlayerGestion.getGradeDesign(playerStaffGrade)) + " " + playerName;
 
-        if (playerStaffGrade.equalsIgnoreCase("NoStaff")) {
-            quitMessage = "§6[§4-§6] " + Chat.colorString(PlayerGestion.getGradeDesign(playerGrade)) + " " + playerName;
-        } else {
-            quitMessage = "§6[§4-§6] " + Chat.colorString(PlayerGestion.getGradeDesign(playerStaffGrade)) + " " + playerName;
-        }
-
-        event.setQuitMessage(quitMessage);
+        event.quitMessage(Component.text(quitMessage));
 
         int onlinePlayers = Bukkit.getOnlinePlayers().size() - 1;
         int maxPlayers = Bukkit.getServer().getMaxPlayers();
@@ -113,7 +89,11 @@ public class Connection implements Listener {
             onlinePlayer.setPlayerListHeaderFooter(header, footer);
         }
 
-        FichierGestion.saveFile(FichierGestion.getCfgPlayers(), FichierGestion.getFichierPlayers());
+        PlayerClass playerClass = PlayerClass.getPlayerClass(player.getUniqueId());
+        if (playerClass != null) {
+            playerClass.savePlayerData();
+            PlayerClass.removePlayerClass(player.getUniqueId());
+        }
     }
 
     public void onNameTag(Player player, String prefix) {

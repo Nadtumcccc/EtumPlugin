@@ -1,8 +1,7 @@
-package be.nadtum.etum.Staff.commands;
+package be.nadtum.etum.Moderation.commands;
 
-import be.nadtum.etum.Utility.Modules.FichierGestion;
-import be.nadtum.etum.Utility.Modules.PlayerGestion;
 import be.nadtum.etum.Utility.Modules.PrefixMessage;
+import be.nadtum.etum.Vanilla.Player.Class.PlayerClass;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
@@ -16,26 +15,21 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class command_gamemode implements CommandExecutor, TabExecutor {
+public class CommandGamemode implements CommandExecutor, TabExecutor {
 
     private static String GAMEMODE_STRING;
     private static GameMode GAMEMODE;
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
 
-        if (!(sender instanceof Player)) {
-            System.out.println(PrefixMessage.erreur() + "vous ne pouvez pas utiliser cette commande");
+        if (!(sender instanceof Player player)) {
+            sender.sendMessage(PrefixMessage.erreur() + "Vous ne pouvez pas utiliser cette commande");
             return false;
         }
 
-        Player player = (Player) sender;
-
-        if (!FichierGestion.getCfgPermission().contains("Grade." + PlayerGestion.getPlayerStaffGrade(player.getName()) + ".permission.gamemode")) {
-            if (!player.isOp()) {
-                player.sendMessage(PrefixMessage.erreur() + "vous n'avez pas la permission d'utiliser cette commande");
-                return false;
-            }
+        if (!PlayerClass.playerClassList.get(player).hasPermission("gamemode")) {
+            return false;
         }
 
         if (args.length < 1 || args.length > 2) {
@@ -43,7 +37,7 @@ public class command_gamemode implements CommandExecutor, TabExecutor {
             return false;
         }
 
-        switch (args[0]) {
+        switch (args[0].toLowerCase()) {
             case "survival":
             case "0":
                 GAMEMODE = GameMode.SURVIVAL;
@@ -62,7 +56,7 @@ public class command_gamemode implements CommandExecutor, TabExecutor {
             case "spectator":
             case "3":
                 GAMEMODE = GameMode.SPECTATOR;
-                GAMEMODE_STRING = "spéctateur";
+                GAMEMODE_STRING = "spectateur";
                 break;
             default:
                 player.sendMessage(PrefixMessage.erreur() + "/gm [0,1,2,3] (joueur)");
@@ -70,31 +64,31 @@ public class command_gamemode implements CommandExecutor, TabExecutor {
         }
 
         if (args.length == 1) {
-            player.sendMessage(PrefixMessage.serveur() + "votre mode de jeu est maintenant en §b" + GAMEMODE_STRING);
+            player.sendMessage(PrefixMessage.serveur() + "Votre mode de jeu est maintenant en §b" + GAMEMODE_STRING);
             player.setGameMode(GAMEMODE);
             return false;
         }
 
-        if(Bukkit.getPlayer(args[1]) == null){
-            player.sendMessage(PrefixMessage.erreur() + "le joueur §4" + args[1] + " §cn'est pas en ligne !");
+        Player target = Bukkit.getPlayer(args[1]);
+        if (target == null || !target.isOnline()) {
+            player.sendMessage(PrefixMessage.erreur() + "Le joueur §4" + args[1] + " §cn'est pas en ligne !");
             return false;
         }
-        Player target = Bukkit.getPlayer(args[1]);
-        target.setGameMode(GAMEMODE);
 
-        target.sendMessage(PrefixMessage.serveur() + "votre mode de jeu a été mis en §b" + GAMEMODE_STRING + " §apar §b" + player.getName());
-        player.sendMessage(PrefixMessage.serveur() + "le mode de jeu a été mis en §b" + GAMEMODE_STRING + " §apour §b" + target.getName());
+        target.setGameMode(GAMEMODE);
+        target.sendMessage(PrefixMessage.serveur() + "Votre mode de jeu a été mis en §b" + GAMEMODE_STRING + " §apar §b" + player.getName());
+        player.sendMessage(PrefixMessage.serveur() + "Le mode de jeu a été mis en §b" + GAMEMODE_STRING + " §apour §b" + target.getName());
 
         return false;
     }
 
     @Nullable
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String @NotNull [] args) {
 
         List<String> list = new ArrayList<>();
 
-        if(args.length == 1){
+        if (args.length == 1) {
             list.add("0");
             list.add("1");
             list.add("2");
@@ -106,9 +100,9 @@ public class command_gamemode implements CommandExecutor, TabExecutor {
             return list;
         }
 
-        if(args.length == 2){
-            for (Player players : Bukkit.getOnlinePlayers()){
-                list.add(players.getName());
+        if (args.length == 2) {
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                list.add(player.getName());
             }
             return list;
         }

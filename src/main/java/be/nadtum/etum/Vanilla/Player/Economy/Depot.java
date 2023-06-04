@@ -1,4 +1,4 @@
-package be.nadtum.etum.Vanilla.Economie;
+package be.nadtum.etum.Vanilla.Player.Economy;
 
 import be.nadtum.etum.Utility.Modules.FichierGestion;
 import be.nadtum.etum.Utility.Modules.PlayerGestion;
@@ -63,7 +63,7 @@ public class Depot implements Listener {
             inventoryBuilder.getInventory().clear();
             inventoryBuilder.setupTemplate();
 
-            YamlConfiguration config = FichierGestion.getCfgJobs();
+            YamlConfiguration config = YamlConfiguration.loadConfiguration(FichierGestion.getFichierEconomie());
             ConfigurationSection jobSection = config.getConfigurationSection("Jobs." + jobMenu.getJobName());
 
             if (jobSection != null) {
@@ -148,7 +148,7 @@ public class Depot implements Listener {
                 return;
             }
 
-            sellItem(event.getCurrentItem(), FichierGestion.getCfgJobs(), player, event);
+            sellItem(event.getCurrentItem(), YamlConfiguration.loadConfiguration(FichierGestion.getFichierEconomie()), player, event);
         }
     }
 

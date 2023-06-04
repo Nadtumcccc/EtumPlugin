@@ -1,67 +1,198 @@
 package be.nadtum.etum.Vanilla.Player.Class;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-import java.util.UUID;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 public class PlayerClass {
 
-    private UUID uuid;
-    private String name;
+    public static HashMap<Player, PlayerClass> playerClassList = new HashMap<>();
 
-    private Integer mana;
-    private Long money;
+    public static void createFile(@NotNull Player player) {
+        UUID uuid = player.getUniqueId();
+        String playerName = player.getName();
+        String fileName = uuid + ".yml";
 
+        File playerFile = new File("plugins/fichier", fileName);
+        if (!playerFile.exists()) {
+            try {
+                playerFile.createNewFile();
+
+                YamlConfiguration playerConfig = YamlConfiguration.loadConfiguration(playerFile);
+                playerConfig.set("uuid", uuid.toString());
+                playerConfig.set("name", playerName);
+                playerConfig.set("mana", 0);
+                playerConfig.set("money", 0);
+                playerConfig.set("homes", new ArrayList<>());
+                playerConfig.set("ranks", new ArrayList<>());
+                playerConfig.set("homeAmount", 0);
+                playerConfig.set("cityId", "");
+                playerConfig.set("claimAmount", 0);
+                playerConfig.set("hearth", 0.0);
+
+                playerConfig.save(playerFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }else{
+            loadPlayerClass(player);
+        }
+    }
+
+    public static void removePlayerClass(UUID uniqueId) {
+        playerClassList.remove(uniqueId);
+    }
+
+    public static PlayerClass getPlayerClass(Player uniqueId) {
+        return playerClassList.get(uniqueId);
+    }
+
+    public void savePlayerData() {
+        String fileName = uuid.toString() + ".yml";
+        File playerFile = new File("plugins/fichier", fileName);
+
+        if (playerFile.exists()) {
+            YamlConfiguration playerConfig = YamlConfiguration.loadConfiguration(playerFile);
+
+            playerConfig.set("mana", mana);
+            playerConfig.set("money", money);
+            playerConfig.set("homes", listHomes);
+            playerConfig.set("ranks", listRanks);
+            playerConfig.set("homeAmount", homeAmount);
+            playerConfig.set("cityId", cityId);
+            playerConfig.set("claimAmount", claimAmount);
+            playerConfig.set("hearth", hearth);
+
+            try {
+                playerConfig.save(playerFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public static void loadPlayerClass(@NotNull Player player) {
+        UUID uuid = player.getUniqueId();
+        String fileName = uuid + ".yml";
+        File playerFile = new File("plugins/fichier", fileName);
+
+        if (playerFile.exists()) {
+            YamlConfiguration playerConfig = YamlConfiguration.loadConfiguration(playerFile);
+
+            int mana = playerConfig.getInt("mana");
+            int money = playerConfig.getInt("money");
+            List<?> homes = playerConfig.getList("homes");
+            List<?> ranks = playerConfig.getList("ranks");
+            int homeAmount = playerConfig.getInt("homeAmount");
+            int cityId = playerConfig.getInt("cityId");
+            int claimAmount = playerConfig.getInt("claimAmount");
+            double hearth = playerConfig.getDouble("hearth");
+
+            PlayerClass playerClass = new PlayerClass(uuid, player.getName());
+            playerClass.setMana(mana);
+            playerClass.setMoney(money);
+
+            List<HomeClass> homeList = new ArrayList<>();
+            if (homes != null) {
+                for (Object home : homes) {
+                    if (home instanceof HomeClass homeData) {
+                        Location location = homeData.getLocation();
+                        String name = homeData.getName();
+                        boolean visible = homeData.isVisible();
+                        HomeClass homeClass = new HomeClass(location, name, visible);
+                        homeList.add(homeClass);
+                    }
+                }
+            }
+            playerClass.setListHomes(homeList);
+
+            List<String> rankList = new ArrayList<>();
+            if (ranks != null) {
+                for (Object rank : ranks) {
+                    if (rank instanceof String) {
+                        rankList.add((String) rank);
+                    }
+                }
+            }
+            playerClass.setListRanks(rankList);
+
+            playerClass.setHomeAmount(homeAmount);
+            playerClass.setCityId(cityId);
+            playerClass.setClaimAmount(claimAmount);
+            playerClass.setHearth(hearth);
+
+            // Ajouter playerClass à la liste playerClassList
+            playerClassList.put(player, playerClass);
+        }
+    }
+
+    public Boolean hasPermission(String permission){
+        if(Objects.requireNonNull(Bukkit.getPlayer(uuid)).isOp()) return true;
+        for(String rankClass : getListRanks()){
+            if(RankClass.rankClassList.get(rankClass).hasPermission(permission)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private final UUID uuid;
+    private final String name;
+    private int mana;
+    private int money;
+    private double hearth;
     private List<HomeClass> listHomes;
+    private List<String> listRanks;
+    private int homeAmount;
+    private Integer cityId;
+    private int claimAmount;
 
-    private Integer homeAmount;
-
-    private String cityName;
-    private Integer claimAmount;
-
-
-    public PlayerClass(UUID uuid, String name, Integer mana, Long money, List<HomeClass> listHomes, Integer homeAmount, String cityName, Integer claimAmount) {
+    public PlayerClass(UUID uuid, String name) {
         this.uuid = uuid;
         this.name = name;
-        this.mana = mana;
-        this.money = money;
-        this.listHomes = listHomes;
-        this.homeAmount = homeAmount;
-        this.cityName = cityName;
-        this.claimAmount = claimAmount;
+        this.mana = 0;
+        this.money = 0;
+        this.listHomes = new ArrayList<>();
+        this.listRanks = new ArrayList<>();
+        this.homeAmount = 0;
+        this.cityId = 0;
+        this.claimAmount = 0;
+        this.hearth = 0.0;
     }
 
     public UUID getUuid() {
         return uuid;
     }
 
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
-    }
-
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getMana() {
+    public int getMana() {
         return mana;
     }
 
-    public void setMana(Integer mana) {
+    public void setMana(int mana) {
         this.mana = mana;
     }
 
-    public Long getMoney() {
+    public int getMoney() {
         return money;
     }
 
-    public void setMoney(Long money) {
+    public void setMoney(Integer money) {
         this.money = money;
+    }
+
+    public void addMoney(int money) {
+        this.money = getMoney() + money;
     }
 
     public List<HomeClass> getListHomes() {
@@ -72,7 +203,15 @@ public class PlayerClass {
         this.listHomes = listHomes;
     }
 
-    public Integer getHomeAmount() {
+    public List<String> getListRanks() {
+        return listRanks;
+    }
+
+    public void setListRanks(List<String> listRanks) {
+        this.listRanks = listRanks;
+    }
+
+    public int getHomeAmount() {
         return homeAmount;
     }
 
@@ -80,19 +219,27 @@ public class PlayerClass {
         this.homeAmount = homeAmount;
     }
 
-    public String getCityName() {
-        return cityName;
+    public Integer getCityId() {
+        return cityId;
     }
 
-    public void setCityName(String cityName) {
-        this.cityName = cityName;
+    public void setCityId(Integer cityId) {
+        this.cityId = cityId;
     }
 
-    public Integer getClaimAmount() {
+    public int getClaimAmount() {
         return claimAmount;
     }
 
-    public void setClaimAmount(Integer claimAmount) {
+    public void setClaimAmount(int claimAmount) {
         this.claimAmount = claimAmount;
+    }
+
+    public double getHearth() {
+        return hearth;
+    }
+
+    public void setHearth(double hearth) {
+        this.hearth = hearth;
     }
 }

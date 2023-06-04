@@ -1,13 +1,12 @@
-package be.nadtum.etum.Vanilla.Economie.shop;
+package be.nadtum.etum.Vanilla.Player.Economy.shop;
 
 
-import be.nadtum.etum.Utility.Modules.FichierGestion;
 import be.nadtum.etum.Utility.Modules.PlayerGestion;
 import be.nadtum.etum.Utility.Modules.PrefixMessage;
+import be.nadtum.etum.Vanilla.Player.Class.PlayerClass;
 import org.bukkit.Material;
 
 import org.bukkit.block.Sign;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -17,7 +16,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 
-public class Shop_Serveur implements Listener {
+public class Market implements Listener {
 
     @EventHandler
     public void OnClickSignShop(PlayerInteractEvent e){
@@ -148,32 +147,14 @@ public class Shop_Serveur implements Listener {
 
 
     @EventHandler
-    public void PlacedSignShop(SignChangeEvent e){
+    public void PlacedSignShop(SignChangeEvent event){
 
-        if(e.getLine(0).equals("AdminShop")){
+        if(event.getLine(0).equals("AdminShop")){
 
-            YamlConfiguration cfg = FichierGestion.getCfgPermission();
-            Player player = e.getPlayer();
-
-            if(!cfg.contains("Grade." + PlayerGestion.getPlayerStaffGrade(player.getName()) + ".permission.admin") ){
-                if(!player.isOp()){
-                    e.setCancelled(true);
-                    player.sendMessage(PrefixMessage.erreur() + "vous n'avez pas la permission !");
-                    return;
-                }
+            if (!PlayerClass.getPlayerClass(event.getPlayer()).hasPermission("shop.admin.sign")) {
+                event.setCancelled(true);
+                return;
             }
-
-            /*
-            if(!Objects.requireNonNull(e.getLine(2)).isEmpty()){
-                String[] line = Objects.requireNonNull(e.getLine(2)).split(" ");
-                e.setLine(2, "§a" + line[0] + " " + line[1]);
-            }
-
-            if(!Objects.requireNonNull(e.getLine(3)).isEmpty()){
-                String[] line = Objects.requireNonNull(e.getLine(3)).split(" ");
-                e.setLine(3, "§c" + line[0] + "  " + line[1]);
-            }
-             */
         }
 
     }

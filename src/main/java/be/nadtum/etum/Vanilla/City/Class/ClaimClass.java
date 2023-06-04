@@ -1,9 +1,9 @@
-package be.nadtum.etum.Vanilla.City.Builder;
+package be.nadtum.etum.Vanilla.City.Class;
 
 
 import be.nadtum.etum.Utility.Modules.PrefixMessage;
 
-public class ClaimBuilder {
+public class ClaimClass {
 
     private int CityId;
 
@@ -14,7 +14,7 @@ public class ClaimBuilder {
     private int y2;
 
 
-    public ClaimBuilder(int cityId, int x1, int y1, int x2, int y2) {
+    public ClaimClass(int cityId, int x1, int y1, int x2, int y2) {
         CityId = cityId;
         this.x1 = x1;
         this.y1 = y1;

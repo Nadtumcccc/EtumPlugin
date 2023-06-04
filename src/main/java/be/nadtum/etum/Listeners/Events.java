@@ -1,14 +1,14 @@
 package be.nadtum.etum.Listeners;
 
-import be.nadtum.etum.Vanilla.Economie.Depot;
+import be.nadtum.etum.Vanilla.Player.Economy.Depot;
 import be.nadtum.etum.Vanilla.MenuGui.City.*;
-import be.nadtum.etum.Vanilla.Player.Jobs.*;
-import be.nadtum.etum.Vanilla.Economie.shop.*;
+import be.nadtum.etum.Vanilla.Player.Economy.Jobs.*;
+import be.nadtum.etum.Vanilla.Player.Economy.shop.*;
 import be.nadtum.etum.Vanilla.City.Management.Claim;
 import be.nadtum.etum.Vanilla.Fonctionnalité.Spawner;
 import be.nadtum.etum.Main;
 import be.nadtum.etum.Region.RegionGestion;
-import be.nadtum.etum.Staff.ACC.events.PlayerJoinQuit;
+import be.nadtum.etum.Moderation.ACC.events.PlayerJoinQuit;
 import be.nadtum.etum.Utility.Modules.*;
 
 import be.nadtum.etum.Vanilla.MenuGui.MenuHome;
@@ -30,7 +30,6 @@ public class Events {
 
         // Fichier load server
         FichierGestion.CreateFiles();
-        FichierGestion.LoadConfig();
 
         registerServerEvents(main);
         registerFunctionalityEvents(main);
@@ -69,7 +68,7 @@ public class Events {
 
     private void registerEconomyEvents(Main main) {
         pluginManager.registerEvents(new Shop_Commerçant(), main);
-        pluginManager.registerEvents(new Shop_Serveur(), main);
+        pluginManager.registerEvents(new Market(), main);
         pluginManager.registerEvents(new Depot(), main);
         pluginManager.registerEvents(new ActionManager(), main);
     }

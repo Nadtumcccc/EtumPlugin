@@ -1,4 +1,4 @@
-package be.nadtum.etum.Staff.commands;
+package be.nadtum.etum.Moderation.commands;
 
 
 import be.nadtum.etum.Utility.Modules.FichierGestion;
@@ -27,12 +27,10 @@ public class command_tp implements CommandExecutor, TabExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             System.out.println(PrefixMessage.erreur() + " vous ne pouvez pas utiliser cette commande");
             return false;
         }
-
-        Player player = (Player) sender;
 
         YamlConfiguration cfg = FichierGestion.getCfgPermission();
 
