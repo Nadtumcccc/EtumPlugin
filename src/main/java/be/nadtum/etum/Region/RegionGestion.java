@@ -24,6 +24,7 @@ import org.bukkit.event.player.PlayerBucketFishEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public class RegionGestion implements Listener {
 
@@ -193,8 +194,8 @@ public class RegionGestion implements Listener {
 
     public static Boolean verifIfClaimIsOnOtherRegion(Player player, YamlConfiguration cfg, String cityname, Double xBlock, Double zBlock){
 
-        double x1Player = 0;
-        double z1Player = 0;
+        double x1Player;
+        double z1Player;
 
         if(Claim.isActionOnClaim.containsKey(player) && player.isSneaking()){
             x1Player = FichierGestion.getCfgCity().getDouble("City." + cityname + ".zone.coordonnées.x1");
@@ -206,6 +207,11 @@ public class RegionGestion implements Listener {
         if(cfg.contains("Region")) {
 
             for (String region : cfg.getConfigurationSection("Region.").getKeys(false)) {
+
+                if(!Objects.equals(cfg.getString("Region." + region + ".coordonnées.world"), player.getLocation().getWorld().getName())){
+                    continue;
+                }
+
                 double x1 = cfg.getDouble("Region." + region + ".coordonnées.x1");
                 double z1 = cfg.getDouble("Region." + region + ".coordonnées.z1");
                 double x2 = cfg.getDouble("Region." + region + ".coordonnées.x2");

@@ -8,21 +8,21 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
-public class CommandClaim implements CommandExecutor {
+import java.util.ArrayList;
+import java.util.List;
+
+public class CommandClaim implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             System.out.println(PrefixMessage.logs() + "vous ne pouvez pas utiliser cette commande");
             return false;
         }
-
-        Player player = (Player) sender;
-        YamlConfiguration cfg = FichierGestion.getCfgPermission();
-
-        if(!PlayerGestion.hasPermission(player, "default")) return true;
 
         if (cmd.getName().equalsIgnoreCase("claim")) {
             if (args.length > 0) {
@@ -81,5 +81,20 @@ public class CommandClaim implements CommandExecutor {
         } catch (NumberFormatException e) {
             return false;
         }
+    }
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
+        if (commandSender instanceof Player player) {
+            ArrayList<String> completions = new ArrayList<>();
+
+            if (args.length == 1) {
+                completions.add("add");
+                completions.add("set");
+            }
+
+            return completions;
+        }
+
+        return null;
     }
 }

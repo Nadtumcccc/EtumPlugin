@@ -15,7 +15,7 @@ public class DataPunish {
     YamlConfiguration cfg = FichierGestion.getCfgPlayers();
 
     public DataPunish(UUID uuid){
-        fb = FichierGestion.getFichierPlayers();
+        fb = FichierGestion.getPlayersFile();
         this.uuid = uuid;
     }
 

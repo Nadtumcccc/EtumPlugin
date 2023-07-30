@@ -73,7 +73,7 @@ public class MenuCityGestionMembre implements Listener {
         lore.add("§6Grade  §e: " + Chat.colorString(PlayerGestion.getGradeDesign(PlayerGestion.getPlayerGrade(membre))));
         lore.add("§6Claim §e: §b" + PlayerGestion.getPlayerClaimCount(membre));
         lore.add("§6Money  §e: §b" + PlayerGestion.getPlayerMoney(membre));
-        lore.add(!Bukkit.getOfflinePlayer(membre).isOnline() ? "§4or ligne" : "§2en ligne");
+        lore.add(!Bukkit.getOfflinePlayer(membre).isOnline() ? "§4hors ligne" : "§2en ligne");
         skullMeta.setLore(lore);
         profil.getItem().setItemMeta(skullMeta);
 
@@ -130,6 +130,8 @@ public class MenuCityGestionMembre implements Listener {
     }
 
     private void handleMainMenuClick(InventoryClickEvent event, Player player) {
+        event.setCancelled(true);
+
         Material itemType = event.getCurrentItem().getType();
         String displayName = event.getCurrentItem().getItemMeta().getDisplayName();
 
@@ -137,8 +139,9 @@ public class MenuCityGestionMembre implements Listener {
             if (displayName.equalsIgnoreCase(player.getDisplayName())) {
                 event.setCancelled(true);
             } else {
-                player.closeInventory();
-                menuMembre(player, displayName);
+                if (CityGestion.hasPermission(player.getName(), "admin") && !CityGestion.hasPermission(displayName, "owner")) {
+                    menuMembre(player, displayName);
+                }
             }
         } else if (itemType == Material.DARK_OAK_DOOR) {
             player.closeInventory();
@@ -147,6 +150,8 @@ public class MenuCityGestionMembre implements Listener {
     }
 
     private void handleMembreMenuClick(InventoryClickEvent event, Player player) {
+        event.setCancelled(true);
+
         Material itemType = event.getCurrentItem().getType();
         String membre = event.getClickedInventory().getItem(10).getItemMeta().getDisplayName();
 
@@ -166,8 +171,7 @@ public class MenuCityGestionMembre implements Listener {
             case IRON_HOE:
                 togglePermission(player, membre, "admin");
                 break;
-            case BARRIER:
-                player.closeInventory();
+            case DARK_OAK_DOOR:
                 menu(player);
                 break;
             default:
@@ -182,8 +186,6 @@ public class MenuCityGestionMembre implements Listener {
         } else {
             CityGestion.setPermission(membre, permission);
         }
-
-        player.closeInventory();
         menuMembre(player, membre);
     }
 

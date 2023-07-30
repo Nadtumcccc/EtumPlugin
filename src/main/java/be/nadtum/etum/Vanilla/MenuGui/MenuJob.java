@@ -68,6 +68,9 @@ public class MenuJob implements Listener {
         if (event.getCurrentItem() == null) return;
 
         if (event.getView().getTitle().equalsIgnoreCase(nameMenu)) {
+
+            event.setCancelled(true);
+
             // Gestion des actions du menu
             if (event.getCurrentItem().getType().equals(Material.DARK_OAK_DOOR)) {
                 player.closeInventory();
@@ -79,19 +82,19 @@ public class MenuJob implements Listener {
                 // Sélection du métier
                 switch (event.getCurrentItem().getType()) {
                     case IRON_PICKAXE:
-                        PlayerGestion.setPlayerJobName(player.getName(), "Mineur");
+                        PlayerGestion.setPlayerJobName(player.getName(), "MINER");
                         break;
                     case IRON_AXE:
-                        PlayerGestion.setPlayerJobName(player.getName(), "Bûcheron");
+                        PlayerGestion.setPlayerJobName(player.getName(), "LUMBERJACK");
                         break;
                     case IRON_SWORD:
-                        PlayerGestion.setPlayerJobName(player.getName(), "Chasseur");
+                        PlayerGestion.setPlayerJobName(player.getName(), "HUNTER");
                         break;
                     case IRON_HOE:
-                        PlayerGestion.setPlayerJobName(player.getName(), "Fermier");
+                        PlayerGestion.setPlayerJobName(player.getName(), "FARMER");
                         break;
                     case FISHING_ROD:
-                        PlayerGestion.setPlayerJobName(player.getName(), "Pêcheur");
+                        PlayerGestion.setPlayerJobName(player.getName(), "FISHERMAN");
                         break;
                     default:
                         event.setCancelled(true);

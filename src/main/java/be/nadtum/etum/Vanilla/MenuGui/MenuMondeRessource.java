@@ -45,6 +45,8 @@ public class MenuMondeRessource implements Listener {
         if (event.getCurrentItem() == null) return;
 
         if (event.getView().getTitle().equalsIgnoreCase(nameMenu)) {
+            event.setCancelled(true);
+
             switch (event.getCurrentItem().getType()) {
                 case GRASS_BLOCK:
                     Teleportation.PlayerTpToSpawn(player, "OverWorld");
@@ -59,7 +61,6 @@ public class MenuMondeRessource implements Listener {
                     MenuPrincipal.menu(player);
                     break;
                 default:
-                    event.setCancelled(true);
                     break;
             }
 

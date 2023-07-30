@@ -8,71 +8,47 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class command_back implements CommandExecutor {
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-
-        if (!(sender instanceof Player)) {
-            System.out.println("vous ne pouvez pas utiliser cette commande");
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
+        if (!(sender instanceof Player player)) {
+            sender.sendMessage("Vous ne pouvez pas utiliser cette commande depuis la console.");
             return false;
         }
 
-        Player player = (Player) sender;
-
-        YamlConfiguration cfg = null;
-
-        try {
-            FichierGestion.getCfgPermission();
-        }catch (Exception exception){
-            Bukkit.getLogger().severe(String.valueOf(exception));
-        }
+        YamlConfiguration cfg = FichierGestion.getCfgPermission();
 
         if (!cfg.contains("Grade." + PlayerGestion.getPlayerGrade(player.getName()) + ".permission.back")) {
             if (!player.isOp()) {
-                player.sendMessage(PrefixMessage.erreur() + " vous n'avez pas la permission d'utiliser cette commande");
+                player.sendMessage(PrefixMessage.erreur() + " Vous n'avez pas la permission d'utiliser cette commande.");
                 return false;
             }
         }
 
-        //cooldown
-
-        if(CooldownManager.inCooldowns(player)){
-            player.sendMessage(PrefixMessage.erreur() + "vous êtes en cooldown [" + CooldownManager.getCooldowns(player) + "]");
+        // Cooldown check
+        if (CooldownManager.inCooldowns(player)) {
+            player.sendMessage(PrefixMessage.erreur() + " Vous êtes en cooldown [" + CooldownManager.getCooldowns(player) + "]");
             return false;
         }
 
-        if(!HashMapGestion.back.containsKey(player)){
-            player.sendMessage(PrefixMessage.erreur() + " pas de location enregistré");
+        if (!HashMapGestion.back.containsKey(player)) {
+            player.sendMessage(PrefixMessage.erreur() + " Pas de location enregistrée.");
             return false;
         }
 
         player.teleport(HashMapGestion.back.get(player));
         HashMapGestion.back.remove(player);
-        player.sendMessage(PrefixMessage.serveur() + "vous vous êtes téléporté au lieu de votre mort");
+        player.sendMessage(PrefixMessage.serveur() + " Vous vous êtes téléporté au lieu de votre mort.");
 
-        switch (PlayerGestion.getPlayerGrade(player.getName())){
-            case "Bronze":
-                CooldownManager.setCooldowns(player, 60 * 60);
-                break;
-            case "Iron":
-                CooldownManager.setCooldowns(player, 60 * 45);
-                break;
-            case "Commerçant":
-                CooldownManager.setCooldowns(player, 60 * 30);
-                break;
-            case "Gold":
-                CooldownManager.setCooldowns(player, 60 * 15);
-                break;
-            case "Diamond":
-                CooldownManager.setCooldowns(player, 60 * 10);
-                break;
-            case "Netherite":
-                CooldownManager.setCooldowns(player, 60 * 5);
-                break;
-        }
+        String playerRank = PlayerGestion.getPlayerGrade(player.getName());
 
-        return false;
+
+        return true;
     }
 }

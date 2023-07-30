@@ -44,9 +44,7 @@ commands:
   unmute:
   unban:
   invsee:
-  region:
-    aliases:
-      - rg
+  rg:
   spawn:
     aliases:
       - hub

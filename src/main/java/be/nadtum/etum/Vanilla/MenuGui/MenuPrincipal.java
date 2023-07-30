@@ -83,6 +83,8 @@ public class MenuPrincipal implements Listener {
         if (event.getCurrentItem() == null) return;
 
         if (event.getView().getTitle().equalsIgnoreCase(nameMenu)) {
+            event.setCancelled(true);
+
             switch (event.getCurrentItem().getType()) {
                 case DARK_OAK_DOOR:
                     player.closeInventory();
@@ -111,7 +113,6 @@ public class MenuPrincipal implements Listener {
                     player.sendMessage("random téléporte en développement");
                     break;
                 default:
-                    event.setCancelled(true);
                     break;
             }
         }

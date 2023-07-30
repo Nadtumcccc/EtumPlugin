@@ -27,11 +27,12 @@ public class Depot implements Listener {
 
     // Énumération des menus spécifiques à chaque métier
     public enum JobMenu {
-        MINEUR("Mineur"),
-        BÛCHERON("Bûcheron"),
-        CHASSEUR("Chasseur"),
-        PÊCHEUR("Pêcheur"),
-        FERMIER("Fermier");
+        NOJOB("nojob"),
+        MINER("MINER"),
+        LAMBERJACK("LAMBERJACK"),
+        HUNTER("HUNTER"),
+        FISHERMAN("FISHERMAN"),
+        FARMER("FARMER");
 
         private final String jobName;
 
@@ -63,15 +64,15 @@ public class Depot implements Listener {
             inventoryBuilder.getInventory().clear();
             inventoryBuilder.setupTemplate();
 
-            YamlConfiguration config = YamlConfiguration.loadConfiguration(FichierGestion.getFichierEconomie());
-            ConfigurationSection jobSection = config.getConfigurationSection("Jobs." + jobMenu.getJobName());
+            YamlConfiguration config = FichierGestion.getCfgJobs();
+            ConfigurationSection jobSection = config.getConfigurationSection("Jobs." + jobMenu.jobName + ".depot");
 
             if (jobSection != null) {
                 int caseCount = 0;
                 int inventorySize = inventoryBuilder.getInventory().getSize();
 
                 for (String target : jobSection.getKeys(false)) {
-                    String targetPath = "Jobs." + jobMenu.getJobName() + "." + target + ".depot";
+                    String targetPath = "Jobs." + jobMenu.getJobName() + ".depot." + target;
 
                     if (config.contains(targetPath)) {
                         while (caseCount < inventorySize && inventoryBuilder.getInventory().getItem(caseCount) != null) {
@@ -148,14 +149,14 @@ public class Depot implements Listener {
                 return;
             }
 
-            sellItem(event.getCurrentItem(), YamlConfiguration.loadConfiguration(FichierGestion.getFichierEconomie()), player, event);
+            sellItem(event.getCurrentItem(), FichierGestion.getCfgJobs(), player, event);
         }
     }
 
     // Vend un objet et met à jour les stocks, l'inventaire du joueur et les données du GUI
     public void sellItem(@NotNull ItemStack stack, @NotNull YamlConfiguration config, @NotNull Player player, @NotNull InventoryClickEvent event) {
         String jobName = PlayerGestion.getPlayerJobName(player.getName());
-        String targetPath = "Jobs." + jobName + "." + stack.getType() + ".depot";
+        String targetPath = "Jobs." + jobName + ".depot." + stack.getType();
 
         // Obtenir la quantité d'objets en stock dans la configuration
         int stockAmount = config.getInt(targetPath + ".amount");
@@ -167,6 +168,9 @@ public class Depot implements Listener {
         // Vérifier si le joueur clique gauche (une quantité de 1) ou droit (une quantité de 64)
         int quantity = (event.getClick() == ClickType.RIGHT) ? 64 : 1;
 
+        // Calculer le prix total en fonction de la quantité vendue
+        priceFinal = priceFinal * quantity;
+
         // Récupérer les objets correspondants dans l'inventaire du joueur
         int availableAmount = getPlayerInventoryItems(player, stack);
 
@@ -176,14 +180,24 @@ public class Depot implements Listener {
             return;
         }
 
+        if(!config.contains("Server.bank.balance")){
+            player.sendMessage("§cLe serveur n'a pas de compte à sa banque'");
+            return;
+        }
+
+        if(config.getInt("Server.bank.balance") < priceFinal){
+            player.sendMessage("§cLe serveur n'a plus assez d'argent");
+            return;
+        }
+
+        config.set("Server.bank.balance", config.getInt("Server.bank.balance") - priceFinal);
+
+
         // Retirer la quantité d'objets du joueur
         removePlayerInventoryItems(player, stack, quantity);
 
         // Mettre à jour la quantité dans la configuration du métier
         config.set(targetPath + ".amount", stockAmount + quantity);
-
-        // Calculer le prix total en fonction de la quantité vendue
-        priceFinal = priceFinal * quantity;
 
         // Donner de l'argent au joueur
         PlayerGestion.addPlayerMoney(player.getName(), (long) priceFinal);

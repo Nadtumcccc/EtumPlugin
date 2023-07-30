@@ -2,8 +2,8 @@ package be.nadtum.etum;
 
 import be.nadtum.etum.Listeners.Commands;
 import be.nadtum.etum.Listeners.Events;
+import be.nadtum.etum.Utility.Modules.FichierGestion;
 import be.nadtum.etum.Vanilla.Player.Economy.Depot;
-import be.nadtum.etum.Vanilla.Player.Class.RankClass;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -19,17 +19,15 @@ public class Main extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         instance = this;
+        FichierGestion.CreateFiles();
 
         registerListeners();
-
         Depot.initializeJobMenus();
-        RankClass.initializeRanks();
-
     }
 
     @Override
     public void onDisable() {
-        saveData();
+        FichierGestion.saveAllFiles();
     }
 
     private void registerListeners() {
@@ -37,8 +35,4 @@ public class Main extends JavaPlugin implements Listener {
         new Events(this);
     }
 
-    private void saveData() {
-        RankClass.saveConfigRanks();
-
-    }
 }

@@ -40,7 +40,7 @@ public class ActionManager implements Listener {
         }
 
         if (isMatureCrop(block)) {
-            selector(block.getType().name(), player);
+            selector(block.getType().name(), player, "MINE");
             return;
         }
 
@@ -55,14 +55,14 @@ public class ActionManager implements Listener {
             return;
         }
 
-        selector(block.getType().name(), player);
+        selector(block.getType().name(), player, "MINE");
     }
 
     @EventHandler
     public void onBlockPlaced(BlockPlaceEvent event) {
         YamlConfiguration cfg = FichierGestion.getCfgJobs();
 
-        if (!cfg.contains("Jobs." + PlayerGestion.getPlayerJobName(event.getPlayer().getName()) + "." + event.getBlock().getType())) {
+        if (!cfg.contains("Jobs." + PlayerGestion.getPlayerJobName(event.getPlayer().getName()) + ".MINE." + event.getBlock().getType())) {
             return;
         }
         HashMapGestion.blockPlaced.put(event.getBlockPlaced(), event.getBlockPlaced());
@@ -71,13 +71,13 @@ public class ActionManager implements Listener {
     @EventHandler
     public void onEntityKill(@NotNull EntityDeathEvent event) {
         if (event.getEntity().getKiller() == null) return;
-        selector(event.getEntity().getType().name(), Objects.requireNonNull(event.getEntity().getKiller()));
+        selector(event.getEntity().getType().name(), Objects.requireNonNull(event.getEntity().getKiller()), "KILL");
     }
 
     @EventHandler
     public void onFish(@NotNull PlayerFishEvent event) {
         if (event.getState() == PlayerFishEvent.State.CAUGHT_FISH) {
-            selector(event.getCaught().getName().toUpperCase(), event.getPlayer());
+            selector(event.getCaught().getName().toUpperCase(), event.getPlayer(), "FISH");
         }
     }
 
@@ -86,14 +86,14 @@ public class ActionManager implements Listener {
         return cfg.contains("Jobs.Fermier." + block.getType() + ".age") && block.getData() == 7;
     }
 
-    public void selector(String entity, @NotNull Player player) {
+    public void selector(String entity, @NotNull Player player, String action) {
         String playerName = player.getName();
         String playerJob = PlayerGestion.getPlayerJobName(playerName);
         YamlConfiguration cfg = FichierGestion.getCfgJobs();
 
         // Check if the player gains xp from this entity type
-        if (cfg.contains("Jobs." + playerJob + "." + entity + ".gain_xp")) {
-            int gain_xp = cfg.getInt("Jobs." + playerJob + "." + entity + ".gain_xp");
+        if (cfg.contains("Jobs." + playerJob + "." + action + "." + entity + ".gain_xp")) {
+            int gain_xp = cfg.getInt("Jobs." + playerJob + "." + action + "." + entity + ".gain_xp");
             int xp_for_next_level = PlayerGestion.getPlayerJobNiveau(playerName) * 500;
 
             // Check if the player should level up
@@ -116,12 +116,11 @@ public class ActionManager implements Listener {
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), bossBar::removeAll, 100L);
         }
 
-        if (cfg.contains("Jobs." + playerJob + "." + entity + ".money")) {
-            int gain_money = cfg.getInt("Jobs." + playerJob + "." + entity + ".money");
+        if (cfg.contains("Jobs." + playerJob + "." + action + "." + entity + ".money")) {
+            int gain_money = cfg.getInt("Jobs." + playerJob + "." + action + "." + entity + ".money");
             PlayerGestion.addPlayerMoney(player.getName(), (long) gain_money);
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(("§7vous avez gagné §f" + gain_money + " §7de money")));
         }
 
-        player.sendMessage(Component.text("Jobs." + playerJob + "." + entity + "."));
     }
 }

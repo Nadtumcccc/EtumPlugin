@@ -1,5 +1,6 @@
 package be.nadtum.etum.Vanilla.City.Management;
 
+import be.nadtum.etum.Main;
 import be.nadtum.etum.Region.RegionGestion;
 import be.nadtum.etum.Utility.Modules.CityGestion;
 import be.nadtum.etum.Utility.Modules.FichierGestion;
@@ -23,11 +24,14 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.HashMap;
 import java.util.UUID;
 
 public class Claim implements Listener {
+
+    private static final String METADATA_KEY = "temporary_block_change";
 
     private static Double petitx;
     private static Double petitz;
@@ -50,7 +54,7 @@ public class Claim implements Listener {
 
     public static HashMap<String, Boolean> cityCoinShow = new HashMap<>();
 
-    //hashmap pour récupérer les block coin d'une cité qui seraii montrer
+    //hashmap pour récupérer les block coin d'une cité qui serai montrer
     private static final HashMap<String, Block> coinMontrerx1z1 = new HashMap<>();
     private static final HashMap<String, Block> coinMontrerx1z2 = new HashMap<>();
     private static final HashMap<String, Block> coinMontrerx2z1 = new HashMap<>();
@@ -142,6 +146,7 @@ public class Claim implements Listener {
             case STICK:
                 //on utilise la méthode canBuild pour vérifier qu'il est dans son claim
                 if(!player.isSneaking()){
+
                     if(!cityCoinShow.containsKey(PlayerGestion.getPlayerCityName(player.getName()))){
                         x1 = FichierGestion.getCfgCity().getDouble("City." + PlayerGestion.getPlayerCityName(player.getName()) + ".zone.coordonnées.x1");
                         z1 = FichierGestion.getCfgCity().getDouble("City." + PlayerGestion.getPlayerCityName(player.getName()) + ".zone.coordonnées.z1");
@@ -149,7 +154,7 @@ public class Claim implements Listener {
                         z2 = FichierGestion.getCfgCity().getDouble("City." + PlayerGestion.getPlayerCityName(player.getName()) + ".zone.coordonnées.z2");
 
                         getCoinClaim(PlayerGestion.getPlayerCityName(player.getName()), player, x1,x2,z1,z2);
-                        coinMontrerx1z1.get(PlayerGestion.getPlayerCityName(player.getName())).setType(Material.BEDROCK);
+                        coinMontrerx1z1.get(PlayerGestion.getPlayerCityName(player.getName())).setMetadata(METADATA_KEY, new FixedMetadataValue(Main.getInstance(), true));;
                         coinMontrerx1z2.get(PlayerGestion.getPlayerCityName(player.getName())).setType(Material.BEDROCK);
                         coinMontrerx2z1.get(PlayerGestion.getPlayerCityName(player.getName())).setType(Material.BEDROCK);
                         coinMontrerx2z2.get(PlayerGestion.getPlayerCityName(player.getName())).setType(Material.BEDROCK);
@@ -294,39 +299,37 @@ public class Claim implements Listener {
 
     public static boolean canBuild(Player player, double xBlock, double zBlock) {
         YamlConfiguration cfg_perms = FichierGestion.getCfgPermission();
-
-        if (cfg_perms.contains("Grade." + PlayerGestion.getPlayerStaffGrade(player.getName()) + ".permission.build")) {
-            return true;
-        }
-
-        if (RegionGestion.getNameOfRegion(player, xBlock, zBlock) != null) {
-            return false;
-        }
-
-        if (!isInDefaultWorld(player)) {
-            return true;
-        }
-
         String playerCityName = PlayerGestion.getPlayerCityName(player.getName());
-        if (playerCityName.equals("NoCity") || !CityGestion.hasPermission(player.getName(), "build")) {
-            return false;
-        }
-
         String cityName = getNameCityOfClaim(player, xBlock, zBlock);
-        if (cityName != null) {
-            if (cityName.equals(playerCityName)) {
-                if (cityCoinShow.containsKey(cityName) && !CityGestion.hasPermission(player.getName(), "claim")) {
-                    player.sendMessage(PrefixMessage.erreur() + "le claim est en mode modification veuillez attendre");
-                    return false;
-                }
-                return true;
-            } else {
-                player.sendMessage(PrefixMessage.erreur() + "tu es dans la cité " + cityName);
-            }
+        boolean canBuild = false;
+
+        // Vérifie si le grade du joueur a la permission "build" dans la configuration.
+        if (cfg_perms.contains("Grade." + PlayerGestion.getPlayerStaffGrade(player.getName()) + ".permission.build")) {
+            return true; // Le joueur a la permission de construire.
         }
 
-        return false;
+        // Vérifie si le joueur se trouve dans une région aux coordonnées spécifiées.
+        if (RegionGestion.getNameOfRegion(player, xBlock, zBlock) != null) {
+            return false; // Le joueur ne peut pas construire dans cette région.
+        }
+
+        // Vérifie si le claim aux coordonnées spécifiées appartient à la même ville que celle du joueur.
+        if (cityName != null) {
+            if(cityName.equals(playerCityName)){
+                // Le joueur peut construire dans cette ville s'il a la permission "claim" ou si le claim n'est pas en mode modification.
+                if (!CityGestion.hasPermission(player.getName(), "build")) {
+                    return false; // Le joueur n'a pas la permission de construire dans cette ville.
+                }
+            }else{
+                return false;
+            }
+
+        }
+
+        return true; // Le joueur peut construire à l'emplacement spécifié car il ne se trouve pas dans un claim de ville ou dans une ville où il peut construire.
     }
+
+
 
     public static String getNameCityOfClaim(Player player, double xBlock, double zBlock) {
         ConfigurationSection citySection = FichierGestion.getCfgCity().getConfigurationSection("City");
@@ -651,13 +654,12 @@ public class Claim implements Listener {
                 return;
             }
 
-
-
             if((longueur * largeur) > calculTotalClaimOfCity(PlayerGestion.getPlayerCityName(player.getName()))){
                 player.sendMessage(PrefixMessage.erreur() + "l'air de la cité est trop grande");
                 cancelActionClaim(player);
                 return;
             }
+
             isActionOnClaim.remove(player);
             PlayerGestion.setPlayerMoney(player.getName(), (long) (PlayerGestion.getPlayerMoney(player.getName()) - ((longueur * largeur) * 15)));
             player.sendMessage(PrefixMessage.serveur() + "le deuxième point de claim a bien été placé");
@@ -739,7 +741,6 @@ public class Claim implements Listener {
 
             if (airClaim > totalClaimOfCity) {
                 player.sendMessage(PrefixMessage.erreur() + "l'air de la cité est trop grande [" + airClaim + "]");
-                isActionOnClaim.remove(player);
                 cancelActionClaim(player);
                 return;
             }
@@ -775,4 +776,3 @@ public class Claim implements Listener {
 
 
 }
-

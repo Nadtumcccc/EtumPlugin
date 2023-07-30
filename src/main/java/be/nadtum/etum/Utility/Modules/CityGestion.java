@@ -45,7 +45,7 @@ public class CityGestion {
         PlayerGestion.setPlayerCityName(player.getName(), cityName);
 
         FichierGestion.saveFile(FichierGestion.getCfgCity(), FichierGestion.getCityFile());
-        FichierGestion.saveFile(FichierGestion.getCfgPlayers(), FichierGestion.getFichierPlayers());
+        FichierGestion.saveFile(FichierGestion.getCfgPlayers(), FichierGestion.getPlayersFile());
     }
 
     public static void deleteCity(Player player){
@@ -58,7 +58,7 @@ public class CityGestion {
         FichierGestion.getCfgCity().set("City." + PlayerGestion.getPlayerCityName(player.getName()), null);
         PlayerGestion.setPlayerCityName(player.getName(), "NoCity");
         FichierGestion.saveFile(FichierGestion.getCfgCity(), FichierGestion.getCityFile());
-        FichierGestion.saveFile(FichierGestion.getCfgPlayers(), FichierGestion.getFichierPlayers());
+        FichierGestion.saveFile(FichierGestion.getCfgPlayers(), FichierGestion.getPlayersFile());
     }
 
     public static void setSpawn(Player player, String cityName){

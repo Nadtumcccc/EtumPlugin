@@ -60,6 +60,8 @@ public class MenuHome implements Listener {
 
 
         if (event.getView().getTitle().equalsIgnoreCase(nameMenu)) {
+            event.setCancelled(true);
+
             switch (event.getCurrentItem().getType()) {
                 case OAK_SIGN:
                     player.closeInventory();
@@ -70,7 +72,7 @@ public class MenuHome implements Listener {
                     MenuPrincipal.menu(player);
                     break;
                 default:
-                    event.setCancelled(true);
+
                     break;
             }
         }

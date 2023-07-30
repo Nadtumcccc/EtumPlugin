@@ -3,7 +3,6 @@ package be.nadtum.etum.Vanilla.Player.Economy.shop;
 
 import be.nadtum.etum.Utility.Modules.PlayerGestion;
 import be.nadtum.etum.Utility.Modules.PrefixMessage;
-import be.nadtum.etum.Vanilla.Player.Class.PlayerClass;
 import org.bukkit.Material;
 
 import org.bukkit.block.Sign;
@@ -151,7 +150,7 @@ public class Market implements Listener {
 
         if(event.getLine(0).equals("AdminShop")){
 
-            if (!PlayerClass.getPlayerClass(event.getPlayer()).hasPermission("shop.admin.sign")) {
+            if (!PlayerGestion.hasPermission(event.getPlayer(), "shop.admin.sign")) {
                 event.setCancelled(true);
                 return;
             }

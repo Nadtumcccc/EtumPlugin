@@ -72,6 +72,8 @@ public class MenuCity implements Listener {
     }
 
     private void handleMainMenuClick(InventoryClickEvent event, Player player) {
+        event.setCancelled(true);
+
         Material itemType = event.getCurrentItem().getType();
 
         switch (itemType) {
@@ -109,6 +111,8 @@ public class MenuCity implements Listener {
     }
 
     private void handleSettingsMenuClick(InventoryClickEvent event, Player player) {
+        event.setCancelled(true);
+
         Material itemType = event.getCurrentItem().getType();
 
         switch (itemType) {

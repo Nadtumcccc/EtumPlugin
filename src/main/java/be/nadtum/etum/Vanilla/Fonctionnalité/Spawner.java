@@ -26,7 +26,7 @@ public class Spawner implements Listener {
 
         if (!block.getType().equals(Material.SPAWNER)) return;
 
-        if(PlayerGestion.hasPermission(player, "spawner")) return;
+        if(!PlayerGestion.hasPermission(player, "spawner")) return;
 
         CreatureSpawner cs = (CreatureSpawner) block.getState();
         World world = block.getWorld();

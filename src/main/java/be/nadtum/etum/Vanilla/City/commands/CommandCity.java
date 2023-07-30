@@ -73,7 +73,7 @@ public class CommandCity implements CommandExecutor, TabCompleter {
                         return false;
                     }
 
-                    if (!CityGestion.hasPermission(player.getName(), "owner")) {
+                    if (CityGestion.hasPermission(player.getName(), "owner")) {
                         player.sendMessage(PrefixMessage.erreur() + "Vous ne pouvez pas quitter votre propre cité.");
                         return false;
                     }

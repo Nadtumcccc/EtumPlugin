@@ -23,15 +23,14 @@ public class Commands {
         main.getCommand("unmute").setExecutor(new command_unmute());
         main.getCommand("gm").setExecutor(new CommandGamemode());
         main.getCommand("grade").setExecutor(new command_grade());
-        main.getCommand("etum").setExecutor(new command_etum());
 
         // Menu Commands
         main.getCommand("menu").setExecutor(new command_menu());
 
         // Home Commands
-        main.getCommand("home").setExecutor(new command_home());
-        main.getCommand("sethome").setExecutor(new command_home());
-        main.getCommand("delhome").setExecutor(new command_home());
+        main.getCommand("home").setExecutor(new CommandHome());
+        main.getCommand("sethome").setExecutor(new CommandHome());
+        main.getCommand("delhome").setExecutor(new CommandHome());
 
         // Economy Commands
         main.getCommand("ec").setExecutor(new command_ec());

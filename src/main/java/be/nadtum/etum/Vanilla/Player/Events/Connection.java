@@ -1,8 +1,6 @@
 package be.nadtum.etum.Vanilla.Player.Events;
 
 import be.nadtum.etum.Utility.Modules.*;
-import be.nadtum.etum.Vanilla.Player.Class.HomeClass;
-import be.nadtum.etum.Vanilla.Player.Class.PlayerClass;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -16,16 +14,13 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 public class Connection implements Listener {
 
     @EventHandler
     public void onPlayerJoinServer(@NotNull PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        PlayerClass.createFile(player);
+        PlayerGestion.createNewProfil(player);
 
         String playerName = player.getName();
         String playerStaffGrade = PlayerGestion.getPlayerStaffGrade(playerName);
@@ -89,11 +84,7 @@ public class Connection implements Listener {
             onlinePlayer.setPlayerListHeaderFooter(header, footer);
         }
 
-        PlayerClass playerClass = PlayerClass.getPlayerClass(player.getUniqueId());
-        if (playerClass != null) {
-            playerClass.savePlayerData();
-            PlayerClass.removePlayerClass(player.getUniqueId());
-        }
+
     }
 
     public void onNameTag(Player player, String prefix) {

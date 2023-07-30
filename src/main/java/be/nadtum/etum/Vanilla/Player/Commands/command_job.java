@@ -7,10 +7,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-public class command_job implements CommandExecutor {
+import java.util.ArrayList;
+import java.util.List;
+
+public class command_job implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
@@ -61,5 +65,27 @@ public class command_job implements CommandExecutor {
 
 
         return false;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
+        List<String> completions = new ArrayList<>();
+
+        if (args.length == 1) {
+            // Compléter les sous-commandes "add" et "set"
+            completions.add("add");
+            completions.add("set");
+        } else if (args.length == 2) {
+            // Compléter les noms des joueurs en ligne pour le deuxième argument
+            for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+                completions.add(onlinePlayer.getName());
+            }
+        } else if (args.length == 3 && args[0].equalsIgnoreCase("add")) {
+            // Compléter les sous-arguments "niveau" et "xp" pour la commande "add"
+            completions.add("niveau");
+            completions.add("xp");
+        }
+
+        return completions;
     }
 }
