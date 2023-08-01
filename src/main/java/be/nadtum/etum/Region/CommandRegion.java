@@ -10,7 +10,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 
-public class command_region implements CommandExecutor {
+public class CommandRegion implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player)) {
@@ -32,12 +32,12 @@ public class command_region implements CommandExecutor {
         if(args.length == 2){
             switch (args[0]){
                 case "create":
-                    RegionGestion.setRegion(args[1], player);
-                    RegionGestion.removeCache(player);
+                    RegionManage.setRegion(args[1], player);
+                    RegionManage.removeCache(player);
                     player.sendMessage(PrefixMessage.admin() + "création de la region " + args[1]);
                     break;
                 case "delete":
-                    RegionGestion.deleteRegion(args[1]);
+                    RegionManage.deleteRegion(args[1]);
                     player.sendMessage(PrefixMessage.admin() + "suppression de la region " + args[1]);
                     break;
                 default:

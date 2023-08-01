@@ -78,7 +78,7 @@ public class MenuCity implements Listener {
 
         switch (itemType) {
             case COMPARATOR:
-                if (CityGestion.hasPermission(player.getName(), "admin")) {
+                if (CityManage.hasPermission(player.getName(), "admin")) {
                     player.closeInventory();
                     MenuCity.menuSettings(player);
                 } else {
@@ -86,16 +86,16 @@ public class MenuCity implements Listener {
                 }
                 break;
             case RED_BED:
-                if (CityGestion.hasCitySpawn(player.getName())) {
-                    CityGestion.tpToSpawn(player, PlayerGestion.getPlayerCityName(player.getName()));
-                } else if (CityGestion.hasPermission(player.getName(), "admin")) {
+                if (CityManage.hasCitySpawn(player.getName())) {
+                    CityManage.tpToSpawn(player, PlayerGestion.getPlayerCityName(player.getName()));
+                } else if (CityManage.hasPermission(player.getName(), "admin")) {
                     if (!Claim.canBuild(player, player.getLocation().getX(), player.getLocation().getZ())) {
                         player.closeInventory();
                         player.sendMessage(PrefixMessage.erreur() + "vous n'êtes pas dans votre cité");
                         return;
                     }
                     player.closeInventory();
-                    CityGestion.setSpawn(player, PlayerGestion.getPlayerCityName(player.getName()));
+                    CityManage.setSpawn(player, PlayerGestion.getPlayerCityName(player.getName()));
                 } else {
                     event.setCancelled(true);
                 }
@@ -126,7 +126,7 @@ public class MenuCity implements Listener {
                     player.sendMessage(PrefixMessage.erreur() + "vous n'êtes pas dans votre cité");
                     return;
                 }
-                CityGestion.setSpawn(player, PlayerGestion.getPlayerCityName(player.getName()));
+                CityManage.setSpawn(player, PlayerGestion.getPlayerCityName(player.getName()));
                 event.setCancelled(true);
                 break;
             case DARK_OAK_DOOR:

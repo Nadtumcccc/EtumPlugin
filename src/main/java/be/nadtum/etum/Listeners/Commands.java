@@ -1,9 +1,9 @@
 package be.nadtum.etum.Listeners;
 
+import be.nadtum.etum.Region.CommandRegion;
 import be.nadtum.etum.Vanilla.City.commands.CommandCity;
 import be.nadtum.etum.Vanilla.Player.Commands.CommandSpawn;
 import be.nadtum.etum.Main;
-import be.nadtum.etum.Region.command_region;
 import be.nadtum.etum.Moderation.commands.*;
 import be.nadtum.etum.Vanilla.Player.Commands.*;
 import be.nadtum.etum.Vanilla.MenuGui.commands.command_menu;
@@ -12,7 +12,7 @@ public class Commands {
     public Commands(Main main) {
 
         // Admin Commands
-        main.getCommand("rg").setExecutor(new command_region());
+        main.getCommand("rg").setExecutor(new CommandRegion());
 
         // Player Commands
 

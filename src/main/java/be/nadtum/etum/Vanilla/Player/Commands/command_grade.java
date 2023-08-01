@@ -1,7 +1,7 @@
 package be.nadtum.etum.Vanilla.Player.Commands;
 
 
-import be.nadtum.etum.Utility.Modules.Chat;
+import be.nadtum.etum.Utility.Modules.ChatManage;
 import be.nadtum.etum.Utility.Modules.FichierGestion;
 import be.nadtum.etum.Utility.Modules.PlayerGestion;
 import be.nadtum.etum.Utility.Modules.PrefixMessage;
@@ -183,7 +183,7 @@ public class command_grade implements CommandExecutor {
                     }
 
                     FichierGestion.getCfgPermission().set("Grade." + args[1] + ".design", args[2]);
-                    player.sendMessage(PrefixMessage.admin() + "le design " + Chat.colorString(args[2]) + " §ea été ajouté pour le grade §b" + args[1]);
+                    player.sendMessage(PrefixMessage.admin() + "le design " + ChatManage.colorString(args[2]) + " §ea été ajouté pour le grade §b" + args[1]);
                     break;
                 default:
                     player.sendMessage(PrefixMessage.erreur() + "/grade [add/delete/set/design]");

@@ -26,7 +26,7 @@ public class Connection implements Listener {
         String playerStaffGrade = PlayerGestion.getPlayerStaffGrade(playerName);
         String playerGrade = PlayerGestion.getPlayerGrade(playerName);
 
-        String joinMessage = "§6[§a+§6] " + Chat.colorString(playerStaffGrade.equalsIgnoreCase("NoStaff") ? PlayerGestion.getGradeDesign(playerGrade) : PlayerGestion.getGradeDesign(playerStaffGrade)) + " " + playerName;
+        String joinMessage = "§6[§a+§6] " + ChatManage.colorString(playerStaffGrade.equalsIgnoreCase("NoStaff") ? PlayerGestion.getGradeDesign(playerGrade) : PlayerGestion.getGradeDesign(playerStaffGrade)) + " " + playerName;
         event.joinMessage(Component.text(joinMessage));
 
         if (!player.hasPlayedBefore()) {
@@ -51,7 +51,7 @@ public class Connection implements Listener {
             onlinePlayer.setPlayerListHeaderFooter(header, footer);
         }
 
-        String nameTag = Chat.colorString(playerStaffGrade.equalsIgnoreCase("NoStaff") ? PlayerGestion.getGradeDesign(playerGrade) : PlayerGestion.getGradeDesign(playerStaffGrade)) + " ";
+        String nameTag = ChatManage.colorString(playerStaffGrade.equalsIgnoreCase("NoStaff") ? PlayerGestion.getGradeDesign(playerGrade) : PlayerGestion.getGradeDesign(playerStaffGrade)) + " ";
         onNameTag(player, nameTag);
 
         player.sendTitle("§aBienvenue sur §bEtum", "Nous te souhaitons une bonne session", 20, 30, 30);
@@ -71,7 +71,7 @@ public class Connection implements Listener {
         String playerName = player.getName();
         String playerStaffGrade = PlayerGestion.getPlayerStaffGrade(playerName);
         String playerGrade = PlayerGestion.getPlayerGrade(playerName);
-        String quitMessage = "§6[§4-§6] " + Chat.colorString(playerStaffGrade.equalsIgnoreCase("NoStaff") ? PlayerGestion.getGradeDesign(playerGrade) : PlayerGestion.getGradeDesign(playerStaffGrade)) + " " + playerName;
+        String quitMessage = "§6[§4-§6] " + ChatManage.colorString(playerStaffGrade.equalsIgnoreCase("NoStaff") ? PlayerGestion.getGradeDesign(playerGrade) : PlayerGestion.getGradeDesign(playerStaffGrade)) + " " + playerName;
 
         event.quitMessage(Component.text(quitMessage));
 

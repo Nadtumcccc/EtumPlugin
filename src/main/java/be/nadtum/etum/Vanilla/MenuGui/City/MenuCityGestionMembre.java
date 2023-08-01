@@ -40,7 +40,7 @@ public class MenuCityGestionMembre implements Listener {
                 skullMeta.setOwner(offlinePlayer.getName());
 
                 List<String> lore = new ArrayList<>();
-                lore.add("§6Grade  §e: " + Chat.colorString(PlayerGestion.getGradeDesign(PlayerGestion.getPlayerGrade(offlinePlayer.getName()))));
+                lore.add("§6Grade  §e: " + ChatManage.colorString(PlayerGestion.getGradeDesign(PlayerGestion.getPlayerGrade(offlinePlayer.getName()))));
                 lore.add("§6Claim §e: §b" + PlayerGestion.getPlayerClaimCount(offlinePlayer.getName()));
                 lore.add("§6Money  §e: §b" + PlayerGestion.getPlayerMoney(offlinePlayer.getName()));
                 lore.add(offlinePlayer.isOnline() ? "§2en ligne" : "§4hors ligne");
@@ -70,7 +70,7 @@ public class MenuCityGestionMembre implements Listener {
         SkullMeta skullMeta = (SkullMeta) profil.getItem().getItemMeta();
         skullMeta.setOwner(membre);
         List<String> lore = new ArrayList<String>();
-        lore.add("§6Grade  §e: " + Chat.colorString(PlayerGestion.getGradeDesign(PlayerGestion.getPlayerGrade(membre))));
+        lore.add("§6Grade  §e: " + ChatManage.colorString(PlayerGestion.getGradeDesign(PlayerGestion.getPlayerGrade(membre))));
         lore.add("§6Claim §e: §b" + PlayerGestion.getPlayerClaimCount(membre));
         lore.add("§6Money  §e: §b" + PlayerGestion.getPlayerMoney(membre));
         lore.add(!Bukkit.getOfflinePlayer(membre).isOnline() ? "§4hors ligne" : "§2en ligne");
@@ -80,23 +80,23 @@ public class MenuCityGestionMembre implements Listener {
         //shop: true
         //upgrade: true
         ItemBuilder build = new ItemBuilder(Material.GRASS_BLOCK,"§2BUILD",1);
-        build.addLore(CityGestion.hasPermission(membre,"build") ? "§2oui" : "§4non");
+        build.addLore(CityManage.hasPermission(membre,"build") ? "§2oui" : "§4non");
 
 
 
         ItemBuilder admin = new ItemBuilder(Material.IRON_HOE,"§cADMIN",1);
-        admin.addLore(CityGestion.hasPermission(membre,"admin") ? "§2oui" : "§4non");
+        admin.addLore(CityManage.hasPermission(membre,"admin") ? "§2oui" : "§4non");
 
 
         ItemBuilder claim = new ItemBuilder(Material.GOLDEN_SHOVEL,"§6CLAIM",1);
-        claim.addLore(CityGestion.hasPermission(membre,"claim") ? "§2oui" : "§4non");
+        claim.addLore(CityManage.hasPermission(membre,"claim") ? "§2oui" : "§4non");
 
 
         ItemBuilder invite = new ItemBuilder(Material.NAME_TAG,"§bINVITE",1);
-        invite.addLore(CityGestion.hasPermission(membre,"invite") ? "§2oui" : "§4non");
+        invite.addLore(CityManage.hasPermission(membre,"invite") ? "§2oui" : "§4non");
 
         ItemBuilder modération = new ItemBuilder(Material.IRON_AXE,"§bMODERATION",1);
-        modération.addLore(CityGestion.hasPermission(membre,"modération") ? "§2oui" : "§4non");
+        modération.addLore(CityManage.hasPermission(membre,"modération") ? "§2oui" : "§4non");
 
 
         ItemBuilder kick = new ItemBuilder(Material.DIAMOND_AXE, "§4kick le membre de la guilde",1);
@@ -139,7 +139,7 @@ public class MenuCityGestionMembre implements Listener {
             if (displayName.equalsIgnoreCase(player.getDisplayName())) {
                 event.setCancelled(true);
             } else {
-                if (CityGestion.hasPermission(player.getName(), "admin") && !CityGestion.hasPermission(displayName, "owner")) {
+                if (CityManage.hasPermission(player.getName(), "admin") && !CityManage.hasPermission(displayName, "owner")) {
                     menuMembre(player, displayName);
                 }
             }
@@ -181,10 +181,10 @@ public class MenuCityGestionMembre implements Listener {
     }
 
     private void togglePermission(Player player, String membre, String permission) {
-        if (CityGestion.hasPermission(membre, permission)) {
-            CityGestion.removePermission(membre, permission);
+        if (CityManage.hasPermission(membre, permission)) {
+            CityManage.removePermission(membre, permission);
         } else {
-            CityGestion.setPermission(membre, permission);
+            CityManage.setPermission(membre, permission);
         }
         menuMembre(player, membre);
     }

@@ -47,7 +47,7 @@ public class MenuPrincipal implements Listener {
         SkullMeta skullMeta = (SkullMeta) profil.getItem().getItemMeta();
         skullMeta.setOwner(player.getName());
         List<String> lore = new ArrayList<String>();
-        lore.add("§6Grade  §e: " + Chat.colorString(PlayerGestion.getGradeDesign(PlayerGestion.getPlayerGrade(player.getName()))));
+        lore.add("§6Grade  §e: " + ChatManage.colorString(PlayerGestion.getGradeDesign(PlayerGestion.getPlayerGrade(player.getName()))));
         lore.add("§6Métier  §e: §b" + PlayerGestion.getPlayerJobName(player.getName()));
         lore.add("§6Money  §e: §b" + PlayerGestion.getPlayerMoney(player.getName()));
         skullMeta.setLore(lore);

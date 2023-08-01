@@ -26,7 +26,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import java.util.HashMap;
 import java.util.Objects;
 
-public class RegionGestion implements Listener {
+public class RegionManage implements Listener {
 
     public static HashMap<Player, Integer> cachecoordonnéex1 = new HashMap<>();
     public static HashMap<Player, Integer> cachecoordonnéez1 = new HashMap<>();

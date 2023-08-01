@@ -1,5 +1,6 @@
 package be.nadtum.etum.Listeners;
 
+import be.nadtum.etum.Region.RegionManage;
 import be.nadtum.etum.Vanilla.Player.Economy.Depot;
 import be.nadtum.etum.Vanilla.MenuGui.City.*;
 import be.nadtum.etum.Vanilla.Player.Economy.Jobs.*;
@@ -7,7 +8,6 @@ import be.nadtum.etum.Vanilla.Player.Economy.shop.*;
 import be.nadtum.etum.Vanilla.City.Management.Claim;
 import be.nadtum.etum.Vanilla.Fonctionnalité.Spawner;
 import be.nadtum.etum.Main;
-import be.nadtum.etum.Region.RegionGestion;
 import be.nadtum.etum.Moderation.ACC.events.PlayerJoinQuit;
 import be.nadtum.etum.Utility.Modules.*;
 
@@ -52,7 +52,7 @@ public class Events {
     }
 
     private void registerPlayerEvents(Main main) {
-        pluginManager.registerEvents(new Chat(), main);
+        pluginManager.registerEvents(new ChatManage(), main);
         pluginManager.registerEvents(new Death(), main);
         pluginManager.registerEvents(new Fight(), main);
     }
@@ -82,7 +82,7 @@ public class Events {
 
     private void registerStaffEvents(Main main) {
         pluginManager.registerEvents(new PlayerJoinQuit(), main);
-        pluginManager.registerEvents(new RegionGestion(), main);
+        pluginManager.registerEvents(new RegionManage(), main);
     }
 
 }

@@ -5,7 +5,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
-import java.io.File;
 import java.util.UUID;
 
 public class PlayerGestion {
@@ -224,8 +223,8 @@ public class PlayerGestion {
             return true;
         }
         if(!Claim.isInDefaultWorld(player))return false;
-        if(Claim.getNameCityOfClaim(player, player.getLocation().getX(), player.getLocation().getZ()) == null)return false;
-        if(!Claim.getNameCityOfClaim(player, player.getLocation().getX(), player.getLocation().getZ()).equals(PlayerGestion.getPlayerCityName(player.getName()))){
+        if(Claim.getNameCityOfClaim(player.getLocation().getX(), player.getLocation().getZ()) == null)return false;
+        if(!Claim.getNameCityOfClaim(player.getLocation().getX(), player.getLocation().getZ()).equals(PlayerGestion.getPlayerCityName(player.getName()))){
             return false;
         }
         return true;

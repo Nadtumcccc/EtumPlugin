@@ -9,10 +9,10 @@ public class ServerList implements Listener {
     @EventHandler
     public void ServerListEvent(ServerListPingEvent event){
         event.setMotd(
-                Chat.colorString(Chat.colorString(
+                ChatManage.colorString(ChatManage.colorString(
                           FichierGestion.getCfgSettings().getString("Settings.Module.MOTD.ligne_1"))
                         + "\n"
-                        + Chat.colorString(FichierGestion.getCfgSettings().getString("Settings.Module.MOTD.ligne_2"))));
+                        + ChatManage.colorString(FichierGestion.getCfgSettings().getString("Settings.Module.MOTD.ligne_2"))));
     }
 
 }

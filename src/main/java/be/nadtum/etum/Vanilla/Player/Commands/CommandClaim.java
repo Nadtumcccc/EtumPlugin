@@ -1,6 +1,6 @@
 package be.nadtum.etum.Vanilla.Player.Commands;
 
-import be.nadtum.etum.Utility.Modules.CityGestion;
+import be.nadtum.etum.Utility.Modules.CityManage;
 import be.nadtum.etum.Utility.Modules.FichierGestion;
 import be.nadtum.etum.Utility.Modules.PlayerGestion;
 import be.nadtum.etum.Utility.Modules.PrefixMessage;
@@ -9,7 +9,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -53,7 +52,7 @@ public class CommandClaim implements CommandExecutor, TabCompleter {
         }
 
         if (cmd.getName().equalsIgnoreCase("unclaim")) {
-            if (!CityGestion.hasPermission(player.getName(), "claim")) {
+            if (!CityManage.hasPermission(player.getName(), "claim")) {
                 player.sendMessage(PrefixMessage.erreur() + "vous n'avez pas la permission de gérer le claim de la cité");
                 return false;
             }

@@ -1,6 +1,6 @@
 package be.nadtum.etum.Vanilla.Player.Events;
 
-import be.nadtum.etum.Utility.Modules.Chat;
+import be.nadtum.etum.Utility.Modules.ChatManage;
 import be.nadtum.etum.Utility.Modules.HashMapGestion;
 import be.nadtum.etum.Utility.Modules.PlayerGestion;
 import net.kyori.adventure.text.Component;
@@ -54,6 +54,6 @@ public class Death implements Listener {
         String prefix = PlayerGestion.getGradeDesign(grade);
         String name = player.getName();
 
-        return Chat.colorString(prefix + " " + name);
+        return ChatManage.colorString(prefix + " " + name);
     }
 }

@@ -9,7 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.jetbrains.annotations.NotNull;
 
-public class Chat implements Listener {
+public class ChatManage implements Listener {
 
     @EventHandler
     public void onPlayerChat(@NotNull PlayerChatEvent event) {

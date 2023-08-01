@@ -6,7 +6,7 @@ import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-public class CityGestion {
+public class CityManage {
 
     //fonction
     public static Boolean hasCity(String player){

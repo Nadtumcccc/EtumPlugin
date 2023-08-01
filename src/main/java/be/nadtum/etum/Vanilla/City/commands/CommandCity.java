@@ -37,20 +37,20 @@ public class CommandCity implements CommandExecutor, TabCompleter {
         if (args.length == 1) {
             switch (args[0]) {
                 case "spawn":
-                    if (CityGestion.hasCitySpawn(player.getName())) {
-                        CityGestion.tpToSpawn(player, PlayerGestion.getPlayerCityName(player.getName()));
+                    if (CityManage.hasCitySpawn(player.getName())) {
+                        CityManage.tpToSpawn(player, PlayerGestion.getPlayerCityName(player.getName()));
                         player.sendMessage(PrefixMessage.serveur() + "Tu as été téléporté au spawn de ta cité.");
                     } else {
                         player.sendMessage(PrefixMessage.erreur() + "Ta cité n'a pas encore de spawn défini.");
                     }
                     break;
                 case "delete":
-                    if (!CityGestion.hasCity(player.getName())) {
+                    if (!CityManage.hasCity(player.getName())) {
                         player.sendMessage(PrefixMessage.erreur() + "Vous n'avez pas de cité.");
                         return false;
                     }
 
-                    if (!CityGestion.hasPermission(player.getName(), "owner")) {
+                    if (!CityManage.hasPermission(player.getName(), "owner")) {
                         player.sendMessage(PrefixMessage.erreur() + "Vous n'avez pas la permission de supprimer la cité.");
                         return false;
                     }
@@ -61,19 +61,19 @@ public class CommandCity implements CommandExecutor, TabCompleter {
                     }
 
                     PlayerGestion.setPlayerMoney(player.getName(), PlayerGestion.getPlayerMoney(player.getName()) - 10000);
-                    CityGestion.deleteCity(player);
+                    CityManage.deleteCity(player);
                     player.sendMessage(PrefixMessage.serveur() + "Votre cité a été supprimée.");
 
                     break;
                 case "leave":
 
                     // On vérifie si le joueur a une cité pour effectuer une action
-                    if (!CityGestion.hasCity(player.getName())) {
+                    if (!CityManage.hasCity(player.getName())) {
                         player.sendMessage(PrefixMessage.erreur() + "Vous n'avez pas de cité.");
                         return false;
                     }
 
-                    if (CityGestion.hasPermission(player.getName(), "owner")) {
+                    if (CityManage.hasPermission(player.getName(), "owner")) {
                         player.sendMessage(PrefixMessage.erreur() + "Vous ne pouvez pas quitter votre propre cité.");
                         return false;
                     }
@@ -90,7 +90,7 @@ public class CommandCity implements CommandExecutor, TabCompleter {
         if (args.length == 2) {
             switch (args[0]) {
                 case "create":
-                    if (CityGestion.hasCity(player.getName())) {
+                    if (CityManage.hasCity(player.getName())) {
                         player.sendMessage(PrefixMessage.erreur() + "Vous avez déjà une cité.");
                         return false;
                     }
@@ -110,17 +110,17 @@ public class CommandCity implements CommandExecutor, TabCompleter {
                         return false;
                     }
                     PlayerGestion.setPlayerMoney(player.getName(), PlayerGestion.getPlayerMoney(player.getName()) - 10000);
-                    CityGestion.createCity(player, args[1].toLowerCase());
+                    CityManage.createCity(player, args[1].toLowerCase());
                     player.sendMessage(PrefixMessage.serveur() + "Votre cité a été créée.");
                     break;
                 case "kick":
                     // On vérifie si le joueur a une cité pour effectuer une action
-                    if (!CityGestion.hasCity(player.getName())) {
+                    if (!CityManage.hasCity(player.getName())) {
                         player.sendMessage(PrefixMessage.erreur() + "Vous n'avez pas de cité.");
                         return false;
                     }
 
-                    if (!CityGestion.hasCity(args[1])) {
+                    if (!CityManage.hasCity(args[1])) {
                         player.sendMessage(PrefixMessage.erreur() + args[1] + " n'a pas de cité.");
                         return false;
                     }
@@ -131,7 +131,7 @@ public class CommandCity implements CommandExecutor, TabCompleter {
                         return false;
                     }
 
-                    if (!CityGestion.hasPermission(player.getName(), "modération")) {
+                    if (!CityManage.hasPermission(player.getName(), "modération")) {
                         player.sendMessage(PrefixMessage.erreur() + "Vous n'avez pas la permission.");
                         return false;
                     }
@@ -141,7 +141,7 @@ public class CommandCity implements CommandExecutor, TabCompleter {
                         return false;
                     }
 
-                    if (!CityGestion.hasPermission(player.getName(), "owner") && CityGestion.hasPermission(args[1], "modération")) {
+                    if (!CityManage.hasPermission(player.getName(), "owner") && CityManage.hasPermission(args[1], "modération")) {
                         player.sendMessage(PrefixMessage.erreur() + "Vous ne pouvez pas exclure un membre qui a la permission [modération].");
                         return false;
                     }
@@ -156,7 +156,7 @@ public class CommandCity implements CommandExecutor, TabCompleter {
 
                     if (Bukkit.getPlayer(args[1]) != null) {
 
-                        if (!CityGestion.hasCity(player.getName())) {
+                        if (!CityManage.hasCity(player.getName())) {
                             player.sendMessage(PrefixMessage.erreur() + "Vous n'avez pas de cité.");
                             return false;
                         }
@@ -171,14 +171,14 @@ public class CommandCity implements CommandExecutor, TabCompleter {
                             return false;
                         }
 
-                        if (!CityGestion.hasPermission(player.getName(), "invite")) {
+                        if (!CityManage.hasPermission(player.getName(), "invite")) {
                             player.sendMessage(PrefixMessage.erreur() + "Vous n'avez pas la permission [invite].");
                             return false;
                         }
 
                         Player target = Bukkit.getPlayer(args[1]);
 
-                        if (CityGestion.hasCity(target.getName())) {
+                        if (CityManage.hasCity(target.getName())) {
                             player.sendMessage(PrefixMessage.erreur() + "Le joueur est déjà dans une cité.");
                             return false;
                         }
