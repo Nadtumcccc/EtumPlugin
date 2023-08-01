@@ -67,7 +67,7 @@ public class Events {
     }
 
     private void registerEconomyEvents(Main main) {
-        pluginManager.registerEvents(new Shop_Commerçant(), main);
+        pluginManager.registerEvents(new ShopTrader(), main);
         pluginManager.registerEvents(new Market(), main);
         pluginManager.registerEvents(new Depot(), main);
         pluginManager.registerEvents(new ActionManager(), main);
@@ -77,12 +77,12 @@ public class Events {
 
     private void registerCityEvents(Main main) {
         pluginManager.registerEvents(new Claim(), main);
+        pluginManager.registerEvents(new RegionManage(), main);
         pluginManager.registerEvents(new Connection(), main);
     }
 
     private void registerStaffEvents(Main main) {
         pluginManager.registerEvents(new PlayerJoinQuit(), main);
-        pluginManager.registerEvents(new RegionManage(), main);
     }
 
 }
