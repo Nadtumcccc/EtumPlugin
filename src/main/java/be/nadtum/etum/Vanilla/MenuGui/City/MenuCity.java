@@ -1,6 +1,6 @@
 package be.nadtum.etum.Vanilla.MenuGui.City;
 
-import be.nadtum.etum.Vanilla.City.Management.Claim;
+import be.nadtum.etum.Vanilla.City.Claim.Claim;
 
 import be.nadtum.etum.Vanilla.MenuGui.MenuPrincipal;
 import be.nadtum.etum.Utility.Modules.*;

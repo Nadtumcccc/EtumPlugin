@@ -2,7 +2,7 @@ package be.nadtum.etum.Vanilla.Player.Economy.Jobs;
 
 import be.nadtum.etum.Main;
 import be.nadtum.etum.Utility.Modules.*;
-import be.nadtum.etum.Vanilla.City.Management.Claim;
+import be.nadtum.etum.Vanilla.City.Claim.Claim;
 import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;

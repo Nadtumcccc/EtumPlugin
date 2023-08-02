@@ -5,7 +5,7 @@ import be.nadtum.etum.Vanilla.Player.Economy.Depot;
 import be.nadtum.etum.Vanilla.MenuGui.City.*;
 import be.nadtum.etum.Vanilla.Player.Economy.Jobs.*;
 import be.nadtum.etum.Vanilla.Player.Economy.shop.*;
-import be.nadtum.etum.Vanilla.City.Management.Claim;
+import be.nadtum.etum.Vanilla.City.Claim.Claim;
 import be.nadtum.etum.Vanilla.Fonctionnalité.Spawner;
 import be.nadtum.etum.Main;
 import be.nadtum.etum.Moderation.ACC.events.PlayerJoinQuit;

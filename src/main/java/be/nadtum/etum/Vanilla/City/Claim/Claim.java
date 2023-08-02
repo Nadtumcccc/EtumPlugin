@@ -1,4 +1,5 @@
-package be.nadtum.etum.Vanilla.City.Management;
+package be.nadtum.etum.Vanilla.City.Claim;
+
 
 import be.nadtum.etum.Region.RegionManage;
 import be.nadtum.etum.Utility.Modules.CityManage;
@@ -401,12 +402,6 @@ public class Claim implements Listener {
             Double longueur = Math.max(grandx - petitx, 1.0);
             Double largeur = Math.max(grandz - petitz, 1.0);
 
-            // Vérification si le joueur a suffisamment d'Akoins pour poser le claim
-            if (!((longueur * largeur) * 15 <= PlayerGestion.getPlayerMoney(player.getName()))) {
-                player.sendMessage(PrefixMessage.erreur() + "vous n'avez pas assez d'Akoins");
-                cancelActionClaim(player);
-                return;
-            }
 
             // Vérification si l'aire du claim n'est pas trop grande par rapport aux autres claims de la cité
             if ((longueur * largeur) > calculTotalClaimOfCity(PlayerGestion.getPlayerCityName(player.getName()))) {

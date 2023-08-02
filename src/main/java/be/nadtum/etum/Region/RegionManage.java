@@ -1,6 +1,6 @@
 package be.nadtum.etum.Region;
 
-import be.nadtum.etum.Vanilla.City.Management.Claim;
+import be.nadtum.etum.Vanilla.City.Claim.Claim;
 import be.nadtum.etum.Utility.Modules.FichierGestion;
 import be.nadtum.etum.Utility.Modules.PlayerGestion;
 import be.nadtum.etum.Utility.Modules.PrefixMessage;

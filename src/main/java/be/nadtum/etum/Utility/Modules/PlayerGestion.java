@@ -1,6 +1,6 @@
 package be.nadtum.etum.Utility.Modules;
 
-import be.nadtum.etum.Vanilla.City.Management.Claim;
+import be.nadtum.etum.Vanilla.City.Claim.Claim;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
