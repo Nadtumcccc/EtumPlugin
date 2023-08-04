@@ -1,12 +1,14 @@
 package be.nadtum.etum.Vanilla.Player.Commands;
 
 import be.nadtum.etum.Utility.Modules.*;
+import net.citizensnpcs.api.event.NPCRightClickEvent;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 
 public class CommandSpawn implements CommandExecutor {
 
@@ -69,5 +71,13 @@ public class CommandSpawn implements CommandExecutor {
         }
 
         return false;
+    }
+
+    @EventHandler
+    public void openDepot(NPCRightClickEvent event) {
+        if (!(event.getNPC().getId() == 1)) {
+            return;
+        }
+
     }
 }
