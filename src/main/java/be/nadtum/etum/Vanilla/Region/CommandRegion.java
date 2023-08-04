@@ -1,4 +1,4 @@
-package be.nadtum.etum.Region;
+package be.nadtum.etum.Vanilla.Region;
 
 import be.nadtum.etum.Utility.Modules.FichierGestion;
 import be.nadtum.etum.Utility.Modules.PlayerGestion;

@@ -1,4 +1,4 @@
-package be.nadtum.etum.Region;
+package be.nadtum.etum.Vanilla.Region;
 
 import be.nadtum.etum.Vanilla.City.Claim.Claim;
 import be.nadtum.etum.Utility.Modules.FichierGestion;

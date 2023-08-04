@@ -46,6 +46,8 @@ public class CityBuilder {
         this.ID = ID;
     }
 
+    //--------------------------------------------------------
+
     // Méthode pour récupérer la liste des membres de la ville
     public List<MemberBuilder> getMembers() {
         return members;
@@ -60,3 +62,5 @@ public class CityBuilder {
 
     }
 }
+
+//--------------------------------------------------------

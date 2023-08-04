@@ -1,7 +1,7 @@
 package be.nadtum.etum.Vanilla.City.Claim;
 
 
-import be.nadtum.etum.Region.RegionManage;
+import be.nadtum.etum.Vanilla.Region.RegionManage;
 import be.nadtum.etum.Utility.Modules.CityManage;
 import be.nadtum.etum.Utility.Modules.FichierGestion;
 import be.nadtum.etum.Utility.Modules.PlayerGestion;

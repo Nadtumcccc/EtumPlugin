@@ -1,6 +1,6 @@
 package be.nadtum.etum.Listeners;
 
-import be.nadtum.etum.Region.CommandRegion;
+import be.nadtum.etum.Vanilla.Region.CommandRegion;
 import be.nadtum.etum.Vanilla.City.commands.CommandCity;
 import be.nadtum.etum.Vanilla.Player.Commands.CommandSpawn;
 import be.nadtum.etum.Main;

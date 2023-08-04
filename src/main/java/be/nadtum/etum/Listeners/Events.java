@@ -1,6 +1,6 @@
 package be.nadtum.etum.Listeners;
 
-import be.nadtum.etum.Region.RegionManage;
+import be.nadtum.etum.Vanilla.Region.RegionManage;
 import be.nadtum.etum.Vanilla.Player.Economy.Depot;
 import be.nadtum.etum.Vanilla.MenuGui.City.*;
 import be.nadtum.etum.Vanilla.Player.Economy.Jobs.*;
