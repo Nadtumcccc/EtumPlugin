@@ -1,7 +1,7 @@
 package be.nadtum.etum.Vanilla.Player.Economy;
 
 import be.nadtum.etum.Utility.Modules.FichierGestion;
-import be.nadtum.etum.Utility.Modules.PlayerGestion;
+import be.nadtum.etum.Utility.Modules.PlayerBuilder;
 import be.nadtum.etum.Utility.Objets.InventoryBuilder;
 import be.nadtum.etum.Utility.Objets.ItemBuilder;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
@@ -29,7 +29,7 @@ public class Depot implements Listener {
     public enum JobMenu {
         NOJOB("nojob"),
         MINER("MINER"),
-        LAMBERJACK("LAMBERJACK"),
+        LUMBERJACK("LUMBERJACK"),
         HUNTER("HUNTER"),
         FISHERMAN("FISHERMAN"),
         FARMER("FARMER");
@@ -113,7 +113,7 @@ public class Depot implements Listener {
 
     // Ouvre le menu de dépôt pour un joueur spécifique
     public static void openDepotMenu(@NotNull Player player) {
-        String jobName = PlayerGestion.getPlayerJobName(player.getName());
+        String jobName = PlayerBuilder.getPlayerJobName(player.getName());
         JobMenu jobMenu = JobMenu.valueOf(jobName.toUpperCase());
         jobMenu.update();
         InventoryBuilder inventoryBuilder = jobMenu.getGuiDepot();
@@ -155,7 +155,7 @@ public class Depot implements Listener {
 
     // Vend un objet et met à jour les stocks, l'inventaire du joueur et les données du GUI
     public void sellItem(@NotNull ItemStack stack, @NotNull YamlConfiguration config, @NotNull Player player, @NotNull InventoryClickEvent event) {
-        String jobName = PlayerGestion.getPlayerJobName(player.getName());
+        String jobName = PlayerBuilder.getPlayerJobName(player.getName());
         String targetPath = "Jobs." + jobName + ".depot." + stack.getType();
 
         // Obtenir la quantité d'objets en stock dans la configuration
@@ -200,7 +200,7 @@ public class Depot implements Listener {
         config.set(targetPath + ".amount", stockAmount + quantity);
 
         // Donner de l'argent au joueur
-        PlayerGestion.addPlayerMoney(player.getName(), (long) priceFinal);
+        PlayerBuilder.addPlayerMoney(player.getName(), (long) priceFinal);
 
         // Envoyer un message au joueur avec les informations de la transaction
         player.sendMessage(ChatColor.GREEN + "Vous avez vendu " + quantity + " " + stack.getType().toString().toUpperCase() + " pour " + priceFinal + " pièces.");
@@ -269,7 +269,7 @@ public class Depot implements Listener {
 
     @EventHandler
     public void openDepot(NPCRightClickEvent event) {
-        if (!(event.getNPC().getId() == 0)) {
+        if (!(event.getNPC().getId() == 2)) {
             return;
         }
 

@@ -1,9 +1,7 @@
 package be.nadtum.etum.Vanilla.City.Builder;
 
 import be.nadtum.etum.Utility.Modules.FichierGestion;
-import be.nadtum.etum.Utility.Modules.PlayerGestion;
 import org.bukkit.Location;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.List;
 
@@ -11,11 +9,12 @@ public class ClaimBuilder extends CityBuilder {
 
     private List<Location> locations; // Liste des emplacements de la revendication
 
-    // Constructeur de la classe ClaimBuilder
-    public ClaimBuilder(Integer ID, String name, ClaimBuilder claim, List<Location> locations) {
-        super(ID, name, claim);
-        this.locations = locations;
+    public ClaimBuilder(Integer uuid, String name, ClaimBuilder claim) {
+        super(uuid, name, claim);
     }
+
+    // Constructeur de la classe ClaimBuilder
+
 
     public List<Location> getLocations() {
         return locations;

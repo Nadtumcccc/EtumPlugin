@@ -2,7 +2,7 @@ package be.nadtum.etum.Vanilla.Player.Commands;
 
 import be.nadtum.etum.Utility.Modules.CityManage;
 import be.nadtum.etum.Utility.Modules.FichierGestion;
-import be.nadtum.etum.Utility.Modules.PlayerGestion;
+import be.nadtum.etum.Utility.Modules.PlayerBuilder;
 import be.nadtum.etum.Utility.Modules.PrefixMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -25,7 +25,7 @@ public class CommandClaim implements CommandExecutor, TabCompleter {
 
         if (cmd.getName().equalsIgnoreCase("claim")) {
             if (args.length > 0) {
-                if(PlayerGestion.hasPermission(player, "admin")) return true;
+                if(PlayerBuilder.hasPermission(player, "admin")) return true;
 
 
                 if (!isInteger(args[2])) {
@@ -42,10 +42,10 @@ public class CommandClaim implements CommandExecutor, TabCompleter {
                 int amount = Integer.parseInt(args[2]);
                 switch (args[0]) {
                     case "add":
-                        PlayerGestion.setPlayerClaimCount(args[1], PlayerGestion.getPlayerClaimCount(args[1]) + amount);
+                        PlayerBuilder.setPlayerClaimCount(args[1], PlayerBuilder.getPlayerClaimCount(args[1]) + amount);
                         break;
                     case "set":
-                        PlayerGestion.setPlayerClaimCount(args[1], amount);
+                        PlayerBuilder.setPlayerClaimCount(args[1], amount);
                         break;
                 }
             }
@@ -57,18 +57,18 @@ public class CommandClaim implements CommandExecutor, TabCompleter {
                 return false;
             }
 
-            if (!FichierGestion.getCfgCity().contains("City." + PlayerGestion.getPlayerCityName(player.getName()) + ".zone")) {
+            if (!FichierGestion.getCfgCity().contains("City." + PlayerBuilder.getPlayerCityName(player.getName()) + ".zone")) {
                 player.sendMessage(PrefixMessage.erreur() + "vous n'avez pas de claim");
                 return false;
             }
 
-            FichierGestion.getCfgCity().set("City." + PlayerGestion.getPlayerCityName(player.getName()) + ".zone", null);
+            FichierGestion.getCfgCity().set("City." + PlayerBuilder.getPlayerCityName(player.getName()) + ".zone", null);
 
             player.sendMessage(PrefixMessage.serveur() + "le claim de votre cité à été supprimé");
             return false;
         }
 
-        player.sendMessage(PrefixMessage.serveur() + "§b" + PlayerGestion.getPlayerClaimCount(player.getName()) + " §aclaim");
+        player.sendMessage(PrefixMessage.serveur() + "§b" + PlayerBuilder.getPlayerClaimCount(player.getName()) + " §aclaim");
 
         return false;
     }

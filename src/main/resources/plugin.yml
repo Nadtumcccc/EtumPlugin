@@ -11,8 +11,6 @@ commands:
     aliases:
       gamemode
     description: "permet de changer le mode de jeu du joueur"
-  grade:
-    description: "permet la gestion des grades staff et joueur (permission incluse)"
   menu:
   home:
   delhome:

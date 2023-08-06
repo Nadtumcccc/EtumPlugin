@@ -1,6 +1,7 @@
 package be.nadtum.etum.Vanilla.MenuGui;
 
-import be.nadtum.etum.Utility.Modules.*;
+import be.nadtum.etum.Utility.Modules.PlayerBuilder;
+import be.nadtum.etum.Utility.Modules.PrefixMessage;
 import be.nadtum.etum.Utility.Objets.InventoryBuilder;
 import be.nadtum.etum.Utility.Objets.ItemBuilder;
 import org.bukkit.Material;
@@ -25,7 +26,7 @@ public class MenuJob implements Listener {
         InventoryBuilder inv = new InventoryBuilder(nameMenu, 54);
         inv.setupTemplate();
 
-        if (PlayerGestion.getPlayerJobName(player.getName()).equalsIgnoreCase("nojob")) {
+        if (PlayerBuilder.getPlayerJobName(player.getName()).equalsIgnoreCase("nojob")) {
             // Menu pour choisir un métier
             ItemBuilder mineur = new ItemBuilder(Material.IRON_PICKAXE, "§7Mineur", 1);
             ItemBuilder chasseur = new ItemBuilder(Material.IRON_SWORD, "§4Chasseur", 1);
@@ -40,14 +41,14 @@ public class MenuJob implements Listener {
             inv.getInventory().setItem(14, pecheur.getItem());
         } else {
             // Affichage du métier choisi et options associées
-            ItemBuilder jobs = new ItemBuilder(Material.ENCHANTED_BOOK, PlayerGestion.getPlayerJobName(player.getName()), 1);
-            jobs.addLore("§6Voie§e : §b" + PlayerGestion.getPlayerJobsVoie(player.getName()));
-            jobs.addLore("§6Niveau§e : §b" + PlayerGestion.getPlayerJobNiveau(player.getName()));
-            jobs.addLore("§6XP§e : §b" + PlayerGestion.getPlayerJobXp(player.getName()) + "§e/"
-                    + 500 * PlayerGestion.getPlayerJobNiveau(player.getName()) * 2);
+            ItemBuilder jobs = new ItemBuilder(Material.ENCHANTED_BOOK, PlayerBuilder.getPlayerJobName(player.getName()), 1);
+            jobs.addLore("§6Voie§e : §b" + PlayerBuilder.getPlayerJobsVoie(player.getName()));
+            jobs.addLore("§6Niveau§e : §b" + PlayerBuilder.getPlayerJobNiveau(player.getName()));
+            jobs.addLore("§6XP§e : §b" + PlayerBuilder.getPlayerJobXp(player.getName()) + "§e/"
+                    + 500 * PlayerBuilder.getPlayerJobNiveau(player.getName()) * 2);
 
             ItemBuilder quitterMétier = new ItemBuilder(Material.BOOK, "Quitter le métier", 1);
-            quitterMétier.addLore(PlayerGestion.getPlayerMoney(player.getName()) < 500 ? "§4vous n'avez pas assez de money" : "§2vous avez assez de money");
+            quitterMétier.addLore(PlayerBuilder.getPlayerMoney(player.getName()) < 500 ? "§4vous n'avez pas assez de money" : "§2vous avez assez de money");
 
             ItemBuilder ability = new ItemBuilder(Material.SPYGLASS, "compétence métier", 1);
 
@@ -78,23 +79,23 @@ public class MenuJob implements Listener {
                 return;
             }
 
-            if (PlayerGestion.getPlayerJobName(player.getName()).equalsIgnoreCase("nojob")) {
+            if (PlayerBuilder.getPlayerJobName(player.getName()).equalsIgnoreCase("nojob")) {
                 // Sélection du métier
                 switch (event.getCurrentItem().getType()) {
                     case IRON_PICKAXE:
-                        PlayerGestion.setPlayerJobName(player.getName(), "MINER");
+                        PlayerBuilder.setPlayerJobName(player.getName(), "MINER");
                         break;
                     case IRON_AXE:
-                        PlayerGestion.setPlayerJobName(player.getName(), "LUMBERJACK");
+                        PlayerBuilder.setPlayerJobName(player.getName(), "LUMBERJACK");
                         break;
                     case IRON_SWORD:
-                        PlayerGestion.setPlayerJobName(player.getName(), "HUNTER");
+                        PlayerBuilder.setPlayerJobName(player.getName(), "HUNTER");
                         break;
                     case IRON_HOE:
-                        PlayerGestion.setPlayerJobName(player.getName(), "FARMER");
+                        PlayerBuilder.setPlayerJobName(player.getName(), "FARMER");
                         break;
                     case FISHING_ROD:
-                        PlayerGestion.setPlayerJobName(player.getName(), "FISHERMAN");
+                        PlayerBuilder.setPlayerJobName(player.getName(), "FISHERMAN");
                         break;
                     default:
                         event.setCancelled(true);
@@ -102,7 +103,7 @@ public class MenuJob implements Listener {
                 }
 
                 player.closeInventory();
-                player.sendMessage(PrefixMessage.serveur() + "vous êtes maintenant §b" + PlayerGestion.getPlayerJobName(player.getName()));
+                player.sendMessage(PrefixMessage.serveur() + "vous êtes maintenant §b" + PlayerBuilder.getPlayerJobName(player.getName()));
                 menu(player);
                 return;
             }
@@ -110,18 +111,18 @@ public class MenuJob implements Listener {
             switch (event.getCurrentItem().getType()) {
                 case BOOK:
                     // Quitter le métier
-                    if (PlayerGestion.getPlayerMoney(player.getName()) < 500) {
+                    if (PlayerBuilder.getPlayerMoney(player.getName()) < 500) {
                         event.setCancelled(true);
                         return;
                     }
 
-                    PlayerGestion.setPlayerJobXp(player.getName(), 0);
-                    PlayerGestion.setPlayerJobNiveau(player.getName(), 1);
-                    PlayerGestion.setPlayerJobName(player.getName(), "nojob");
-                    PlayerGestion.setPlayerJobsVoie(player.getName(), null);
+                    PlayerBuilder.setPlayerJobXp(player.getName(), 0);
+                    PlayerBuilder.setPlayerJobNiveau(player.getName(), 1);
+                    PlayerBuilder.setPlayerJobName(player.getName(), "nojob");
+                    PlayerBuilder.setPlayerJobsVoie(player.getName(), null);
 
                     player.sendMessage(PrefixMessage.serveur() + "vous avez quitté votre métier");
-                    PlayerGestion.addPlayerMoney(player.getName(), (long) -500);
+                    PlayerBuilder.addPlayerMoney(player.getName(), (long) -500);
                     menu(player);
                     break;
                 case SPYGLASS:

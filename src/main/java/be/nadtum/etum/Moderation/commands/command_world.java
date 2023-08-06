@@ -2,7 +2,7 @@ package be.nadtum.etum.Moderation.commands;
 
 
 import be.nadtum.etum.Utility.Modules.FichierGestion;
-import be.nadtum.etum.Utility.Modules.PlayerGestion;
+import be.nadtum.etum.Utility.Modules.PlayerBuilder;
 import be.nadtum.etum.Utility.Modules.PrefixMessage;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
@@ -33,7 +33,7 @@ public class command_world implements CommandExecutor, TabExecutor {
 
         YamlConfiguration cfg = FichierGestion.getCfgPermission();
 
-        if(!cfg.contains("Grade." + PlayerGestion.getPlayerStaffGrade(player.getName()) + ".permission.admin") ){
+        if(!cfg.contains("Grade." + PlayerBuilder.getPlayerStaffGrade(player.getName()) + ".permission.admin") ){
             if(!player.isOp()){
                 player.sendMessage(PrefixMessage.erreur() + "vous n'avez pas la permission d'utiliser cette commande");
                 return false;

@@ -1,6 +1,6 @@
 package be.nadtum.etum.Vanilla.Player.Events;
 
-import be.nadtum.etum.Utility.Modules.PlayerGestion;
+import be.nadtum.etum.Utility.Modules.PlayerBuilder;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,7 +15,7 @@ public class Fight implements Listener {
         }
 
         // Prevent PvP between players of the same guild
-        if (PlayerGestion.isSameCity(player, target)) {
+        if (PlayerBuilder.isSameCity(player, target)) {
             event.setCancelled(true);
         }
     }

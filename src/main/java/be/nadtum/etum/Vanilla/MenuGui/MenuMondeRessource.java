@@ -1,8 +1,8 @@
 package be.nadtum.etum.Vanilla.MenuGui;
 
-import be.nadtum.etum.Utility.Modules.Teleportation;
 import be.nadtum.etum.Utility.Objets.InventoryBuilder;
 import be.nadtum.etum.Utility.Objets.ItemBuilder;
+import be.nadtum.etum.Vanilla.Player.Commands.CommandWarp;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -49,13 +49,13 @@ public class MenuMondeRessource implements Listener {
 
             switch (event.getCurrentItem().getType()) {
                 case GRASS_BLOCK:
-                    Teleportation.PlayerTpToSpawn(player, "OverWorld");
+                    CommandWarp.TeleportToWarp(player, "OverWorld");
                     break;
                 case NETHER_BRICK:
-                    Teleportation.PlayerTpToSpawn(player, "Nether");
+                    CommandWarp.TeleportToWarp(player, "Nether");
                     break;
                 case END_CRYSTAL:
-                    Teleportation.PlayerTpToSpawn(player, "End");
+                    CommandWarp.TeleportToWarp(player, "End");
                     break;
                 case DARK_OAK_DOOR:
                     MenuPrincipal.menu(player);

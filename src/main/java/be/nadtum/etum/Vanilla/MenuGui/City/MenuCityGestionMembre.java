@@ -1,6 +1,9 @@
 package be.nadtum.etum.Vanilla.MenuGui.City;
 
-import be.nadtum.etum.Utility.Modules.*;
+import be.nadtum.etum.Utility.Modules.ChatManage;
+import be.nadtum.etum.Utility.Modules.CityManage;
+import be.nadtum.etum.Utility.Modules.FichierGestion;
+import be.nadtum.etum.Utility.Modules.PlayerBuilder;
 import be.nadtum.etum.Utility.Objets.InventoryBuilder;
 import be.nadtum.etum.Utility.Objets.ItemBuilder;
 import org.bukkit.Bukkit;
@@ -28,7 +31,7 @@ public class MenuCityGestionMembre implements Listener {
         inv.setupTemplate();
 
         int nbCase = 0;
-        ConfigurationSection membresSection = FichierGestion.getCfgCity().getConfigurationSection("City." + PlayerGestion.getPlayerCityName(player.getName()) + ".membres");
+        ConfigurationSection membresSection = FichierGestion.getCfgCity().getConfigurationSection("City." + PlayerBuilder.getPlayerCityName(player.getName()) + ".membres");
         if (membresSection != null) {
             for (String membre : membresSection.getKeys(false)) {
                 UUID membreUUID = UUID.fromString(membre);
@@ -40,9 +43,9 @@ public class MenuCityGestionMembre implements Listener {
                 skullMeta.setOwner(offlinePlayer.getName());
 
                 List<String> lore = new ArrayList<>();
-                lore.add("§6Grade  §e: " + ChatManage.colorString(PlayerGestion.getGradeDesign(PlayerGestion.getPlayerGrade(offlinePlayer.getName()))));
-                lore.add("§6Claim §e: §b" + PlayerGestion.getPlayerClaimCount(offlinePlayer.getName()));
-                lore.add("§6Money  §e: §b" + PlayerGestion.getPlayerMoney(offlinePlayer.getName()));
+                lore.add("§6Grade  §e: " + ChatManage.colorString(PlayerBuilder.getGradeDesign(PlayerBuilder.getPlayerGrade(offlinePlayer.getName()))));
+                lore.add("§6Claim §e: §b" + PlayerBuilder.getPlayerClaimCount(offlinePlayer.getName()));
+                lore.add("§6Money  §e: §b" + PlayerBuilder.getPlayerMoney(offlinePlayer.getName()));
                 lore.add(offlinePlayer.isOnline() ? "§2en ligne" : "§4hors ligne");
 
                 skullMeta.setLore(lore);
@@ -70,9 +73,9 @@ public class MenuCityGestionMembre implements Listener {
         SkullMeta skullMeta = (SkullMeta) profil.getItem().getItemMeta();
         skullMeta.setOwner(membre);
         List<String> lore = new ArrayList<String>();
-        lore.add("§6Grade  §e: " + ChatManage.colorString(PlayerGestion.getGradeDesign(PlayerGestion.getPlayerGrade(membre))));
-        lore.add("§6Claim §e: §b" + PlayerGestion.getPlayerClaimCount(membre));
-        lore.add("§6Money  §e: §b" + PlayerGestion.getPlayerMoney(membre));
+        lore.add("§6Grade  §e: " + ChatManage.colorString(PlayerBuilder.getGradeDesign(PlayerBuilder.getPlayerGrade(membre))));
+        lore.add("§6Claim §e: §b" + PlayerBuilder.getPlayerClaimCount(membre));
+        lore.add("§6Money  §e: §b" + PlayerBuilder.getPlayerMoney(membre));
         lore.add(!Bukkit.getOfflinePlayer(membre).isOnline() ? "§4hors ligne" : "§2en ligne");
         skullMeta.setLore(lore);
         profil.getItem().setItemMeta(skullMeta);

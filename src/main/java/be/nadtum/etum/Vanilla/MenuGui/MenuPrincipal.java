@@ -1,10 +1,11 @@
 package be.nadtum.etum.Vanilla.MenuGui;
 
+import be.nadtum.etum.Utility.Modules.ChatManage;
+import be.nadtum.etum.Utility.Modules.PlayerBuilder;
 import be.nadtum.etum.Utility.Objets.InventoryBuilder;
-import be.nadtum.etum.Vanilla.MenuGui.City.MenuCity;
-
-import be.nadtum.etum.Utility.Modules.*;
 import be.nadtum.etum.Utility.Objets.ItemBuilder;
+import be.nadtum.etum.Vanilla.MenuGui.City.MenuCity;
+import be.nadtum.etum.Vanilla.Player.Commands.CommandWarp;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -47,9 +48,9 @@ public class MenuPrincipal implements Listener {
         SkullMeta skullMeta = (SkullMeta) profil.getItem().getItemMeta();
         skullMeta.setOwner(player.getName());
         List<String> lore = new ArrayList<String>();
-        lore.add("§6Grade  §e: " + ChatManage.colorString(PlayerGestion.getGradeDesign(PlayerGestion.getPlayerGrade(player.getName()))));
-        lore.add("§6Métier  §e: §b" + PlayerGestion.getPlayerJobName(player.getName()));
-        lore.add("§6Money  §e: §b" + PlayerGestion.getPlayerMoney(player.getName()));
+        lore.add("§6Grade  §e: " + ChatManage.colorString(PlayerBuilder.getGradeDesign(PlayerBuilder.getPlayerGrade(player.getName()))));
+        lore.add("§6Métier  §e: §b" + PlayerBuilder.getPlayerJobName(player.getName()));
+        lore.add("§6Money  §e: §b" + PlayerBuilder.getPlayerMoney(player.getName()));
         skullMeta.setLore(lore);
         profil.getItem().setItemMeta(skullMeta);
 
@@ -59,12 +60,14 @@ public class MenuPrincipal implements Listener {
         ItemBuilder random = new ItemBuilder(Material.GHAST_TEAR, "§4Random §cLocation", 1);
         ItemBuilder jobs = new ItemBuilder(Material.IRON_AXE, "§6Jobs", 1);
         ItemBuilder guilde = new ItemBuilder(Material.TOTEM_OF_UNDYING, "§5City", 1);
+        ItemBuilder crate = new ItemBuilder(Material.ENDER_CHEST, "§5Loot §dBox", 1);
 
 
         inv.getInventory().setItem(10, profil.getItem());
         inv.getInventory().setItem(11, home.getItem());
         inv.getInventory().setItem(16, jobs.getItem());
         inv.getInventory().setItem(25, guilde.getItem());
+        inv.getInventory().setItem(28, crate.getItem());
         inv.getInventory().setItem(37, mressource.getItem());
         inv.getInventory().setItem(38, random.getItem());
         inv.getInventory().setItem(39, spawn.getItem());
@@ -93,7 +96,7 @@ public class MenuPrincipal implements Listener {
                     MenuHome.menu(player);
                     break;
                 case TOTEM_OF_UNDYING:
-                    if(PlayerGestion.getPlayerCityName(player.getName()).equals("NoCity")){
+                    if(PlayerBuilder.getPlayerCityName(player.getName()).equals("NoCity")){
                         event.setCancelled(true);
                         return;
                     }
@@ -107,10 +110,13 @@ public class MenuPrincipal implements Listener {
                     break;
                 case BEACON:
                     player.closeInventory();
-                    Teleportation.PlayerTpToSpawn(player, "Spawn");
+                    CommandWarp.TeleportToWarp(player, "Spawn");
                     break;
                 case GHAST_TEAR:
                     player.sendMessage("random téléporte en développement");
+                    break;
+                case ENDER_CHEST:
+                    CommandWarp.TeleportToWarp(player, "Crate");
                     break;
                 default:
                     break;

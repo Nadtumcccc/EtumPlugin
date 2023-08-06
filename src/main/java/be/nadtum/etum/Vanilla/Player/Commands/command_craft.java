@@ -2,7 +2,7 @@ package be.nadtum.etum.Vanilla.Player.Commands;
 
 
 import be.nadtum.etum.Utility.Modules.FichierGestion;
-import be.nadtum.etum.Utility.Modules.PlayerGestion;
+import be.nadtum.etum.Utility.Modules.PlayerBuilder;
 import be.nadtum.etum.Utility.Modules.PrefixMessage;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -25,7 +25,7 @@ public class command_craft implements CommandExecutor {
 
         YamlConfiguration cfg = FichierGestion.getCfgPermission();
 
-        if (!cfg.contains("Grade." + PlayerGestion.getPlayerGrade(player.getName()) + ".permission.craft")) {
+        if (!cfg.contains("Grade." + PlayerBuilder.getPlayerGrade(player.getName()) + ".permission.craft")) {
             if (!player.isOp()) {
                 player.sendMessage(PrefixMessage.erreur() + " vous n'avez pas la permission d'utiliser cette commande");
                 return false;

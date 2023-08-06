@@ -1,7 +1,7 @@
 package be.nadtum.etum.Vanilla.Player.Commands;
 
 import be.nadtum.etum.Utility.Modules.FichierGestion;
-import be.nadtum.etum.Utility.Modules.PlayerGestion;
+import be.nadtum.etum.Utility.Modules.PlayerBuilder;
 import be.nadtum.etum.Utility.Modules.PrefixMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -28,7 +28,7 @@ public class command_job implements CommandExecutor, TabCompleter {
         YamlConfiguration cfg = FichierGestion.getCfgPermission();
 
         if(args.length > 0){
-            if (!cfg.contains("Grade." + PlayerGestion.getPlayerStaffGrade(player.getName()) + ".permission.admin")) {
+            if (!cfg.contains("Grade." + PlayerBuilder.getPlayerStaffGrade(player.getName()) + ".permission.admin")) {
                 if (!player.isOp()) {
                     player.sendMessage(PrefixMessage.erreur() + "vous n'avez pas la permission d'utiliser cette commande (faîtes /money)");
                     return false;
@@ -40,19 +40,19 @@ public class command_job implements CommandExecutor, TabCompleter {
                 return false;
             }
 
-            if(!(Bukkit.getPlayer(args[1]) instanceof Player)){
+            if(Bukkit.getPlayer(args[1]) == null){
                 player.sendMessage(PrefixMessage.erreur() + "le joueur n'est pas en ligne");
                 return false;
             }
             switch (args[0]){
                 case "add":
                     if(args[2].equals("niveau")){
-                        PlayerGestion.setPlayerJobNiveau(args[1], PlayerGestion.getPlayerJobNiveau(args[1]) + Integer.valueOf(args[3]));
+                        PlayerBuilder.setPlayerJobNiveau(args[1], PlayerBuilder.getPlayerJobNiveau(args[1]) + Integer.valueOf(args[3]));
                         return false;
                     }
 
                     if(args[2].equals("xp")){
-                        PlayerGestion.setPlayerJobXp(args[1], PlayerGestion.getPlayerJobXp(args[1]) + Integer.valueOf(args[3]));
+                        PlayerBuilder.setPlayerJobXp(args[1], PlayerBuilder.getPlayerJobXp(args[1]) + Integer.valueOf(args[3]));
                         return false;
                     }
                     break;

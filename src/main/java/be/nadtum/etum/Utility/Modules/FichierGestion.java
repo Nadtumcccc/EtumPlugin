@@ -137,11 +137,17 @@ public class FichierGestion {
 
     // Method to save all configurations to their respective files
     public static void saveAllFiles() {
-        saveFile(cfgPlayers, players);
-        saveFile(cfgPermission, permission);
-        saveFile(cfgSettings, settings);
-        saveFile(cfgJobs, jobs);
-        saveFile(cfgCity, city);
-        saveFile(cfgRegion, region);
+        if (cfgPlayers != null)
+            saveFile(cfgPlayers, players);
+        if (cfgPermission != null)
+            saveFile(cfgPermission, permission);
+        if (cfgSettings != null)
+            saveFile(cfgSettings, settings);
+        if (cfgJobs != null)
+            saveFile(cfgJobs, jobs);
+        if (cfgCity != null)
+            saveFile(cfgCity, city);
+        if (cfgRegion != null)
+            saveFile(cfgRegion, region);
     }
 }

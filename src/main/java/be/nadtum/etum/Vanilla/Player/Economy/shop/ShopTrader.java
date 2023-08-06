@@ -1,7 +1,7 @@
 package be.nadtum.etum.Vanilla.Player.Economy.shop;
 
 import be.nadtum.etum.Utility.Modules.FichierGestion;
-import be.nadtum.etum.Utility.Modules.PlayerGestion;
+import be.nadtum.etum.Utility.Modules.PlayerBuilder;
 import be.nadtum.etum.Utility.Modules.PrefixMessage;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -40,7 +40,7 @@ public class ShopTrader implements Listener {
         Player player = e.getPlayer();
 
         YamlConfiguration cfg_file = FichierGestion.getCfgPermission();
-        if (!cfg_file.contains("Grade." + PlayerGestion.getPlayerGrade(trader) + ".permission.trader")
+        if (!cfg_file.contains("Grade." + PlayerBuilder.getPlayerGrade(trader) + ".permission.trader")
                 && !player.isOp()) {
             player.sendMessage(PrefixMessage.erreur() + " le joueur §4" + sign.getLine(0) + "§c n'est pas trader ou marchand");
             return;
@@ -105,15 +105,15 @@ public class ShopTrader implements Listener {
             }
 
             int totalCost = prix * amount;
-            if (PlayerGestion.getPlayerMoney(player.getName()) < totalCost) {
+            if (PlayerBuilder.getPlayerMoney(player.getName()) < totalCost) {
                 player.sendMessage(PrefixMessage.erreur() + " vous n'avez pas assez de " + AKON_CURRENCY);
                 return;
             }
 
-            PlayerGestion.setPlayerMoney(player.getName(), PlayerGestion.getPlayerMoney(player.getName()) - totalCost);
+            PlayerBuilder.setPlayerMoney(player.getName(), PlayerBuilder.getPlayerMoney(player.getName()) - totalCost);
             player.getInventory().addItem(new ItemStack(material, amount));
             player.sendMessage(PrefixMessage.serveur() + " vous avez acheté un stack de §b" + material + " §epour §b" + totalCost);
-            PlayerGestion.setPlayerMoney(trader, PlayerGestion.getPlayerMoney(trader) + totalCost);
+            PlayerBuilder.setPlayerMoney(trader, PlayerBuilder.getPlayerMoney(trader) + totalCost);
 
             removeItemFromChest(chest, material, amount);
         }
@@ -131,15 +131,15 @@ public class ShopTrader implements Listener {
             }
 
             int totalCost = prix * amount;
-            if (PlayerGestion.getPlayerMoney(trader) < totalCost) {
+            if (PlayerBuilder.getPlayerMoney(trader) < totalCost) {
                 player.sendMessage(PrefixMessage.erreur() + " le trader n'a pas assez d'argent");
                 return;
             }
 
             handItem.setAmount(handItem.getAmount() - amount);
-            PlayerGestion.setPlayerMoney(player.getName(), PlayerGestion.getPlayerMoney(player.getName()) + totalCost);
+            PlayerBuilder.setPlayerMoney(player.getName(), PlayerBuilder.getPlayerMoney(player.getName()) + totalCost);
             player.sendMessage(PrefixMessage.serveur() + " vous avez vendu un stack de §b" + material + " §epour §b" + totalCost);
-            PlayerGestion.setPlayerMoney(trader, PlayerGestion.getPlayerMoney(trader) - totalCost);
+            PlayerBuilder.setPlayerMoney(trader, PlayerBuilder.getPlayerMoney(trader) - totalCost);
 
             addItemToChest(chest, new ItemStack(material, amount));
         }

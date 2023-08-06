@@ -1,9 +1,9 @@
 package be.nadtum.etum.Vanilla.Region;
 
-import be.nadtum.etum.Vanilla.City.Claim.Claim;
 import be.nadtum.etum.Utility.Modules.FichierGestion;
-import be.nadtum.etum.Utility.Modules.PlayerGestion;
+import be.nadtum.etum.Utility.Modules.PlayerBuilder;
 import be.nadtum.etum.Utility.Modules.PrefixMessage;
+import be.nadtum.etum.Vanilla.City.Claim.Claim;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -44,7 +44,7 @@ public class RegionManage implements Listener {
         Block block = event.getClickedBlock();
         if(!event.getAction().equals(Action.RIGHT_CLICK_BLOCK))return;
         //on vérifie s'il à la permission de gérer les regions
-        if (!FichierGestion.getCfgPermission().contains("Grade." + PlayerGestion.getPlayerGrade(player.getName()) + ".permission.region")) {
+        if (!FichierGestion.getCfgPermission().contains("Grade." + PlayerBuilder.getPlayerGrade(player.getName()) + ".permission.region")) {
             if (!player.isOp()) {
                 return;
             }
@@ -250,7 +250,7 @@ public class RegionManage implements Listener {
             String regionname = getNameOfRegion(player, xBlock, zBlock);
 
             if(regionname != null){
-                if(!regionname.equals(PlayerGestion.getPlayerCityName(player.getName()))){
+                if(!regionname.equals(PlayerBuilder.getPlayerCityName(player.getName()))){
                     player.sendMessage(PrefixMessage.erreur() + "tu es dans la region " + regionname);
                     Claim.cancelActionClaim(player);
                     return true;

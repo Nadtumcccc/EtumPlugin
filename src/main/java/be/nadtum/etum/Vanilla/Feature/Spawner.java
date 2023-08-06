@@ -1,12 +1,10 @@
-package be.nadtum.etum.Vanilla.Fonctionnalité;
+package be.nadtum.etum.Vanilla.Feature;
 
 import be.nadtum.etum.Utility.Modules.FichierGestion;
-import be.nadtum.etum.Utility.Modules.PlayerGestion;
-import org.bukkit.Location;
+import be.nadtum.etum.Utility.Modules.PlayerBuilder;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -27,7 +25,7 @@ public class Spawner implements Listener {
 
         if (!block.getType().equals(Material.SPAWNER)) return;
 
-        if (!PlayerGestion.hasPermission(player, "spawner")) return;
+        if (!PlayerBuilder.hasPermission(player, "spawner")) return;
 
         CreatureSpawner cs = (CreatureSpawner) block.getState();
         World world = block.getWorld();

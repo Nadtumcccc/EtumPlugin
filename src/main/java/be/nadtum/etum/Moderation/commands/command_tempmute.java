@@ -1,9 +1,9 @@
 package be.nadtum.etum.Moderation.commands;
 
-import be.nadtum.etum.Utility.Modules.FichierGestion;
-import be.nadtum.etum.Utility.Modules.PlayerGestion;
-import be.nadtum.etum.Utility.Modules.PrefixMessage;
 import be.nadtum.etum.Moderation.DataPunish;
+import be.nadtum.etum.Utility.Modules.FichierGestion;
+import be.nadtum.etum.Utility.Modules.PlayerBuilder;
+import be.nadtum.etum.Utility.Modules.PrefixMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -25,7 +25,7 @@ public class command_tempmute implements CommandExecutor {
 
         YamlConfiguration cfg = FichierGestion.getCfgPermission();
 
-        if (!cfg.contains("Grade." + PlayerGestion.getPlayerStaffGrade(player.getName()) + ".permission.modération")) {
+        if (!cfg.contains("Grade." + PlayerBuilder.getPlayerStaffGrade(player.getName()) + ".permission.modération")) {
             if (!player.isOp()) {
                 player.sendMessage(PrefixMessage.erreur() + "vous n'avez pas la permission d'utiliser cette commande");
                 return false;
@@ -81,7 +81,7 @@ public class command_tempmute implements CommandExecutor {
             }
             reason = reason.trim();
 
-            DataPunish data  = new DataPunish(PlayerGestion.getUUIDFromName(args[0]));
+            DataPunish data  = new DataPunish(PlayerBuilder.getUUIDFromName(args[0]));
 
             if(data.exist()){
                 player.sendMessage(PrefixMessage.erreur() + "fichier joueur inexistant contactez un membre de l'administation au plus vite !");
@@ -90,7 +90,7 @@ public class command_tempmute implements CommandExecutor {
 
             String target = (args[0]);
 
-            if (cfg.contains("Grade." + PlayerGestion.getPlayerStaffGrade(target) + ".permission.modération")) {
+            if (cfg.contains("Grade." + PlayerBuilder.getPlayerStaffGrade(target) + ".permission.modération")) {
                 if(!player.isOp()){
                     player.sendMessage(PrefixMessage.erreur() + "vous n'avez pas la permission de mute un membre du staff");
                     return false;

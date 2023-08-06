@@ -1,10 +1,10 @@
 package be.nadtum.etum.Vanilla.MenuGui.commands;
 
 
-import be.nadtum.etum.Vanilla.MenuGui.MenuPrincipal;
 import be.nadtum.etum.Utility.Modules.FichierGestion;
-import be.nadtum.etum.Utility.Modules.PlayerGestion;
+import be.nadtum.etum.Utility.Modules.PlayerBuilder;
 import be.nadtum.etum.Utility.Modules.PrefixMessage;
+import be.nadtum.etum.Vanilla.MenuGui.MenuPrincipal;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -27,7 +27,7 @@ public class command_menu implements CommandExecutor {
 
         YamlConfiguration cfg = FichierGestion.getCfgPermission();
 
-        if(!cfg.contains("Grade." + PlayerGestion.getPlayerGrade(player.getName()) + ".permission.default") ){
+        if(!cfg.contains("Grade." + PlayerBuilder.getPlayerGrade(player.getName()) + ".permission.default") ){
             if(!player.isOp()){
                 player.sendMessage(PrefixMessage.erreur() + "vous n'avez pas la permission d'utiliser cette commande");
 

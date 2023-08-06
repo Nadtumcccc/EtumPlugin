@@ -1,7 +1,7 @@
 package be.nadtum.etum.Vanilla.Region;
 
 import be.nadtum.etum.Utility.Modules.FichierGestion;
-import be.nadtum.etum.Utility.Modules.PlayerGestion;
+import be.nadtum.etum.Utility.Modules.PlayerBuilder;
 import be.nadtum.etum.Utility.Modules.PrefixMessage;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -22,7 +22,7 @@ public class CommandRegion implements CommandExecutor {
 
         YamlConfiguration cfg = FichierGestion.getCfgPermission();
 
-        if (PlayerGestion.hasPermission(player,"admin")) {
+        if (PlayerBuilder.hasPermission(player,"admin")) {
             if (!player.isOp()) {
                 player.sendMessage(PrefixMessage.erreur() + "vous n'avez pas la permission d'utiliser cette commande");
                 return false;

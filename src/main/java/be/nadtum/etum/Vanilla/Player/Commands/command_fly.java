@@ -2,7 +2,7 @@ package be.nadtum.etum.Vanilla.Player.Commands;
 
 
 import be.nadtum.etum.Utility.Modules.FichierGestion;
-import be.nadtum.etum.Utility.Modules.PlayerGestion;
+import be.nadtum.etum.Utility.Modules.PlayerBuilder;
 import be.nadtum.etum.Utility.Modules.PrefixMessage;
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
@@ -26,7 +26,7 @@ public class command_fly implements CommandExecutor {
 
         YamlConfiguration cfg = FichierGestion.getCfgPermission();
 
-        if (!cfg.contains("Grade." + PlayerGestion.getPlayerGrade(player.getName()) + ".permission.fly")) {
+        if (!cfg.contains("Grade." + PlayerBuilder.getPlayerGrade(player.getName()) + ".permission.fly")) {
             if (!player.isOp()) {
                 player.sendMessage(PrefixMessage.erreur() + " vous n'avez pas la permission d'utiliser cette commande");
                 return false;
@@ -39,7 +39,7 @@ public class command_fly implements CommandExecutor {
         }
 
 
-        if(!PlayerGestion.canFly(player)){
+        if(!PlayerBuilder.canFly(player)){
             player.sendMessage(PrefixMessage.erreur() + "vous devez être dans votre cité pour voler");
             return false;
         }

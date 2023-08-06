@@ -1,15 +1,12 @@
 package be.nadtum.etum.Vanilla.Player.Commands;
 
 
-import be.nadtum.etum.Utility.Modules.FichierGestion;
 import be.nadtum.etum.Utility.Modules.HashMapGestion;
-import be.nadtum.etum.Utility.Modules.PlayerGestion;
 import be.nadtum.etum.Utility.Modules.PrefixMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -29,14 +26,6 @@ public class command_tpa implements CommandExecutor {
             return false;
         }
 
-        YamlConfiguration cfg = FichierGestion.getCfgPermission();
-
-        if (!cfg.contains("Grade." + PlayerGestion.getPlayerGrade(player.getName()) + ".permission.default")) {
-            if (!player.isOp()) {
-                player.sendMessage(PrefixMessage.erreur() + "vous n'avez pas la permission d'utiliser cette commande");
-                return false;
-            }
-        }
 
         if(args.length == 1){
             if(cmd.getName().equalsIgnoreCase("tpa")){

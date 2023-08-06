@@ -1,6 +1,6 @@
 package be.nadtum.etum.Vanilla.Player.Commands;
 
-import be.nadtum.etum.Utility.Modules.PlayerGestion;
+import be.nadtum.etum.Utility.Modules.PlayerBuilder;
 import be.nadtum.etum.Utility.Modules.PrefixMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -12,43 +12,49 @@ public class CommandMoney implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player player)) {
-            sender.sendMessage(PrefixMessage.logs() + "Vous ne pouvez pas utiliser cette commande");
-            return false;
-        }
-
-        if (args.length > 0) {
-            if (!PlayerGestion.hasPermission(player,"money.manage")) {
-                return false;
+        if (args.length == 0) {
+            // Display the player's Akoins balance
+            if (sender instanceof Player) {
+                Player player = (Player) sender;
+                player.sendMessage(PrefixMessage.serveur() + "§b" + PlayerBuilder.getPlayerMoney(player.getName()) + " §aAkoins");
+            } else {
+                // Console can't use this part of the command
+                sender.sendMessage("This command is only available for players.");
             }
-
-            if (!isInteger(args[2])) {
-                player.sendMessage(PrefixMessage.erreur() + "La valeur n'est pas un nombre");
-                return false;
-            }
-
-            Player targetPlayer = Bukkit.getPlayer(args[1]);
-            if (targetPlayer == null) {
-                player.sendMessage(PrefixMessage.erreur() + "Le joueur n'est pas en ligne");
-                return false;
-            }
-
-            int amount = Integer.parseInt(args[2]);
-            switch (args[0]) {
-                case "add" -> {
-                    PlayerGestion.addPlayerMoney(targetPlayer.getName(), (long) amount);
-                }
-                case "set" -> {
-                    PlayerGestion.setPlayerMoney(targetPlayer.getName(), (long) amount);
-                }
-            }
-
-            player.sendMessage(PrefixMessage.serveur() + "Le joueur a maintenant §b" + PlayerGestion.getPlayerMoney(targetPlayer.getName()) + " §aAkoins");
             return true;
         }
 
-        player.sendMessage(PrefixMessage.serveur() + "§b" + PlayerGestion.getPlayerMoney(player.getName()) + " §aAkoins");
+        if (!sender.hasPermission("money.manage")) {
+            sender.sendMessage(PrefixMessage.erreur() + "You don't have permission to use this command.");
+            return false;
+        }
 
+        if (!isInteger(args[2])) {
+            sender.sendMessage(PrefixMessage.erreur() + "The value is not a number.");
+            return false;
+        }
+
+        Player targetPlayer = Bukkit.getPlayer(args[1]);
+        if (targetPlayer == null) {
+            sender.sendMessage(PrefixMessage.erreur() + "The player is not online.");
+            return false;
+        }
+
+        int amount = Integer.parseInt(args[2]);
+        switch (args[0]) {
+            case "add" -> {
+                PlayerBuilder.addPlayerMoney(targetPlayer.getName(), (long) amount);
+            }
+            case "set" -> {
+                PlayerBuilder.setPlayerMoney(targetPlayer.getName(), (long) amount);
+            }
+            default -> {
+                sender.sendMessage(PrefixMessage.erreur() + "Invalid usage. Use /money add/set <player> <amount>");
+                return false;
+            }
+        }
+
+        sender.sendMessage(PrefixMessage.serveur() + "The player now has §b" + PlayerBuilder.getPlayerMoney(targetPlayer.getName()) + " §aAkoins");
         return true;
     }
 

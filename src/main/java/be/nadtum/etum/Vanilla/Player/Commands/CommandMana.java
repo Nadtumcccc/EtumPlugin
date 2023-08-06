@@ -1,7 +1,7 @@
 package be.nadtum.etum.Vanilla.Player.Commands;
 
 import be.nadtum.etum.Utility.Modules.FichierGestion;
-import be.nadtum.etum.Utility.Modules.PlayerGestion;
+import be.nadtum.etum.Utility.Modules.PlayerBuilder;
 import be.nadtum.etum.Utility.Modules.PrefixMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -23,7 +23,7 @@ public class CommandMana implements CommandExecutor {
 
         YamlConfiguration cfg = FichierGestion.getCfgPermission();
 
-        if (!cfg.contains("Grade." + PlayerGestion.getPlayerGrade(player.getName()) + ".permission.mana")) {
+        if (!cfg.contains("Grade." + PlayerBuilder.getPlayerGrade(player.getName()) + ".permission.mana")) {
             if (!player.isOp()) {
                 player.sendMessage(PrefixMessage.erreur() + "vous n'avez pas la permission d'utiliser cette commande");
                 return false;
@@ -31,7 +31,7 @@ public class CommandMana implements CommandExecutor {
         }
 
         if(args.length > 0){
-            if (!cfg.contains("Grade." + PlayerGestion.getPlayerStaffGrade(player.getName()) + ".permission.admin")) {
+            if (!cfg.contains("Grade." + PlayerBuilder.getPlayerStaffGrade(player.getName()) + ".permission.admin")) {
                 if (!player.isOp()) {
                     player.sendMessage(PrefixMessage.erreur() + "vous n'avez pas la permission d'utiliser cette commande (faîtes /mana)");
                     return false;
@@ -49,17 +49,17 @@ public class CommandMana implements CommandExecutor {
             }
             switch (args[0]){
                 case "add":
-                    PlayerGestion.setPlayerMana(args[1], PlayerGestion.getPlayerMana(args[1]) + Integer.valueOf(args[2]));
+                    PlayerBuilder.setPlayerMana(args[1], PlayerBuilder.getPlayerMana(args[1]) + Integer.valueOf(args[2]));
                     break;
                 case "set":
-                    PlayerGestion.setPlayerMana(args[1], Integer.valueOf(args[2]));
+                    PlayerBuilder.setPlayerMana(args[1], Integer.valueOf(args[2]));
                     break;
             }
-            player.sendMessage(PrefixMessage.serveur() + "le joueur a maintenant §b" + PlayerGestion.getPlayerMana(args[1]) + " §aMana");
+            player.sendMessage(PrefixMessage.serveur() + "le joueur a maintenant §b" + PlayerBuilder.getPlayerMana(args[1]) + " §aMana");
             return false;
         }
 
-        player.sendMessage(PrefixMessage.serveur() + "§b" + PlayerGestion.getPlayerMana(player.getName()) + " §aMana");
+        player.sendMessage(PrefixMessage.serveur() + "§b" + PlayerBuilder.getPlayerMana(player.getName()) + " §aMana");
 
 
         return false;

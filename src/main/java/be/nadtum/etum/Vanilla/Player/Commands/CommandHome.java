@@ -2,7 +2,7 @@ package be.nadtum.etum.Vanilla.Player.Commands;
 
 
 import be.nadtum.etum.Utility.Modules.FichierGestion;
-import be.nadtum.etum.Utility.Modules.PlayerGestion;
+import be.nadtum.etum.Utility.Modules.PlayerBuilder;
 import be.nadtum.etum.Utility.Modules.PrefixMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -11,13 +11,13 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class CommandHome implements CommandExecutor, TabExecutor {
 
@@ -42,20 +42,13 @@ public class CommandHome implements CommandExecutor, TabExecutor {
             return false;
         }
 
-        if(PlayerGestion.hasPermission(player, "admin")){
+        if(PlayerBuilder.hasPermission(player, "admin")){
             if(args[0].equals("add")){
                 if(Bukkit.getPlayer(args[1]) != null){
-                    PlayerGestion.setPlayerHomeCount(Bukkit.getPlayer(args[1]).getName(), PlayerGestion.getPlayerHomeCount(Bukkit.getPlayer(args[1]).getName()) + Integer.valueOf(args[2]));
-                    player.sendMessage(PrefixMessage.admin() + "le joueur §b" + args[1] + "§a a maintenant §b" + PlayerGestion.getPlayerHomeCount(Bukkit.getPlayer(args[1]).getName()) + " §ahomes");
+                    PlayerBuilder.setPlayerHomeCount(Bukkit.getPlayer(args[1]).getName(), PlayerBuilder.getPlayerHomeCount(Bukkit.getPlayer(args[1]).getName()) + Integer.valueOf(args[2]));
+                    player.sendMessage(PrefixMessage.admin() + "le joueur §b" + args[1] + "§a a maintenant §b" + PlayerBuilder.getPlayerHomeCount(Bukkit.getPlayer(args[1]).getName()) + " §ahomes");
                     return false;
                 }
-            }
-        }
-
-        if(!cfg.contains("Grade." + PlayerGestion.getPlayerGrade(player.getName()) + ".permission.default")){
-            if(!player.isOp()){
-                player.sendMessage(PrefixMessage.erreur() + " vous n'avez pas la permission d'utiliser cette commande");
-                return false;
             }
         }
 
@@ -69,7 +62,7 @@ public class CommandHome implements CommandExecutor, TabExecutor {
                 for (String home : FichierGestion.getCfgPlayers().getConfigurationSection("Profil." + player.getUniqueId() + ".Home.homes").getKeys(false)) {
                     nbHome = nbHome + 1;
                 }
-                if (nbHome >= PlayerGestion.getPlayerHomeCount(player.getName())) {
+                if (nbHome >= PlayerBuilder.getPlayerHomeCount(player.getName())) {
                     player.sendMessage(PrefixMessage.erreur() + " vous avez trop de home " +
                             "\nvous avez §c[" + nbHome + "§c] home");
 
@@ -131,16 +124,17 @@ public class CommandHome implements CommandExecutor, TabExecutor {
     public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
 
         Player player = (Player) commandSender;
-        ArrayList list = new ArrayList<>();
-        if(args.length == 1){
-            try {
-                for(String home : FichierGestion.getCfgPlayers().getConfigurationSection("Profil." + player.getUniqueId() + ".Home.homes").getKeys(false)){
-                    list.add(home);
-                }
-            }catch (NullPointerException exception){
-                player.sendMessage(PrefixMessage.erreur() + "la liste est vide");
+        ArrayList<String> list = new ArrayList<>();
+
+        if (args.length == 1) {
+
+            ConfigurationSection homesSection = FichierGestion.getCfgPlayers().getConfigurationSection("Profil." + player.getUniqueId() + ".Home.homes");
+            if (homesSection != null) {
+                list.addAll(homesSection.getKeys(false));
             }
+
         }
+
         return list;
     }
 }

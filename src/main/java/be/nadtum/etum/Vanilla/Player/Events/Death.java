@@ -1,8 +1,8 @@
 package be.nadtum.etum.Vanilla.Player.Events;
 
 import be.nadtum.etum.Utility.Modules.ChatManage;
-import be.nadtum.etum.Utility.Modules.HashMapGestion;
-import be.nadtum.etum.Utility.Modules.PlayerGestion;
+import be.nadtum.etum.Utility.Modules.PlayerBuilder;
+import be.nadtum.etum.Vanilla.Player.Commands.CommandBack;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -40,18 +40,16 @@ public class Death implements Listener {
 
         player.playSound(player.getLocation(), Sound.ENTITY_WITHER_SPAWN, 4, 1);
 
-        if (PlayerGestion.hasPermission(player, "back")) {
-            HashMapGestion.back.put(player, player.getLocation());
-        }
+        CommandBack.setLastLocation(player, player.getLocation());
     }
 
     private @NotNull String getPlayerDisplayName(@NotNull Player player) {
-        String grade = PlayerGestion.getPlayerStaffGrade(player.getName());
+        String grade = PlayerBuilder.getPlayerStaffGrade(player.getName());
         if (grade.equalsIgnoreCase("NoStaff")) {
-            grade = PlayerGestion.getPlayerGrade(player.getName());
+            grade = PlayerBuilder.getPlayerGrade(player.getName());
         }
 
-        String prefix = PlayerGestion.getGradeDesign(grade);
+        String prefix = PlayerBuilder.getGradeDesign(grade);
         String name = player.getName();
 
         return ChatManage.colorString(prefix + " " + name);

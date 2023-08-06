@@ -1,10 +1,9 @@
 package be.nadtum.etum.Vanilla.Player.Economy.shop;
 
 
-import be.nadtum.etum.Utility.Modules.PlayerGestion;
+import be.nadtum.etum.Utility.Modules.PlayerBuilder;
 import be.nadtum.etum.Utility.Modules.PrefixMessage;
 import org.bukkit.Material;
-
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -38,12 +37,12 @@ public class Market implements Listener {
 
             String prixstr = sign.getLine(2);
             Integer prix = Integer.valueOf(prixstr);
-            if(PlayerGestion.getPlayerMoney(player.getName()) < prix){
+            if(PlayerBuilder.getPlayerMoney(player.getName()) < prix){
                 player.sendMessage(PrefixMessage.erreur() + " vous n'avez pas assez de Akoins");
                 return;
             }
-            PlayerGestion.setPlayerMoney(player.getName(),(PlayerGestion.getPlayerMoney(player.getName()) - prix));
-            PlayerGestion.setPlayerClaimCount(player.getName(), PlayerGestion.getPlayerClaimCount(player.getName()) + Integer.valueOf(sign.getLine(3)));
+            PlayerBuilder.setPlayerMoney(player.getName(),(PlayerBuilder.getPlayerMoney(player.getName()) - prix));
+            PlayerBuilder.setPlayerClaimCount(player.getName(), PlayerBuilder.getPlayerClaimCount(player.getName()) + Integer.valueOf(sign.getLine(3)));
             player.sendMessage(PrefixMessage.serveur() + " vous avez acheté des blocs de claim §b §epour §b" + prix + " §eAkoins");
             return;
         }
@@ -99,7 +98,7 @@ public class Market implements Listener {
         if(action.equals(Action.RIGHT_CLICK_BLOCK)){
 
 
-            if(PlayerGestion.getPlayerMoney(player.getName()) < prix * quantité){
+            if(PlayerBuilder.getPlayerMoney(player.getName()) < prix * quantité){
                 player.sendMessage(PrefixMessage.erreur() + " vous n'avez pas assez de Akons");
                 return;
             }
@@ -115,7 +114,7 @@ public class Market implements Listener {
                 return;
             }
 
-            PlayerGestion.setPlayerMoney(player.getName(),(PlayerGestion.getPlayerMoney(player.getName()) - (prix * quantité)));
+            PlayerBuilder.setPlayerMoney(player.getName(),(PlayerBuilder.getPlayerMoney(player.getName()) - (prix * quantité)));
             player.getInventory().addItem(new ItemStack(material, quantité));
             player.sendMessage(PrefixMessage.serveur() + " vous avez acheter un stack de §b" + material + " §epour §b" + prix * quantité);
 
@@ -131,7 +130,7 @@ public class Market implements Listener {
             }
 
             player.getInventory().getItemInMainHand().setAmount(player.getInventory().getItemInMainHand().getAmount() - quantité);
-            PlayerGestion.setPlayerMoney(player.getName(), PlayerGestion.getPlayerMoney(player.getName()) + (prix * quantité));
+            PlayerBuilder.setPlayerMoney(player.getName(), PlayerBuilder.getPlayerMoney(player.getName()) + (prix * quantité));
             player.sendMessage(PrefixMessage.serveur() + " vous avez vendu un stack de §b" + material + " §epour §b" + prix * quantité);
 
 
@@ -150,7 +149,7 @@ public class Market implements Listener {
 
         if(event.getLine(0).equals("AdminShop")){
 
-            if (!PlayerGestion.hasPermission(event.getPlayer(), "shop.admin.sign")) {
+            if (!PlayerBuilder.hasPermission(event.getPlayer(), "shop.admin.sign")) {
                 event.setCancelled(true);
                 return;
             }

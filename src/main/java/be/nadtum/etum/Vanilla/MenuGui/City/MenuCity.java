@@ -1,11 +1,13 @@
 package be.nadtum.etum.Vanilla.MenuGui.City;
 
-import be.nadtum.etum.Vanilla.City.Claim.Claim;
-
-import be.nadtum.etum.Vanilla.MenuGui.MenuPrincipal;
-import be.nadtum.etum.Utility.Modules.*;
+import be.nadtum.etum.Utility.Modules.CityManage;
+import be.nadtum.etum.Utility.Modules.FichierGestion;
+import be.nadtum.etum.Utility.Modules.PlayerBuilder;
+import be.nadtum.etum.Utility.Modules.PrefixMessage;
 import be.nadtum.etum.Utility.Objets.InventoryBuilder;
 import be.nadtum.etum.Utility.Objets.ItemBuilder;
+import be.nadtum.etum.Vanilla.City.Claim.Claim;
+import be.nadtum.etum.Vanilla.MenuGui.MenuPrincipal;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,7 +28,7 @@ public class MenuCity implements Listener {
         inv.setupTemplate();
 
         ItemBuilder spawn = new ItemBuilder(Material.RED_BED,"§4Spawn",1);
-        spawn.addLore(!FichierGestion.getCfgCity().contains("City." + PlayerGestion.getPlayerCityName(player.getName()) + ".spawn.world") ? "§4le spawn n'est pas placé" : "§2spawn placé");
+        spawn.addLore(!FichierGestion.getCfgCity().contains("City." + PlayerBuilder.getPlayerCityName(player.getName()) + ".spawn.world") ? "§4le spawn n'est pas placé" : "§2spawn placé");
 
         ItemBuilder settings = new ItemBuilder(Material.COMPARATOR,"§9Settings",1);
 
@@ -87,7 +89,7 @@ public class MenuCity implements Listener {
                 break;
             case RED_BED:
                 if (CityManage.hasCitySpawn(player.getName())) {
-                    CityManage.tpToSpawn(player, PlayerGestion.getPlayerCityName(player.getName()));
+                    CityManage.tpToSpawn(player, PlayerBuilder.getPlayerCityName(player.getName()));
                 } else if (CityManage.hasPermission(player.getName(), "admin")) {
                     if (!Claim.canBuild(player, player.getLocation().getX(), player.getLocation().getZ())) {
                         player.closeInventory();
@@ -95,7 +97,7 @@ public class MenuCity implements Listener {
                         return;
                     }
                     player.closeInventory();
-                    CityManage.setSpawn(player, PlayerGestion.getPlayerCityName(player.getName()));
+                    CityManage.setSpawn(player, PlayerBuilder.getPlayerCityName(player.getName()));
                 } else {
                     event.setCancelled(true);
                 }
@@ -126,7 +128,7 @@ public class MenuCity implements Listener {
                     player.sendMessage(PrefixMessage.erreur() + "vous n'êtes pas dans votre cité");
                     return;
                 }
-                CityManage.setSpawn(player, PlayerGestion.getPlayerCityName(player.getName()));
+                CityManage.setSpawn(player, PlayerBuilder.getPlayerCityName(player.getName()));
                 event.setCancelled(true);
                 break;
             case DARK_OAK_DOOR:

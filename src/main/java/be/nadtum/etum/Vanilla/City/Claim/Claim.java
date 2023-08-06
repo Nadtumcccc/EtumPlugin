@@ -1,11 +1,11 @@
 package be.nadtum.etum.Vanilla.City.Claim;
 
 
-import be.nadtum.etum.Vanilla.Region.RegionManage;
 import be.nadtum.etum.Utility.Modules.CityManage;
 import be.nadtum.etum.Utility.Modules.FichierGestion;
-import be.nadtum.etum.Utility.Modules.PlayerGestion;
+import be.nadtum.etum.Utility.Modules.PlayerBuilder;
 import be.nadtum.etum.Utility.Modules.PrefixMessage;
+import be.nadtum.etum.Vanilla.Region.RegionManage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -58,7 +58,7 @@ public class Claim implements Listener {
         }
 
         //on vérifie si le joueur a une cité
-        String cityname = PlayerGestion.getPlayerCityName(player.getName());
+        String cityname = PlayerBuilder.getPlayerCityName(player.getName());
         if(cityname.equals("NoCity")){
 
             return;
@@ -163,11 +163,11 @@ public class Claim implements Listener {
 
     public static boolean canBuild(Player player, double xBlock, double zBlock) {
         YamlConfiguration cfg_perms = FichierGestion.getCfgPermission();
-        String playerCityName = PlayerGestion.getPlayerCityName(player.getName());
+        String playerCityName = PlayerBuilder.getPlayerCityName(player.getName());
         String cityName = getNameCityOfClaim(xBlock, zBlock);
 
         // Vérifie si le grade du joueur a la permission "build" dans la configuration.
-        if (cfg_perms.contains("Grade." + PlayerGestion.getPlayerStaffGrade(player.getName()) + ".permission.build")) {
+        if (cfg_perms.contains("Grade." + PlayerBuilder.getPlayerStaffGrade(player.getName()) + ".permission.build")) {
             return true; // Le joueur a la permission de construire.
         }
 
@@ -242,14 +242,14 @@ public class Claim implements Listener {
             YamlConfiguration cfg = FichierGestion.getCfgCity();
             isActionOnClaim.remove(player);
             if(cachecoordonnéez2.containsKey(player)){
-                cfg.set("City." + PlayerGestion.getPlayerCityName(player.getName()) + ".zone.coordonnées.x1", cachecoordonnéex1.get(player));
-                cfg.set("City." + PlayerGestion.getPlayerCityName(player.getName()) + ".zone.coordonnées.x2", cachecoordonnéex2.get(player));
-                cfg.set("City." + PlayerGestion.getPlayerCityName(player.getName()) + ".zone.coordonnées.z1", cachecoordonnéez1.get(player));
-                cfg.set("City." + PlayerGestion.getPlayerCityName(player.getName()) + ".zone.coordonnées.z2", cachecoordonnéez2.get(player));
+                cfg.set("City." + PlayerBuilder.getPlayerCityName(player.getName()) + ".zone.coordonnées.x1", cachecoordonnéex1.get(player));
+                cfg.set("City." + PlayerBuilder.getPlayerCityName(player.getName()) + ".zone.coordonnées.x2", cachecoordonnéex2.get(player));
+                cfg.set("City." + PlayerBuilder.getPlayerCityName(player.getName()) + ".zone.coordonnées.z1", cachecoordonnéez1.get(player));
+                cfg.set("City." + PlayerBuilder.getPlayerCityName(player.getName()) + ".zone.coordonnées.z2", cachecoordonnéez2.get(player));
                 player.sendMessage(PrefixMessage.erreur() + "claim annulé, l'ancienne zone a été remise");
                 removeCacheCoordonnée(player);
             }else{
-                cfg.set("City." + PlayerGestion.getPlayerCityName(player.getName()) + ".zone", null);
+                cfg.set("City." + PlayerBuilder.getPlayerCityName(player.getName()) + ".zone", null);
             }
         }
     }
@@ -329,7 +329,7 @@ public class Claim implements Listener {
             }
 
             String cityName = getNameCityOfClaim(xBlock, zBlock);
-            if (cityName != null && !cityName.equals(PlayerGestion.getPlayerCityName(player.getName()))) {
+            if (cityName != null && !cityName.equals(PlayerBuilder.getPlayerCityName(player.getName()))) {
                 player.sendMessage(PrefixMessage.erreur() + "tu es dans la cité " + cityName);
                 cancelActionClaim(player);
             }
@@ -343,7 +343,7 @@ public class Claim implements Listener {
         if (membersSection != null) {
             for (String memberId : membersSection.getKeys(false)) {
                 UUID playerUUID = UUID.fromString(memberId);
-                claim += PlayerGestion.getPlayerClaimCount(Bukkit.getOfflinePlayer(playerUUID).getName());
+                claim += PlayerBuilder.getPlayerClaimCount(Bukkit.getOfflinePlayer(playerUUID).getName());
             }
         }
         return claim;
@@ -358,7 +358,7 @@ public class Claim implements Listener {
             }
 
             // Sauvegarde de l'ancien claim de la cité s'il en a un
-            saveOldClaim(cfg, PlayerGestion.getPlayerCityName(player.getName()), player);
+            saveOldClaim(cfg, PlayerBuilder.getPlayerCityName(player.getName()), player);
 
             // Remise à zéro du claim
             cfg.set("City." + cityname + ".zone", null);
@@ -404,7 +404,7 @@ public class Claim implements Listener {
 
 
             // Vérification si l'aire du claim n'est pas trop grande par rapport aux autres claims de la cité
-            if ((longueur * largeur) > calculTotalClaimOfCity(PlayerGestion.getPlayerCityName(player.getName()))) {
+            if ((longueur * largeur) > calculTotalClaimOfCity(PlayerBuilder.getPlayerCityName(player.getName()))) {
                 player.sendMessage(PrefixMessage.erreur() + "l'aire de la cité est trop grande");
                 cancelActionClaim(player);
                 return;
@@ -412,7 +412,7 @@ public class Claim implements Listener {
 
             // Confirmation de la pose du claim et réduction des Akoins du joueur
             isActionOnClaim.remove(player);
-            PlayerGestion.setPlayerMoney(player.getName(), (long) (PlayerGestion.getPlayerMoney(player.getName()) - ((longueur * largeur) * 15)));
+            PlayerBuilder.setPlayerMoney(player.getName(), (long) (PlayerBuilder.getPlayerMoney(player.getName()) - ((longueur * largeur) * 15)));
             player.sendMessage(PrefixMessage.serveur() + "le deuxième point de claim a bien été placé");
             player.sendMessage(PrefixMessage.serveur() + "votre cité a bien sa zone posée");
         }

@@ -1,6 +1,9 @@
 package be.nadtum.etum.Vanilla.City.commands;
 
-import be.nadtum.etum.Utility.Modules.*;
+import be.nadtum.etum.Utility.Modules.CityManage;
+import be.nadtum.etum.Utility.Modules.FichierGestion;
+import be.nadtum.etum.Utility.Modules.PlayerBuilder;
+import be.nadtum.etum.Utility.Modules.PrefixMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -38,7 +41,7 @@ public class CommandCity implements CommandExecutor, TabCompleter {
             switch (args[0]) {
                 case "spawn":
                     if (CityManage.hasCitySpawn(player.getName())) {
-                        CityManage.tpToSpawn(player, PlayerGestion.getPlayerCityName(player.getName()));
+                        CityManage.tpToSpawn(player, PlayerBuilder.getPlayerCityName(player.getName()));
                         player.sendMessage(PrefixMessage.serveur() + "Tu as été téléporté au spawn de ta cité.");
                     } else {
                         player.sendMessage(PrefixMessage.erreur() + "Ta cité n'a pas encore de spawn défini.");
@@ -55,12 +58,12 @@ public class CommandCity implements CommandExecutor, TabCompleter {
                         return false;
                     }
 
-                    if (PlayerGestion.getPlayerMoney(player.getName()) < 10000) {
+                    if (PlayerBuilder.getPlayerMoney(player.getName()) < 10000) {
                         player.sendMessage(PrefixMessage.erreur() + "Vous n'avez pas assez d'Akoins [10 000].");
                         return false;
                     }
 
-                    PlayerGestion.setPlayerMoney(player.getName(), PlayerGestion.getPlayerMoney(player.getName()) - 10000);
+                    PlayerBuilder.setPlayerMoney(player.getName(), PlayerBuilder.getPlayerMoney(player.getName()) - 10000);
                     CityManage.deleteCity(player);
                     player.sendMessage(PrefixMessage.serveur() + "Votre cité a été supprimée.");
 
@@ -78,8 +81,8 @@ public class CommandCity implements CommandExecutor, TabCompleter {
                         return false;
                     }
 
-                    FichierGestion.getCfgCity().set("City." + PlayerGestion.getPlayerCityName(player.getName()) + ".membres." + PlayerGestion.getUUIDFromName(player.getName()), null);
-                    PlayerGestion.setPlayerCityName(player.getName(), "NoCity");
+                    FichierGestion.getCfgCity().set("City." + PlayerBuilder.getPlayerCityName(player.getName()) + ".membres." + PlayerBuilder.getUUIDFromName(player.getName()), null);
+                    PlayerBuilder.setPlayerCityName(player.getName(), "NoCity");
 
                     player.sendMessage(PrefixMessage.serveur() + "Vous avez bien quitté votre cité.");
 
@@ -100,7 +103,7 @@ public class CommandCity implements CommandExecutor, TabCompleter {
                         return false;
                     }
 
-                    if (PlayerGestion.getPlayerMoney(player.getName()) < 10000) {
+                    if (PlayerBuilder.getPlayerMoney(player.getName()) < 10000) {
                         player.sendMessage(PrefixMessage.erreur() + "Vous n'avez pas assez d'Akoins [10 000].");
                         return false;
                     }
@@ -109,7 +112,7 @@ public class CommandCity implements CommandExecutor, TabCompleter {
                         player.sendMessage(PrefixMessage.erreur() + "Le nom de cité existe déjà.");
                         return false;
                     }
-                    PlayerGestion.setPlayerMoney(player.getName(), PlayerGestion.getPlayerMoney(player.getName()) - 10000);
+                    PlayerBuilder.setPlayerMoney(player.getName(), PlayerBuilder.getPlayerMoney(player.getName()) - 10000);
                     CityManage.createCity(player, args[1].toLowerCase());
                     player.sendMessage(PrefixMessage.serveur() + "Votre cité a été créée.");
                     break;
@@ -125,8 +128,8 @@ public class CommandCity implements CommandExecutor, TabCompleter {
                         return false;
                     }
 
-                    if (!FichierGestion.getCfgCity().contains("City." + PlayerGestion.getPlayerCityName(player.getName()) + ".membres."
-                            + PlayerGestion.getUUIDFromName(args[1]).toString())) {
+                    if (!FichierGestion.getCfgCity().contains("City." + PlayerBuilder.getPlayerCityName(player.getName()) + ".membres."
+                            + PlayerBuilder.getUUIDFromName(args[1]).toString())) {
                         player.sendMessage(PrefixMessage.erreur() + "Le joueur n'est pas dans votre cité.");
                         return false;
                     }
@@ -146,8 +149,8 @@ public class CommandCity implements CommandExecutor, TabCompleter {
                         return false;
                     }
 
-                    FichierGestion.getCfgCity().set("City." + PlayerGestion.getPlayerCityName(player.getName()) + ".membres." + PlayerGestion.getUUIDFromName(args[1]).toString(), null);
-                    PlayerGestion.setPlayerCityName(args[1], "NoCity");
+                    FichierGestion.getCfgCity().set("City." + PlayerBuilder.getPlayerCityName(player.getName()) + ".membres." + PlayerBuilder.getUUIDFromName(args[1]).toString(), null);
+                    PlayerBuilder.setPlayerCityName(args[1], "NoCity");
 
                     player.sendMessage(PrefixMessage.serveur() + "Vous avez bien exclu §b" + args[1] + ".");
 
@@ -163,10 +166,10 @@ public class CommandCity implements CommandExecutor, TabCompleter {
 
 
                         int compteur = 0;
-                        for (String member : FichierGestion.getCfgCity().getConfigurationSection("City." + PlayerGestion.getPlayerCityName(player.getName()) + ".membres").getKeys(false)) {
+                        for (String member : FichierGestion.getCfgCity().getConfigurationSection("City." + PlayerBuilder.getPlayerCityName(player.getName()) + ".membres").getKeys(false)) {
                             compteur++;
                         }
-                        if (FichierGestion.getCfgCity().getInt("City." + PlayerGestion.getPlayerCityName(player.getName()) + ".settings.maxMember") == compteur) {
+                        if (FichierGestion.getCfgCity().getInt("City." + PlayerBuilder.getPlayerCityName(player.getName()) + ".settings.maxMember") == compteur) {
                             player.sendMessage(PrefixMessage.erreur() + "Vous avez atteint la limite de membres pour votre cité.");
                             return false;
                         }
@@ -211,18 +214,18 @@ public class CommandCity implements CommandExecutor, TabCompleter {
 
                         int compteur = 0;
 
-                        for (String member : FichierGestion.getCfgCity().getConfigurationSection("City." + PlayerGestion.getPlayerCityName(invite.get(player).getName()) + ".membres").getKeys(false)) {
+                        for (String member : FichierGestion.getCfgCity().getConfigurationSection("City." + PlayerBuilder.getPlayerCityName(invite.get(player).getName()) + ".membres").getKeys(false)) {
                             compteur++;
                         }
 
-                        if (FichierGestion.getCfgCity().getInt("City." + PlayerGestion.getPlayerCityName(invite.get(player).getName()) + ".settings.maxMember") == compteur) {
+                        if (FichierGestion.getCfgCity().getInt("City." + PlayerBuilder.getPlayerCityName(invite.get(player).getName()) + ".settings.maxMember") == compteur) {
                             player.sendMessage(PrefixMessage.erreur() + "Il n'y a plus de place.");
                             invite.remove(player);
                             return false;
                         }
                         // Procédure
-                        PlayerGestion.setPlayerCityName(player.getName(), PlayerGestion.getPlayerCityName(invite.get(player).getName()));
-                        FichierGestion.getCfgCity().set("City." + PlayerGestion.getPlayerCityName(invite.get(player).getName()) + ".membres." + player.getUniqueId().toString() + ".rôle", "Membre");
+                        PlayerBuilder.setPlayerCityName(player.getName(), PlayerBuilder.getPlayerCityName(invite.get(player).getName()));
+                        FichierGestion.getCfgCity().set("City." + PlayerBuilder.getPlayerCityName(invite.get(player).getName()) + ".membres." + player.getUniqueId().toString() + ".rôle", "Membre");
 
                         invite.get(player).sendMessage(PrefixMessage.serveur() + " Le joueur §b" + player.getName() + "§a a accepté votre invitation.");
                         player.sendMessage(PrefixMessage.serveur() + "Vous avez accepté l'invitation.");

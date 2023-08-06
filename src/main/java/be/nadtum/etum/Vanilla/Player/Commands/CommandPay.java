@@ -1,6 +1,6 @@
 package be.nadtum.etum.Vanilla.Player.Commands;
 
-import be.nadtum.etum.Utility.Modules.PlayerGestion;
+import be.nadtum.etum.Utility.Modules.PlayerBuilder;
 import be.nadtum.etum.Utility.Modules.PrefixMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -41,13 +41,13 @@ public class CommandPay implements CommandExecutor, TabExecutor {
             return false;
         }
 
-        if (PlayerGestion.getPlayerMoney(player.getName()) < sendMoney) {
+        if (PlayerBuilder.getPlayerMoney(player.getName()) < sendMoney) {
             player.sendMessage(PrefixMessage.erreur() + "Pas assez de Akoins");
             return false;
         }
 
-        PlayerGestion.addPlayerMoney(player.getName(), (long) -sendMoney);
-        PlayerGestion.addPlayerMoney(target.getName(), (long) +sendMoney);
+        PlayerBuilder.addPlayerMoney(player.getName(), (long) -sendMoney);
+        PlayerBuilder.addPlayerMoney(target.getName(), (long) +sendMoney);
         player.sendMessage(PrefixMessage.serveur() + "Vous avez envoyé §b" + sendMoney + " §aAkoins à §b" + target.getName());
         target.sendMessage(PrefixMessage.serveur() + "Vous avez reçu §b" + sendMoney + " §aAkoins de §b" + player.getName());
 

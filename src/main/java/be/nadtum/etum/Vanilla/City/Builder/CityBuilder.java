@@ -1,13 +1,36 @@
 package be.nadtum.etum.Vanilla.City.Builder;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class CityBuilder {
 
-    private Integer ID;                 // UUID de la ville
+    //--------------------------------------------------------
+
+    /*
+     * STRUCTURE FICHIER
+     *
+     * City:
+     *   ID: UUID de la ville
+     *       Name: Nom de la ville
+     *       Claim: Objet pour la revendication de la ville : objet ClaimBuilder
+     *       Members: Liste des membres de la ville
+     *           - ID: UUID de l'utilisateur : objet MemberBuilder
+     *       SurfaceMax: Surface maximale de la ville
+     *
+     *
+     */
+
+    //--------------------------------------------------------
+
+
+    private Integer ID;                   // UUID de la ville
     private String name;                  // Nom de la ville
     private ClaimBuilder claim;           // Objet pour la revendication de la ville
     private List<MemberBuilder> members;  // Liste des membres de la ville
+
+    private Integer surfaceMax;           // Surface maximale de la ville
 
     // Constructeur de la classe CityBuilder
     public CityBuilder(Integer uuid, String name, ClaimBuilder claim) {
@@ -49,18 +72,35 @@ public class CityBuilder {
     //--------------------------------------------------------
 
     // Méthode pour récupérer la liste des membres de la ville
-    public List<MemberBuilder> getMembers() {
+    public List<MemberBuilder> getListMembers() {
         return members;
     }
 
     // Méthode pour définir la liste des membres de la ville
-    public void setMembers(List<MemberBuilder> members) {
+    public void setListMembers(List<MemberBuilder> members) {
         this.members = members;
     }
 
-    public void addMember(MemberBuilder member) {
-
+    // Méthode pour ajouter un membre à la ville
+    public void addMember(UUID uuid) {
+        getListMembers().add(new MemberBuilder(uuid, new ArrayList<>()));
     }
-}
 
-//--------------------------------------------------------
+    public Boolean removeMember(UUID uuid) {
+        for (MemberBuilder builder : getListMembers()) {
+            if (builder.getUUID().equals(uuid)) {
+                getListMembers().remove(builder);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //--------------------------------------------------------
+
+
+    //--------------------------------------------------------
+
+    // Méthode pour charger toutes les informations de toutes les villes
+
+}

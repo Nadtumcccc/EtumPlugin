@@ -7,28 +7,28 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class PlayerGestion {
+public class PlayerBuilder {
 
 
     public static void createNewProfil(Player player){
 
-        if(PlayerGestion.hasData(player.getName())){
+        if(PlayerBuilder.hasData(player.getName())){
             return;
         }
 
-        FichierGestion.getCfgPlayers().set("Profil." + PlayerGestion.getUUIDFromName(player.getName()) + ".name", player.getName());
-        FichierGestion.getCfgPlayers().set("Profil." + PlayerGestion.getUUIDFromName(player.getName()) + ".grade", "Akien");
-        FichierGestion.getCfgPlayers().set("Profil." + PlayerGestion.getUUIDFromName(player.getName()) + ".money", 500);
-        FichierGestion.getCfgPlayers().set("Profil." + PlayerGestion.getUUIDFromName(player.getName()) + ".mana", 0);
-        FichierGestion.getCfgPlayers().set("Profil." + PlayerGestion.getUUIDFromName(player.getName()) + ".soul", 0);
-        FichierGestion.getCfgPlayers().set("Profil." + PlayerGestion.getUUIDFromName(player.getName()) + ".job.name", "nojob");
-        FichierGestion.getCfgPlayers().set("Profil." + PlayerGestion.getUUIDFromName(player.getName()) + ".job.niveau", 1);
-        FichierGestion.getCfgPlayers().set("Profil." + PlayerGestion.getUUIDFromName(player.getName()) + ".job.xp", 0);
-        FichierGestion.getCfgPlayers().set("Profil." + PlayerGestion.getUUIDFromName(player.getName()) + ".Home.nb", 2);
-        FichierGestion.getCfgPlayers().set("Profil." + PlayerGestion.getUUIDFromName(player.getName()) + ".claim", 200);
-        FichierGestion.getCfgPlayers().set("Profil." + PlayerGestion.getUUIDFromName(player.getName()) + ".city", "NoCity");
-        FichierGestion.getCfgPlayers().set("Profil." + PlayerGestion.getUUIDFromName(player.getName()) + ".staff.grade", "NoStaff");
-        FichierGestion.getCfgPlayers().set("Profil." + PlayerGestion.getUUIDFromName(player.getName()) + ".staff.puissance", 0);
+        FichierGestion.getCfgPlayers().set("Profil." + PlayerBuilder.getUUIDFromName(player.getName()) + ".name", player.getName());
+        FichierGestion.getCfgPlayers().set("Profil." + PlayerBuilder.getUUIDFromName(player.getName()) + ".grade", "Akien");
+        FichierGestion.getCfgPlayers().set("Profil." + PlayerBuilder.getUUIDFromName(player.getName()) + ".money", 500);
+        FichierGestion.getCfgPlayers().set("Profil." + PlayerBuilder.getUUIDFromName(player.getName()) + ".mana", 0);
+        FichierGestion.getCfgPlayers().set("Profil." + PlayerBuilder.getUUIDFromName(player.getName()) + ".soul", 0);
+        FichierGestion.getCfgPlayers().set("Profil." + PlayerBuilder.getUUIDFromName(player.getName()) + ".job.name", "nojob");
+        FichierGestion.getCfgPlayers().set("Profil." + PlayerBuilder.getUUIDFromName(player.getName()) + ".job.niveau", 1);
+        FichierGestion.getCfgPlayers().set("Profil." + PlayerBuilder.getUUIDFromName(player.getName()) + ".job.xp", 0);
+        FichierGestion.getCfgPlayers().set("Profil." + PlayerBuilder.getUUIDFromName(player.getName()) + ".Home.nb", 2);
+        FichierGestion.getCfgPlayers().set("Profil." + PlayerBuilder.getUUIDFromName(player.getName()) + ".claim", 200);
+        FichierGestion.getCfgPlayers().set("Profil." + PlayerBuilder.getUUIDFromName(player.getName()) + ".city", "NoCity");
+        FichierGestion.getCfgPlayers().set("Profil." + PlayerBuilder.getUUIDFromName(player.getName()) + ".staff.grade", "NoStaff");
+        FichierGestion.getCfgPlayers().set("Profil." + PlayerBuilder.getUUIDFromName(player.getName()) + ".staff.puissance", 0);
 
         player.sendMessage(PrefixMessage.serveur() + "votre profil a bien été créé");
     }
@@ -58,6 +58,10 @@ public class PlayerGestion {
 
     public static void addPlayerMoney(String playerName, Long somme){
         FichierGestion.getCfgPlayers().set("Profil." + getUUIDFromName(playerName) + ".money", getPlayerMoney(playerName) + somme);
+    }
+
+    public static void removePlayerMoney(String playerName, Long somme){
+        FichierGestion.getCfgPlayers().set("Profil." + getUUIDFromName(playerName) + ".money", getPlayerMoney(playerName) - somme);
     }
 
     public static String getPlayerJobName(String playerName){
@@ -197,34 +201,17 @@ public class PlayerGestion {
     }
 
     public static boolean hasPermission(Player player, String permission) {
-        String playerGradePermission = "Grade." + PlayerGestion.getPlayerGrade(player.getName()) + ".permission." + permission;
-
-        if (!FichierGestion.getCfgPermission().contains(playerGradePermission) && !player.isOp()) {
-            //player.sendMessage(PrefixMessage.erreur() + " Vous n'avez pas la permission d'utiliser cette commande");
-            return false;
-        }
-
-        return true;
+        return player.hasPermission(permission);
     }
 
-    public static boolean hasStaffPermission(Player player, String permission) {
-        String playerGradePermission = "Grade." + PlayerGestion.getPlayerStaffGrade(player.getName()) + ".permission." + permission;
-
-        if (!FichierGestion.getCfgPermission().contains(playerGradePermission) && !player.isOp()) {
-            //player.sendMessage(PrefixMessage.erreur() + " Vous n'avez pas la permission d'utiliser cette commande");
-            return false;
-        }
-
-        return true;
-    }
 
     public static Boolean canFly(Player player){
-        if (player.isOp() || FichierGestion.getCfgPermission().contains("Grade." + PlayerGestion.getPlayerStaffGrade(player.getName()) + ".permission.fly")) {
+        if (player.isOp() || FichierGestion.getCfgPermission().contains("Grade." + PlayerBuilder.getPlayerStaffGrade(player.getName()) + ".permission.fly")) {
             return true;
         }
         if(!Claim.isInDefaultWorld(player))return false;
         if(Claim.getNameCityOfClaim(player.getLocation().getX(), player.getLocation().getZ()) == null)return false;
-        if(!Claim.getNameCityOfClaim(player.getLocation().getX(), player.getLocation().getZ()).equals(PlayerGestion.getPlayerCityName(player.getName()))){
+        if(!Claim.getNameCityOfClaim(player.getLocation().getX(), player.getLocation().getZ()).equals(PlayerBuilder.getPlayerCityName(player.getName()))){
             return false;
         }
         return true;

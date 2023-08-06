@@ -10,22 +10,22 @@ public class CityManage {
 
     //fonction
     public static Boolean hasCity(String player){
-        return !PlayerGestion.getPlayerCityName(player).equals("NoCity");
+        return !PlayerBuilder.getPlayerCityName(player).equals("NoCity");
     }
 
     public static Boolean hasPermission(String player, String permission){
-        return FichierGestion.getCfgCity().contains("City." + PlayerGestion.getPlayerCityName(player) + ".membres." + PlayerGestion.getUUIDFromName(player) + ".permission." + permission);
+        return FichierGestion.getCfgCity().contains("City." + PlayerBuilder.getPlayerCityName(player) + ".membres." + PlayerBuilder.getUUIDFromName(player) + ".permission." + permission);
     }
     public static void setPermission(String player, String permission){
-        FichierGestion.getCfgCity().set("City." + PlayerGestion.getPlayerCityName(player) + ".membres." + PlayerGestion.getUUIDFromName(player).toString() + ".permission." + permission, permission);
+        FichierGestion.getCfgCity().set("City." + PlayerBuilder.getPlayerCityName(player) + ".membres." + PlayerBuilder.getUUIDFromName(player).toString() + ".permission." + permission, permission);
     }
 
 
     public static void removePermission(String player, String permission){
-        FichierGestion.getCfgCity().set("City." + PlayerGestion.getPlayerCityName(player) + ".membres." + PlayerGestion.getUUIDFromName(player).toString() + ".permission." + permission, null);
+        FichierGestion.getCfgCity().set("City." + PlayerBuilder.getPlayerCityName(player) + ".membres." + PlayerBuilder.getUUIDFromName(player).toString() + ".permission." + permission, null);
     }
     public static Boolean hasCitySpawn(String player){
-        return FichierGestion.getCfgCity().contains("City." + PlayerGestion.getPlayerCityName(player) + ".spawn.world");
+        return FichierGestion.getCfgCity().contains("City." + PlayerBuilder.getPlayerCityName(player) + ".spawn.world");
     }
 
     //scrypt
@@ -42,7 +42,7 @@ public class CityManage {
         FichierGestion.getCfgCity().set("City." + cityName + ".membres." + player.getUniqueId().toString() + ".permission.modération", true);
         FichierGestion.getCfgCity().set("City." + cityName + ".settings.maxMember", 6);
         FichierGestion.getCfgCity().set("City." + cityName + ".settings.maxSurfaceClaim", 1000);
-        PlayerGestion.setPlayerCityName(player.getName(), cityName);
+        PlayerBuilder.setPlayerCityName(player.getName(), cityName);
 
         FichierGestion.saveFile(FichierGestion.getCfgCity(), FichierGestion.getCityFile());
         FichierGestion.saveFile(FichierGestion.getCfgPlayers(), FichierGestion.getPlayersFile());
@@ -50,13 +50,13 @@ public class CityManage {
 
     public static void deleteCity(Player player){
 
-        for (String uuidstr : FichierGestion.getCfgCity().getConfigurationSection("City." + PlayerGestion.getPlayerCityName(player.getName()) + ".membres").getKeys(false)){
+        for (String uuidstr : FichierGestion.getCfgCity().getConfigurationSection("City." + PlayerBuilder.getPlayerCityName(player.getName()) + ".membres").getKeys(false)){
             if(!uuidstr.equals(player.getUniqueId().toString())){
                 FichierGestion.getCfgPlayers().set("Profil." + uuidstr + ".city", "NoCity");
             }
         }
-        FichierGestion.getCfgCity().set("City." + PlayerGestion.getPlayerCityName(player.getName()), null);
-        PlayerGestion.setPlayerCityName(player.getName(), "NoCity");
+        FichierGestion.getCfgCity().set("City." + PlayerBuilder.getPlayerCityName(player.getName()), null);
+        PlayerBuilder.setPlayerCityName(player.getName(), "NoCity");
         FichierGestion.saveFile(FichierGestion.getCfgCity(), FichierGestion.getCityFile());
         FichierGestion.saveFile(FichierGestion.getCfgPlayers(), FichierGestion.getPlayersFile());
     }

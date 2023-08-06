@@ -1,6 +1,6 @@
 package be.nadtum.etum.Moderation.commands;
 
-import be.nadtum.etum.Utility.Modules.PlayerGestion;
+import be.nadtum.etum.Utility.Modules.PlayerBuilder;
 import be.nadtum.etum.Utility.Modules.PrefixMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -28,7 +28,7 @@ public class CommandGamemode implements CommandExecutor, TabExecutor {
             return false;
         }
 
-        if (!PlayerGestion.hasPermission(player,"gamemode")) {
+        if (!PlayerBuilder.hasPermission(player,"gamemode")) {
             return false;
         }
 
